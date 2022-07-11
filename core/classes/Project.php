@@ -38,25 +38,14 @@ class Project
 
         $idProjects = [];
 
-        foreach($result as $item)
-        {
+        foreach ($result as $item) {
 
             $idProjects[] = $item->id_project;
         }
 
-
-
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE id_project IN (" . implode(',', $idProjects) . ") AND status = 0 ORDER BY remains_days ASC";
-       
         return $this->con->read($query);
-
-        // return $idProjects;
-
-        // $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE status = 0 AND id_categorie = :id_categorie ORDER BY remains_days ASC";
-
     }
-
-
 
 
 

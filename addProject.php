@@ -11,11 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
         <form action="" method="POST">
             <div class="mb-3">
                 <label for="name" class="form-label">Name : </label>
-                <input type="text" class="form-control" name="name">
+                <input type="text" class="form-control" name="name" value="<?= isset($_POST['name']) ? $_POST['name'] : null ?>">
             </div>
             <div class="mb-3">
                 <label for="description">Project Description : </label>
-                <textarea class="form-control" name="description" rows="3"></textarea>
+                <textarea class="form-control" name="description" rows="3"><?= isset($_POST['description']) ? $_POST['description'] : null ?></textarea>
             </div>
             <div class="mb-3">
                 <select name="categories[]" class="form-select" multiple>

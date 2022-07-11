@@ -25,6 +25,40 @@ class Project
         return $this->con->read($query);
     }
 
+    public function selectProjectsFromCategory($idCategory)
+    {
+        // if(!is_numeric($_POST['categoryFilter']))
+        // {
+        //     return "Please, select a valid category";
+        // }
+
+        $query = "SELECT id_project FROM projects_categories WHERE id_categorie = :id_categorie";
+
+        $result = $this->con->read($query, ['id_categorie' => $idCategory]);
+
+        $idProjects = [];
+
+        foreach($result as $item)
+        {
+
+            $idProjects[] = $item->id_project;
+        }
+
+
+
+        $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE id_project IN (" . implode(',', $idProjects) . ") AND status = 0 ORDER BY remains_days ASC";
+       
+        return $this->con->read($query);
+
+        // return $idProjects;
+
+        // $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE status = 0 AND id_categorie = :id_categorie ORDER BY remains_days ASC";
+
+    }
+
+
+
+
 
     public function addProject()
     {
@@ -131,7 +165,7 @@ class Project
         $query = "DELETE FROM projects_categories WHERE id_project = :id_project";
         $this->con->write($query, ["id_project" => $idProject]);
     }
-    
+
 
     public function deleteProject()
     {

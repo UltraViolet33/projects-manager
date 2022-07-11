@@ -1,5 +1,15 @@
 <?php require_once("./inc/header.php");
-$projectsInProgress = $project->selectProjectsInProgress(); ?>
+$projectsInProgress = $project->selectProjectsInProgress();
+$allCategories = $category->selectAllCategories();
+
+
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
+    // $createProject = $project->addProject();
+    $projectsInProgress = $project->selectProjectsFromCategory($_POST['categoryFilter']);
+    
+}
+
+?>
 <div class="row">
     <div class="col-12 text-center">
         <h1>Projects Manager</h1>
@@ -9,6 +19,16 @@ $projectsInProgress = $project->selectProjectsInProgress(); ?>
         <h2 class="text-center">Projects In Progress : </h2>
     </div>
 </div>
+<form method="POST">
+    <div class="mb-3">
+        <select onchange="this.form.submit()" name="categoryFilter" class="form-select">
+            <option selected>Choose categories</option>
+            <?php foreach ($allCategories as $category) : ?>
+                <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</form>
 <div class="row">
     <div class="col-12">
         <?php if (!$projectsInProgress) : ?>
@@ -17,6 +37,8 @@ $projectsInProgress = $project->selectProjectsInProgress(); ?>
             <table class="table">
                 <thead>
                     <tr>
+
+
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Remains Days</th>

@@ -12,26 +12,47 @@ class Project
         $this->con = Database::getInstance();
     }
 
-
+    
+    /**
+     * selectOneProject
+     *
+     * @param  mixed $idProject
+     * @return object
+     */
     public function selectOneProject($idProject)
     {
         $query = "SELECT * FROM projects WHERE id_project = :id_project";
         return $this->con->read($query, ["id_project" => $idProject], $single = true);
     }
 
-
+    
+    /**
+     * selectProjectsInProgress
+     *
+     * @return array
+     */
     public function selectProjectsInProgress()
     {
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE status = 0 ORDER BY remains_days ASC";
         return $this->con->read($query);
     }
 
-
+    
+    /**
+     * selectProjectsFromCategory
+     *
+     * @param  mixed $idCategory
+     * @return array
+     */
     public function selectProjectsFromCategory($idCategory)
     {
         $query = "SELECT id_project FROM projects_categories WHERE id_categorie = :id_categorie";
         $result = $this->con->read($query, ['id_categorie' => $idCategory]);
         $idProjects = [];
+
+        if (!$result) {
+            return null;
+        }
 
         foreach ($result as $item) {
             $idProjects[] = $item->id_project;
@@ -41,7 +62,12 @@ class Project
         return $this->con->read($query);
     }
 
-
+    
+    /**
+     * addProject
+     *
+     * @return string
+     */
     public function addProject()
     {
         $dataForm = ['name', 'description', 'deadline'];
@@ -80,11 +106,16 @@ class Project
             $this->insertProjectCategories($idProject, $category);
         }
 
-        header("Location: index.php");
+        header("Location: allProjects.php");
         return;
     }
 
-
+    
+    /**
+     * addDoneProject
+     *
+     * @return string
+     */
     public function addDoneProject()
     {
         $dataForm = ['name', 'description', 'created_at'];
@@ -123,11 +154,18 @@ class Project
             $this->insertProjectCategories($idProject, $category);
         }
 
-        header("Location: index.php");
+        header("Location: allProjects.php");
         return;
     }
 
-
+    
+    /**
+     * insertProjectCategories
+     *
+     * @param  mixed $idProject
+     * @param  mixed $idCategory
+     * @return void
+     */
     private function insertProjectCategories($idProject, $idCategory)
     {
         $query = "INSERT INTO projects_categories(id_project, id_categorie) VALUES(:id_project, :id_categorie)";
@@ -135,14 +173,25 @@ class Project
         $this->con->write($query, $values);
     }
 
-
+    
+    /**
+     * selectAllProjects
+     *
+     * @return array
+     */
     public function selectAllProjects()
     {
-        $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects ORDER BY remains_days ASC";
+        $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects ORDER BY created_at DESC";
         return $this->con->read($query);
     }
 
-
+    
+    /**
+     * updateProject
+     *
+     * @param  mixed $idProject
+     * @return string
+     */
     public function updateProject($idProject)
     {
         $dataForm = ['name', 'description', 'created_at', 'deadline'];
@@ -159,12 +208,10 @@ class Project
         if ($deadline < $currentDate)  return $result = "The deadline must not be in the past";
 
         $deadline = date("Y-m-d", $deadline);
-        $created_at = date("Y-m-d", $currentDate);
+        // $created_at = date("Y-m-d", $currentDate);
+        $created_at = $_POST['created_at'];
         $status = 0;
 
-        if (isset($_POST['status']) && $_POST['status'] == "true") {
-            $status = 1;
-        }
 
         $values = array(
             "id_project" => $idProject,
@@ -177,6 +224,23 @@ class Project
 
         $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, status=:status WHERE id_project=:id_project";
 
+
+        if (isset($_POST['status']) && $_POST['status'] == "true") {
+            $status = 1;
+            $values = array(
+                "id_project" => $idProject,
+                "name" => $_POST['name'],
+                "description" => $_POST['description'],
+                "deadline" => $deadline,
+                "status" => $status,
+                "created_at" => $_POST['created_at'],
+                "date_end" => date("Y-m-d", $currentDate),
+            );
+
+            $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, status=:status, date_end=:date_end WHERE id_project=:id_project";
+        }
+
+
         $this->con->write($query, $values);
         $this->deleteProjectCategories($idProject);
 
@@ -188,14 +252,25 @@ class Project
         return;
     }
 
-
+    
+    /**
+     * deleteProjectCategories
+     *
+     * @param  mixed $idProject
+     * @return void
+     */
     public function deleteProjectCategories($idProject)
     {
         $query = "DELETE FROM projects_categories WHERE id_project = :id_project";
         $this->con->write($query, ["id_project" => $idProject]);
     }
 
-
+    
+    /**
+     * deleteProject
+     *
+     * @return void
+     */
     public function deleteProject()
     {
         $query = "DELETE FROM projects WHERE id_project = :id_project";

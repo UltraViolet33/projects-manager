@@ -1,4 +1,6 @@
-<?php require_once("./inc/header.php"); ?>
+<?php 
+$title = 'Add Category';
+require_once("./inc/header.php"); ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addCategory'])) {
     $createCategory = $category->addCategory();

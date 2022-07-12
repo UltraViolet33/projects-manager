@@ -1,5 +1,7 @@
-<?php require_once("./inc/header.php"); ?>
 <?php
+$title = "Edit Project";
+require_once("./inc/header.php");
+
 $singleProject = $project->selectOneProject($_GET['id']);
 $allCategories = $category->selectAllCategories();
 $projectCategoriesIDS = $category->selectProjectCategoriesIDS($_GET['id']);
@@ -15,6 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['editProject'])) {
             <div class="mb-3">
                 <label for="name" class="form-label">Name : </label>
                 <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($singleProject->name) ?>">
+            </div>
+            <div class="mb-3">
+                <label for="github_link" class="form-label">Github Link : </label>
+                <input type="text" class="form-control" name="github_link" value="<?= htmlspecialchars($singleProject->github_link) ?>">
             </div>
             <div class="mb-3">
                 <label for="description">Project Description : </label>
@@ -39,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['editProject'])) {
                 <label for="deadline" class="form-label">Deadline :</label>
                 <input type="date" class="form-control" name="deadline" value="<?= htmlspecialChars($singleProject->deadline)  ?>">
             </div>
+            <!--  -->
             <div class="form-check mb-3">
                 <?php if ($singleProject->status) : ?>
                     <input name="status" class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" checked>

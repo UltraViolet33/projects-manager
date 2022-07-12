@@ -13,6 +13,12 @@ class Category
     }
 
 
+    /**
+     * selectOneCategory
+     *
+     * @param  mixed $idCategory
+     * @return object
+     */
     public function selectOneCategory($idCategory)
     {
         $query = "SELECT * FROM categories WHERE id_categorie = :id_categorie";
@@ -20,6 +26,12 @@ class Category
     }
 
 
+    /**
+     * selectProjectCategoriesIDS
+     *
+     * @param  mixed $idProject
+     * @return array
+     */
     public function selectProjectCategoriesIDS($idProject)
     {
         $query = "SELECT id_categorie FROM projects_categories WHERE id_project = :id_project";
@@ -34,6 +46,12 @@ class Category
     }
 
 
+    /**
+     * selectProjectCategories
+     *
+     * @param  mixed $idProject
+     * @return array
+     */
     public function selectProjectCategories($idProject)
     {
         $query = "SELECT id_categorie FROM projects_categories WHERE id_project = :id_project";
@@ -48,6 +66,11 @@ class Category
     }
 
 
+    /**
+     * addCategory
+     *
+     * @return string
+     */
     public function addCategory()
     {
         if (!isset($_POST['name']) || empty($_POST['name']) || strlen($_POST['name'] < 1)) {
@@ -66,6 +89,11 @@ class Category
     }
 
 
+    /**
+     * selectAllCategories
+     *
+     * @return array
+     */
     public function selectAllCategories()
     {
         $query = "SELECT * FROM categories";
@@ -73,6 +101,12 @@ class Category
     }
 
 
+    /**
+     * updateCategory
+     *
+     * @param  mixed $idCategory
+     * @return string
+     */
     public function updateCategory($idCategory)
     {
         if (!isset($_POST['name']) || empty($_POST['name']) || strlen($_POST['name'] < 1)) {
@@ -91,6 +125,11 @@ class Category
     }
 
 
+    /**
+     * deleteCategory
+     *
+     * @return void
+     */
     public function deleteCategory()
     {
         $query = "DELETE FROM categories WHERE id_categorie = :idCategory";

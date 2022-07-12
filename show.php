@@ -1,5 +1,7 @@
-<?php require_once("./inc/header.php"); ?>
 <?php
+$title = "All Categories";
+require_once("./inc/header.php");
+
 $allCategories = $category->selectAllCategories();
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["deleteCategory"])) {
     if (isset($_POST['idCategory']) && is_numeric($_POST['idCategory'])) {

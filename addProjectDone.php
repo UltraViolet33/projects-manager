@@ -1,5 +1,7 @@
-<?php require_once("./inc/header.php"); ?>
 <?php
+$title = "Add Project Done";
+require_once("./inc/header.php");
+
 $allCategories = $category->selectAllCategories();
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
     $createProject = $project->addDoneProject();
@@ -23,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
             </div>
             <div class="mb-3">
                 <select name="categories[]" class="form-select" multiple>
-                    <option selected>Choose categories</option>
                     <?php foreach ($allCategories as $category) : ?>
                         <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
                     <?php endforeach; ?>

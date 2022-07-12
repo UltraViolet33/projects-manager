@@ -3,14 +3,15 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header("Location: index.php");
     return;
 }
-?>
-<?php require_once("./inc/header.php"); ?>
-<?php
+$title = "Edit Category";
+require_once("./inc/header.php");
+
 $categoryEdit = $category->selectOneCategory($_GET['id']);
 if (!$categoryEdit) {
     header("Location: index.php");
     return;
 }
+
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['editCategory'])) {
     $edit = $category->updateCategory($categoryEdit->id_categorie);
 }

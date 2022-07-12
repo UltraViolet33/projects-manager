@@ -1,5 +1,6 @@
-<?php require_once("./inc/header.php"); ?>
 <?php
+$title = "All Projects";
+require_once("./inc/header.php");
 $allProjects = $project->selectAllProjects();
 ?>
 <div class="row">

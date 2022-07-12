@@ -1,15 +1,15 @@
-<?php require_once("./inc/header.php");
+<?php
+$title = "Home";
+require_once("./inc/header.php");
+
 $projectsInProgress = $project->selectProjectsInProgress();
 $allCategories = $category->selectAllCategories();
 
-
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
-    // $createProject = $project->addProject();
     $projectsInProgress = $project->selectProjectsFromCategory($_POST['categoryFilter']);
-    
 }
-
 ?>
+
 <div class="row">
     <div class="col-12 text-center">
         <h1>Projects Manager</h1>
@@ -37,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
             <table class="table">
                 <thead>
                     <tr>
-
-
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Remains Days</th>

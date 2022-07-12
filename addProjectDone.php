@@ -2,13 +2,12 @@
 <?php
 $allCategories = $category->selectAllCategories();
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
-    $createProject = $project->addProject();
+    $createProject = $project->addDoneProject();
 }
 ?>
 <div class="row">
     <div class="col-12">
-        <h1 class="text-center">Add a Project</h1>
-        <h3>Add a project already done <a href="./addProjectDone.php">here</a></h3>
+        <h1 class="text-center">Add a Project already done</h1>
         <form action="" method="POST">
             <div class="mb-3">
                 <label for="name" class="form-label">Name : </label>
@@ -31,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
                 </select>
             </div>
             <div class="mb-3">
-                <label for="deadline" class="form-label">Deadline :</label>
-                <input type="date" class="form-control" name="deadline" value="<?= isset($_POST['deadline']) ? htmlspecialChars($_POST['deadline']) : null ?>">
+                <label for="deadline" class="form-label">Created At :</label>
+                <input type="date" class="form-control" name="created_at" value="<?= isset($_POST['created_at']) ? htmlspecialChars($_POST['created_at']) : null ?>">
             </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="addProject">
         </form>

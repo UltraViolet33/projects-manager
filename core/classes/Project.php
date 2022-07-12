@@ -19,27 +19,21 @@ class Project
         return $this->con->read($query, ["id_project" => $idProject], $single = true);
     }
 
+
     public function selectProjectsInProgress()
     {
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE status = 0 ORDER BY remains_days ASC";
         return $this->con->read($query);
     }
 
+
     public function selectProjectsFromCategory($idCategory)
     {
-        // if(!is_numeric($_POST['categoryFilter']))
-        // {
-        //     return "Please, select a valid category";
-        // }
-
         $query = "SELECT id_project FROM projects_categories WHERE id_categorie = :id_categorie";
-
         $result = $this->con->read($query, ['id_categorie' => $idCategory]);
-
         $idProjects = [];
 
         foreach ($result as $item) {
-
             $idProjects[] = $item->id_project;
         }
 
@@ -48,10 +42,11 @@ class Project
     }
 
 
-
     public function addProject()
     {
         $dataForm = ['name', 'description', 'deadline'];
+        $currentDate = strtotime(date('Y-m-d'));
+        $deadline = strtotime($_POST['deadline']);
 
         foreach ($dataForm as $data) {
             if (!isset($_POST[$data]) || empty($_POST[$data])) {
@@ -59,22 +54,67 @@ class Project
             }
         }
 
-        $currentDate = strtotime(date('Y-m-d'));
-        $deadline = strtotime($_POST['deadline']);
-
         if ($deadline < $currentDate)  return $result = "The deadline must not be in the past";
 
         $deadline = date("Y-m-d", $deadline);
         $created_at = date("Y-m-d", $currentDate);
 
+        if (isset($_POST['github_link'])) {
+            $github_link = $_POST['github_link'];
+        }
+
         $values = array(
             "name" => $_POST['name'],
             "description" => $_POST['description'],
+            "github_link" => $github_link,
             "deadline" => $deadline,
             "created_at" => $created_at,
         );
 
-        $query = "INSERT INTO projects(name, description, created_at, deadline) VALUES(:name, :description, :created_at, :deadline)";
+        $query = "INSERT INTO projects(name, description, github_link, created_at, deadline) VALUES(:name, :description, :github_link, :created_at, :deadline)";
+
+        $this->con->write($query, $values);
+        $idProject = $this->con->getLastInsertId();
+
+        foreach ($_POST['categories'] as $category) {
+            $this->insertProjectCategories($idProject, $category);
+        }
+
+        header("Location: index.php");
+        return;
+    }
+
+
+    public function addDoneProject()
+    {
+        $dataForm = ['name', 'description', 'created_at'];
+        $currentDate = strtotime(date('Y-m-d'));
+        $created_at = strtotime($_POST['created_at']);
+
+        foreach ($dataForm as $data) {
+            if (!isset($_POST[$data]) || empty($_POST[$data])) {
+                return "Please fill all inputs";
+            }
+        }
+
+        if ($created_at > $currentDate)  return $result = "The created at date must not be in the futur";
+        $created_at = date("Y-m-d", $created_at);
+        $github_link = null;
+
+        if (isset($_POST['github_link'])) {
+            $github_link = $_POST['github_link'];
+        }
+
+        $values = array(
+            "name" => $_POST['name'],
+            "description" => $_POST['description'],
+            "github_link" => $github_link,
+            "created_at" => $created_at,
+            "deadline" => null,
+            "status" => 1,
+        );
+
+        $query = "INSERT INTO projects(name, description, github_link, created_at, deadline, status) VALUES(:name, :description, :github_link, :created_at, :deadline, :status)";
 
         $this->con->write($query, $values);
         $idProject = $this->con->getLastInsertId();
@@ -120,8 +160,8 @@ class Project
 
         $deadline = date("Y-m-d", $deadline);
         $created_at = date("Y-m-d", $currentDate);
-
         $status = 0;
+
         if (isset($_POST['status']) && $_POST['status'] == "true") {
             $status = 1;
         }

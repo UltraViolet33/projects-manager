@@ -26,14 +26,16 @@ $allProjects = $project->selectAllProjects();
                 </thead>
                 <tbody>
                     <?php foreach ($allProjects as $project) : ?>
-                        <?php $deadline = date('d/m/y', strtotime($project->deadline));
+                        <?php
+                        $deadline  = $project->deadline ? date('d/m/y', strtotime($project->deadline)) : "Done";
+                        $remains_days = $project->remains_days ?: 0;
                         $created_at = date('d/m/y', strtotime($project->created_at));
                         $status = $project->status ? "Done" : "Not done yet";
                         ?>
                         <tr>
                             <th scope="row"><?= $project->id_project ?></th>
                             <td><?= $project->name ?></td>
-                            <td><?= $project->remains_days ?></td>
+                            <td><?= $remains_days ?></td>
                             <td><?= $created_at ?></td>
                             <td><?= $deadline ?></td>
                             <td><?= $status ?></td>

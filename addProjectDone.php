@@ -34,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['addProject'])) {
                 <label for="deadline" class="form-label">Created At :</label>
                 <input type="date" class="form-control" name="created_at" value="<?= isset($_POST['created_at']) ? htmlspecialChars($_POST['created_at']) : null ?>">
             </div>
+            <div class="mb-3">
+                <label for="date_end" class="form-label">Date End :</label>
+                <input type="date" class="form-control" name="date_end" value="<?= isset($_POST['date_end']) ? htmlspecialChars($_POST['date_end']) : null ?>">
+            </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="addProject">
         </form>
         <div class="bg-danger">

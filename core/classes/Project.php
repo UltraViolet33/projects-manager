@@ -53,7 +53,6 @@ class Project
      */
     public function selectIdsProjectsFromCategory($idCategory)
     {
-
         $query = "SELECT id_project FROM projects_categories WHERE id_categorie = :id_categorie";
         $result = $this->con->read($query, ['id_categorie' => $idCategory]);
 
@@ -70,6 +69,7 @@ class Project
         return $idProjects;
     }
 
+
     public function selectProjectsFromCategory($idCategory)
     {
         $idProjects = $this->selectIdsProjectsFromCategory($idCategory);
@@ -80,6 +80,7 @@ class Project
         return $this->con->read($query);
     }
 
+
     public function selectProjectsNotDoneFromCategory($idCategory)
     {
         $idProjects = $this->selectIdsProjectsFromCategory($idCategory);
@@ -89,8 +90,6 @@ class Project
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE id_project IN (" . implode(',', $idProjects) . ") AND status = 0 ORDER BY remains_days ASC";
         return $this->con->read($query);
     }
-
-
 
 
     /**
@@ -114,6 +113,13 @@ class Project
 
         $deadline = date("Y-m-d", $deadline);
         $created_at = date("Y-m-d", $currentDate);
+
+        if (isset($_POST['created_at']) && !empty($_POST['created_at'])) {
+            $created_at = strtotime($_POST['created_at']);
+            if ($created_at > $currentDate) return $result =  "The Created at date can not be in the futur";
+            if ($created_at > strtotime($deadline)) return $result =  "The created At can not be after the deadline";
+            $created_at = $_POST['created_at'];
+        }
 
         if (isset($_POST['github_link'])) {
             $github_link = $_POST['github_link'];
@@ -162,6 +168,14 @@ class Project
         $created_at = date("Y-m-d", $created_at);
         $github_link = null;
 
+        $dateEnd = null;
+
+        if (isset($_POST['date_end']) && !empty($_POST['date_end'])) {
+            if (strtotime($_POST['date_end']) < strtotime($_POST['created_at'])) return "Date end can not be before the created date";
+            if (strtotime($_POST['date_end']) > $currentDate) return "Date end can not be in the futur";
+            $dateEnd = $_POST['date_end'];
+        }
+
         if (isset($_POST['github_link'])) {
             $github_link = $_POST['github_link'];
         }
@@ -173,9 +187,10 @@ class Project
             "created_at" => $created_at,
             "deadline" => null,
             "status" => 1,
+            "date_end" => $dateEnd,
         );
 
-        $query = "INSERT INTO projects(name, description, github_link, created_at, deadline, status) VALUES(:name, :description, :github_link, :created_at, :deadline, :status)";
+        $query = "INSERT INTO projects(name, description, github_link, created_at, deadline, date_end, status) VALUES(:name, :description, :github_link, :created_at, :deadline, :date_end, :status)";
 
         $this->con->write($query, $values);
         $idProject = $this->con->getLastInsertId();
@@ -238,10 +253,8 @@ class Project
         if ($deadline < $currentDate)  return $result = "The deadline must not be in the past";
 
         $deadline = date("Y-m-d", $deadline);
-        // $created_at = date("Y-m-d", $currentDate);
         $created_at = $_POST['created_at'];
         $status = 0;
-
 
         $values = array(
             "id_project" => $idProject,
@@ -269,7 +282,6 @@ class Project
 
             $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, status=:status, date_end=:date_end WHERE id_project=:id_project";
         }
-
 
         $this->con->write($query, $values);
         $this->deleteProjectCategories($idProject);

@@ -12,7 +12,7 @@ class Project
         $this->con = Database::getInstance();
     }
 
-    
+
     /**
      * selectOneProject
      *
@@ -25,7 +25,7 @@ class Project
         return $this->con->read($query, ["id_project" => $idProject], $single = true);
     }
 
-    
+
     /**
      * selectProjectsInProgress
      *
@@ -37,32 +37,62 @@ class Project
         return $this->con->read($query);
     }
 
-    
+
+    public function selectAllDoneProjects()
+    {
+        $query = "SELECT *, 0 AS remains_days FROM projects WHERE status = 1 ORDER BY created_at DESC";
+        return $this->con->read($query);
+    }
+
+
     /**
      * selectProjectsFromCategory
      *
      * @param  mixed $idCategory
      * @return array
      */
-    public function selectProjectsFromCategory($idCategory)
+    public function selectIdsProjectsFromCategory($idCategory)
     {
+
         $query = "SELECT id_project FROM projects_categories WHERE id_categorie = :id_categorie";
         $result = $this->con->read($query, ['id_categorie' => $idCategory]);
+
         $idProjects = [];
 
         if (!$result) {
-            return null;
+            return false;
         }
 
         foreach ($result as $item) {
             $idProjects[] = $item->id_project;
         }
 
+        return $idProjects;
+    }
+
+    public function selectProjectsFromCategory($idCategory)
+    {
+        $idProjects = $this->selectIdsProjectsFromCategory($idCategory);
+        if (!$idProjects) {
+            return false;
+        }
+        $query = "SELECT * FROM projects WHERE id_project IN (" . implode(',', $idProjects) . ") ORDER BY created_at DESC";
+        return $this->con->read($query);
+    }
+
+    public function selectProjectsNotDoneFromCategory($idCategory)
+    {
+        $idProjects = $this->selectIdsProjectsFromCategory($idCategory);
+        if (!$idProjects) {
+            return false;
+        }
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE id_project IN (" . implode(',', $idProjects) . ") AND status = 0 ORDER BY remains_days ASC";
         return $this->con->read($query);
     }
 
-    
+
+
+
     /**
      * addProject
      *
@@ -110,7 +140,7 @@ class Project
         return;
     }
 
-    
+
     /**
      * addDoneProject
      *
@@ -158,7 +188,7 @@ class Project
         return;
     }
 
-    
+
     /**
      * insertProjectCategories
      *
@@ -173,7 +203,7 @@ class Project
         $this->con->write($query, $values);
     }
 
-    
+
     /**
      * selectAllProjects
      *
@@ -185,7 +215,7 @@ class Project
         return $this->con->read($query);
     }
 
-    
+
     /**
      * updateProject
      *
@@ -252,7 +282,7 @@ class Project
         return;
     }
 
-    
+
     /**
      * deleteProjectCategories
      *
@@ -265,7 +295,7 @@ class Project
         $this->con->write($query, ["id_project" => $idProject]);
     }
 
-    
+
     /**
      * deleteProject
      *

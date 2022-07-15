@@ -6,7 +6,7 @@ $projectsInProgress = $project->selectProjectsInProgress();
 $allCategories = $category->selectAllCategories();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
-    $projectsInProgress = $project->selectProjectsFromCategory($_POST['categoryFilter']);
+    $projectsInProgress = $project->selectProjectsNotDoneFromCategory($_POST['categoryFilter']);
 }
 ?>
 
@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
     </div>
     <div class="col-12">
         <h2 class="text-center">Projects In Progress : </h2>
+        <p>Total : <?= $projectsInProgress ? count($projectsInProgress) : 0  ?> </p>
     </div>
 </div>
 <form method="POST">

@@ -1,13 +1,39 @@
 <?php
 $title = "All Projects";
 require_once("./inc/header.php");
-$allProjects = $project->selectAllProjects();
+
+$allCategories = $category->selectAllCategories();
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['categoryFilter'])) {
+    $allProjects = $project->selectProjectsFromCategory($_POST['categoryFilter']);
+} elseif ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['doneProjects'])) {
+    $allProjects = $project->selectAllDoneProjects();
+} else {
+    $allProjects = $project->selectAllProjects();
+}
+
 ?>
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">All Projects</h1>
+        <p>Total : <?= $allProjects ? count($allProjects) : 0  ?> </p>
+        <form method="POST" class="my-3">
+            <input type="submit" class="btn btn-primary" name="doneProjects" value="Done Projects">
+        </form>
+        <form method="POST" class="my-3">
+            <input type="submit" class="btn btn-primary" name="allProjects" value="All Projects">
+        </form>
     </div>
 </div>
+<form method="POST" class="my-3">
+    <div class="mb-3">
+        <select onchange="this.form.submit()" name="categoryFilter" class="form-select">
+            <option selected>Choose categories</option>
+            <?php foreach ($allCategories as $category) : ?>
+                <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</form>
 <div class="row">
     <div class="col-12">
         <?php if (!$allProjects) : ?>
@@ -18,7 +44,6 @@ $allProjects = $project->selectAllProjects();
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Remains Days</th>
                         <th scope="col">Created At</th>
                         <th scope="col">Deadline</th>
                         <th scope="col">Status</th>
@@ -29,14 +54,12 @@ $allProjects = $project->selectAllProjects();
                     <?php foreach ($allProjects as $project) : ?>
                         <?php
                         $deadline  = $project->deadline ? date('d/m/y', strtotime($project->deadline)) : "Done";
-                        $remains_days = $project->remains_days ?: 0;
                         $created_at = date('d/m/y', strtotime($project->created_at));
                         $status = $project->status ? "Done" : "Not done yet";
                         ?>
                         <tr>
                             <th scope="row"><?= $project->id_project ?></th>
                             <td><?= $project->name ?></td>
-                            <td><?= $remains_days ?></td>
                             <td><?= $created_at ?></td>
                             <td><?= $deadline ?></td>
                             <td><?= $status ?></td>

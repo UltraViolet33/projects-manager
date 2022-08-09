@@ -32,6 +32,7 @@ $project = new Project();
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="allProjects.php">All Projects</a></li>
+              <li><a class="dropdown-item" href="portfolioProjects.php">Portfolio Projects</a></li>
               <li><a class="dropdown-item" href="addProject.php">Add Project</a></li>
             </ul>
           </li>

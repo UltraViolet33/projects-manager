@@ -229,6 +229,18 @@ class Project
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects ORDER BY created_at DESC";
         return $this->con->read($query);
     }
+    
+
+    /**
+     * getAllPortfolioProjects
+     *
+     * @return array
+     */
+    public function getAllPortfolioProjects()
+    {
+        $query = "SELECT * FROM projects WHERE github_portfolio = 1 ORDER BY created_at DESC";
+        return $this->con->read($query);
+    }
 
 
     /**
@@ -255,6 +267,7 @@ class Project
         $deadline = date("Y-m-d", $deadline);
         $created_at = $_POST['created_at'];
         $status = 0;
+        $github_portfolio = 0;
 
         $values = array(
             "id_project" => $idProject,
@@ -276,11 +289,19 @@ class Project
                 "description" => $_POST['description'],
                 "deadline" => $deadline,
                 "status" => $status,
+                "github_portfolio" => $github_portfolio,
                 "created_at" => $_POST['created_at'],
                 "date_end" => date("Y-m-d", $currentDate),
             );
 
-            $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, status=:status, date_end=:date_end WHERE id_project=:id_project";
+            if (isset($_POST['github_portfolio']) && $_POST['github_portfolio'] == "true") {
+                $values['github_portfolio'] = 1;
+            }
+
+            // var_dump($values);
+            // die;
+
+            $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, status=:status, date_end=:date_end WHERE id_project=:id_project";
         }
 
         $this->con->write($query, $values);

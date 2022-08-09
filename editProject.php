@@ -56,6 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['editProject'])) {
                     Done
                 </label>
             </div>
+            <div class="form-check mb-3">
+                <?php if ($singleProject->github_portfolio) : ?>
+                    <input name="github_portfolio" class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" checked>
+                <?php else : ?>
+                    <input name="github_portfolio" class="form-check-input" type="checkbox" value="true" id="flexCheckDefault">
+                <?php endif; ?>
+                <label for="github_portfolio" class="form-check-label" for="flexCheckDefault">
+                    Github Portfolio
+                </label>
+            </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="editProject">
         </form>
         <div class="bg-danger">

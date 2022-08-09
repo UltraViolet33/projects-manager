@@ -7,6 +7,7 @@ $title = "Details Project";
 require_once("./inc/header.php");
 
 $singleProject = $project->selectOneProject($_GET['id']);
+
 $categories = $category->selectProjectCategories($_GET['id']);
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && is_numeric($_POST['idProject'])) {
@@ -20,10 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && is_numeric($_POST['idProject'])) {
         <p>Name : <?= $singleProject->name ?></p>
         <p>Description : <?= $singleProject->description ?></p>
         <p>Github link : <?= $singleProject->github_link ?  " <a href='$singleProject->github_link' target='_blanck'>Lien vers github</a> " : "non renseigné" ?></p>
+        <p>Is in Github Portfolio : <?= $singleProject->github_portfolio ? "yes" : "no" ?></p>
         <p>Status : <?= $singleProject->status ? "Done" : "Not done" ?></p>
         <p>Created at : <?= $singleProject->created_at ?></p>
         <p>Deadline : <?= $singleProject->deadline ?></p>
-        <p>Date end : <?= $singleProject->date_end ? $singleProject6->date_end : "unknown" ?></p>
+        <p>Date end : <?= $singleProject->date_end ? $singleProject->date_end : "unknown" ?></p>
         <h2>Categories : </h2>
         <?php foreach ($categories as $category) : ?>
             <p><?= $category->name ?></p>

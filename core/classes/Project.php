@@ -211,6 +211,8 @@ class Project
         $projectsPortfolioJson = json_encode($projectsPortfolio);
         echo $projectsPortfolioJson;
         file_put_contents("./core/data/projects.json", $projectsPortfolioJson);
+        $commands = file_get_contents("./core/classes/pushPortfolio.sh");
+
     }
 
 

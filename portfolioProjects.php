@@ -3,7 +3,6 @@ $title = "Portfolio Projects";
 require_once("./inc/header.php");
 $allProjects = $project->getAllPortfolioProjects();
 ?>
-
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">All Portfolio Projects</h1>
@@ -33,6 +32,7 @@ $allProjects = $project->getAllPortfolioProjects();
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <a href="./commitPortfolio.php" class="btn btn-primary">Commit to github portfolio</a>
         <?php endif; ?>
     </div>
 </div>

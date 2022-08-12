@@ -203,6 +203,16 @@ class Project
         return;
     }
 
+    public function commitPortfolio()
+    {
+
+        $projectsPortfolio = $this->getAllPortfolioProjects();
+        // var_dump($projectsPortfolio);
+        $projectsPortfolioJson = json_encode($projectsPortfolio);
+        echo $projectsPortfolioJson;
+        file_put_contents("./core/data/projects.json", $projectsPortfolioJson);
+    }
+
 
     /**
      * insertProjectCategories

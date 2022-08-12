@@ -274,35 +274,23 @@ class Project
             "name" => $_POST['name'],
             "description" => $_POST['description'],
             "deadline" => $deadline,
-            "status" => $status,
             "created_at" => $created_at,
+            "status" => $status,
+            "github_portfolio" => $github_portfolio,
         );
 
-        $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, status=:status WHERE id_project=:id_project";
-
-
         if (isset($_POST['status']) && $_POST['status'] == "true") {
-            $status = 1;
-            $values = array(
-                "id_project" => $idProject,
-                "name" => $_POST['name'],
-                "description" => $_POST['description'],
-                "deadline" => $deadline,
-                "status" => $status,
-                "github_portfolio" => $github_portfolio,
-                "created_at" => $_POST['created_at'],
-                "date_end" => date("Y-m-d", $currentDate),
-            );
-
-            if (isset($_POST['github_portfolio']) && $_POST['github_portfolio'] == "true") {
-                $values['github_portfolio'] = 1;
-            }
-
-            // var_dump($values);
-            // die;
-
-            $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, status=:status, date_end=:date_end WHERE id_project=:id_project";
+            $values['status'] = 1;
+            $values['date_end'] =date("Y-m-d", $currentDate);
         }
+
+
+        if (isset($_POST['github_portfolio']) && $_POST['github_portfolio'] == "true") {
+            $values['github_portfolio'] = 1;
+        }
+
+        $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, status=:status, date_end=:date_end WHERE id_project=:id_project";
+
 
         $this->con->write($query, $values);
         $this->deleteProjectCategories($idProject);

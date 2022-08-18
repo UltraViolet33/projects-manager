@@ -212,8 +212,8 @@ class Project
         // echo $projectsPortfolioJson;
          file_put_contents("./core/data/projects.json", $projectsPortfolioJson);
         // $commands = file_get_contents("./core/classes/pushPortfolio.sh");
-        shell_exec("sh ./core/classes/pushPortfolio.sh");
-
+        $test = shell_exec("sh ./core/classes/pushPortfolio.sh");
+        var_dump($test);
     }
 
 

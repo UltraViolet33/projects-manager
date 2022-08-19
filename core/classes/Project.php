@@ -251,7 +251,7 @@ class Project
      */
     public function getAllPortfolioProjects()
     {
-        $query = "SELECT * FROM projects WHERE github_portfolio = 1 ORDER BY created_at DESC";
+        $query = "SELECT name, description, github_link, id_project  FROM projects WHERE github_portfolio = 1 ORDER BY created_at DESC";
         return $this->con->read($query);
     }
 

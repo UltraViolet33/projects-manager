@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && is_numeric($_POST['idProject'])) {
         <p>Is in Github Portfolio : <?= $singleProject->github_portfolio ? "yes" : "no" ?></p>
         <p>Status : <?= $singleProject->status ? "Done" : "Not done" ?></p>
         <p>Created at : <?= $singleProject->created_at ?></p>
-        <p>Deadline : <?= $singleProject->deadline ?></p>
+        <p>Deadline : <?= $singleProject->deadline ? $singleProject->deadline : "DONE" ?></p>
         <p>Date end : <?= $singleProject->date_end ? $singleProject->date_end : "unknown" ?></p>
         <h2>Categories : </h2>
         <?php foreach ($categories as $category) : ?>

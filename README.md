@@ -4,3 +4,8 @@
 
 - PHP
 - MySQL
+
+
+## Todos left
+
+- update project bug

@@ -210,7 +210,7 @@ class Project
         // var_dump($projectsPortfolio);
         $projectsPortfolioJson = json_encode($projectsPortfolio);
         // echo $projectsPortfolioJson;
-         file_put_contents("./core/data/projects.json", $projectsPortfolioJson);
+        file_put_contents("./core/data/projects.json", $projectsPortfolioJson);
         // $commands = file_get_contents("./core/classes/pushPortfolio.sh");
         $test = shell_exec("sh ./core/classes/pushPortfolio.sh");
         var_dump($test);
@@ -242,7 +242,7 @@ class Project
         $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects ORDER BY created_at DESC";
         return $this->con->read($query);
     }
-    
+
 
     /**
      * getAllPortfolioProjects
@@ -264,7 +264,8 @@ class Project
      */
     public function updateProject($idProject)
     {
-        $dataForm = ['name', 'description', 'created_at', 'deadline'];
+
+        $dataForm = ['name', 'description', 'created_at'];
 
         foreach ($dataForm as $data) {
             if (!isset($_POST[$data]) || empty($_POST[$data])) {
@@ -273,11 +274,14 @@ class Project
         }
 
         $currentDate = strtotime(date('Y-m-d'));
-        $deadline = strtotime($_POST['deadline']);
+        if ($_POST["deadline"]) {
+            $deadline = strtotime($_POST['deadline']);
 
-        if ($deadline < $currentDate)  return $result = "The deadline must not be in the past";
+            if ($deadline < $currentDate)  return $result = "The deadline must not be in the past";
+            $deadline = date("Y-m-d", $deadline);
+        }
 
-        $deadline = date("Y-m-d", $deadline);
+
         $created_at = $_POST['created_at'];
         $status = 0;
         $github_portfolio = 0;
@@ -290,11 +294,13 @@ class Project
             "created_at" => $created_at,
             "status" => $status,
             "github_portfolio" => $github_portfolio,
+            'date_end' => null
         );
 
         if (isset($_POST['status']) && $_POST['status'] == "true") {
             $values['status'] = 1;
-            $values['date_end'] =date("Y-m-d", $currentDate);
+            $values['date_end'] = date("Y-m-d", $currentDate);
+            $values["deadline"] = null;
         }
 
 
@@ -302,9 +308,11 @@ class Project
             $values['github_portfolio'] = 1;
         }
 
+
         $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, status=:status, date_end=:date_end WHERE id_project=:id_project";
 
 
+        var_dump($values);
         $this->con->write($query, $values);
         $this->deleteProjectCategories($idProject);
 
@@ -312,7 +320,7 @@ class Project
             $this->insertProjectCategories($idProject, $category);
         }
 
-        header("Location: index.php");
+        header("Location: allProjects.php");
         return;
     }
 

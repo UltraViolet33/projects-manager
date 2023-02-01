@@ -294,6 +294,7 @@ class Project
             "created_at" => $created_at,
             "status" => $status,
             "github_portfolio" => $github_portfolio,
+            "github_link" => $_POST["github_link"],
             'date_end' => null
         );
 
@@ -309,7 +310,7 @@ class Project
         }
 
 
-        $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, status=:status, date_end=:date_end WHERE id_project=:id_project";
+        $query = "UPDATE projects SET name = :name, description = :description, created_at=:created_at, deadline=:deadline, github_portfolio=:github_portfolio, github_link=:github_link, status=:status, date_end=:date_end WHERE id_project=:id_project";
 
 
         var_dump($values);

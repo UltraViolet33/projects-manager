@@ -35,7 +35,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="./addCategory.php">Add Category</a></li>
-                            <li><a class="dropdown-item" href="show.php">All Categories</a></li>
+                            <li><a class="dropdown-item" href="/categories">All Categories</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -26,9 +26,9 @@ class Render
         // $errors = Session::get("error");
         ob_start();
         extract($this->args);
-        // require BASE_VIEW_PATH . 'layouts\header.php';
+        require BASE_VIEW_PATH . 'layouts\header.php';
         require BASE_VIEW_PATH . $this->viewPath . '.php';
-        // require BASE_VIEW_PATH . 'layouts\footer.php';
+        require BASE_VIEW_PATH . 'layouts\footer.php';
         return ob_get_clean();
     }
 

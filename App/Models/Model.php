@@ -13,7 +13,6 @@ abstract class Model
     public function __construct()
     {
         $this->db = Database::getInstance();
-        var_dump($this->db);
         $this->table = $this->setTableName();
         $this->id = $this->setId();
     }

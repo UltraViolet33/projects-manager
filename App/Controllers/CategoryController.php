@@ -26,10 +26,12 @@ class CategoryController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
             if ($this->checkPostValues(["name"])) {
                 $this->categoryModel->create($_POST["name"]);
                 header("Location: /categories");
             }
+            
         }
 
         return Render::make("/categories/create");

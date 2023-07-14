@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-// use App\Core\Helpers\Session;
+use App\Core\Helpers\Session;
 
 define('BASE_VIEW_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\views" . DIRECTORY_SEPARATOR);
 
@@ -23,7 +23,7 @@ class Render
 
     public function view(): string
     {
-        // $errors = Session::get("error");
+        $errors = Session::get("error");
         ob_start();
         extract($this->args);
         require BASE_VIEW_PATH . 'layouts\header.php';

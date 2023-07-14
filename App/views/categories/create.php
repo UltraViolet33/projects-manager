@@ -8,7 +8,12 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="addCategory">
         </form>
-        <div class="bg-danger">
-        </div>
+        <?php if (strlen($errors) !== 0) : ?>
+            <div class="bg-danger my-3 p-2">
+                <p class="text-center">
+                    <?= $errors ?>
+                </p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

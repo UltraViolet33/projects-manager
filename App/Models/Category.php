@@ -16,15 +16,9 @@ class Category extends Model
     }
 
 
-    public function create(string $name)
+    public function create(string $name): bool
     {
-        try {
-
-            $query = "INSERT INTO categories(name) VALUES(:name)";
-            $this->db->write($query, ["name" => $name]);
-        } catch (Exception $e) {
-            echo $e;
-            die;
-        }
+        $query = "INSERT INTO categories(name) VALUES(:name)";
+        return $this->db->write($query, ["name" => $name]);
     }
 }

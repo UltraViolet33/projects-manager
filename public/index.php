@@ -18,6 +18,9 @@ $router->get('/categories/index', ['App\Controllers\CategoryController', 'index'
 $router->get('/categories/create', ['App\Controllers\CategoryController', 'create']);
 $router->post('/categories/create', ['App\Controllers\CategoryController', 'create']);
 
+$router->get('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
+$router->post('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
+
 
 
 

@@ -29,6 +29,21 @@ abstract class Model
         return $this->db->readOneRow($query, ["id" => $id]);
     }
 
+    public function selectByColumn(string $column, mixed $value): object|bool
+    {
+        $query = "SELECT * FROM $this->table WHERE $column = :value";
+        return $this->db->readOneRow($query, ["value" => $value]);
+    }
+
+
+    public function doesExist(string $arg, mixed $value): bool
+    {
+        $query = "SELECT * FROM $this->table WHERE $arg = :value";
+        $result = $this->db->readOneRow($query, ["value" => $value]);
+
+        return $result ? true : false;
+    }
+
 
     public function selectAll(): array
     {

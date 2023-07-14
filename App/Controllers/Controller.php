@@ -17,4 +17,14 @@ abstract class Controller
 
         return true;
     }
+
+
+    protected function getIdInUrlOrRedirectTo(string $urlRedirect): bool|int
+    {
+        if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+            header("Location: $urlRedirect");
+        }
+
+        return $_GET["id"];
+    }
 }

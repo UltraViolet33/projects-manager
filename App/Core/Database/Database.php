@@ -2,6 +2,7 @@
 
 namespace App\Core\Database;
 
+use Exception;
 use \PDO;
 
 class Database
@@ -13,10 +14,17 @@ class Database
 
     private function __construct()
     {
-        $string = Config::getValue('db_type') . ":host=" . Config::getValue('db_host') . ";dbname=" . Config::getValue('db_name');
-        $this->PDOInstance  = new PDO($string, Config::getValue('db_user'), Config::getValue('db_password'), [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
+        try {
+
+            $string = Config::getValue('db_type') . ":host=" . Config::getValue('db_host') . ";dbname=" . Config::getValue('db_name');
+            $this->PDOInstance  = new PDO($string, Config::getValue('db_user'), Config::getValue('db_password'), [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+        } catch (Exception $e) {
+
+            echo "an error";
+            // use global variables to display error
+        }
     }
 
 

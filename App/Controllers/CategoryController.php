@@ -21,4 +21,10 @@ class CategoryController
         $allCategories = $this->categoryModel->selectAll();
         return Render::make("categories/index", compact("allCategories"));
     }
+    
+
+    public function create(): Render
+    {
+        return Render::make("/categories/create");
+    }
 }

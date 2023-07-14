@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            if ($this->submitFormCreateCategory()) {
+            if ($this->submitFormCategory()) {
 
                 if ($this->categoryModel->create($_POST["name"])) {
                     header("Location: /categories");
@@ -51,7 +51,8 @@ class CategoryController extends Controller
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            if ($this->submitFormCreateCategory()) {
+            echo "test";
+            if ($this->submitFormCategory()) {
 
                 // if ($this->categoryModel->create($_POST["name"])) {
                 // header("Location: /categories");
@@ -60,12 +61,11 @@ class CategoryController extends Controller
         }
 
 
-
         return Render::make("/categories/edit", compact("category"));
     }
 
 
-    private function submitFormCreateCategory(): bool
+    private function submitFormCategory(): bool
     {
         if ($this->categoryModel->doesExist("name", $_POST["name"])) {
             Session::setErrorMsg("Error : Category name already exists !");
@@ -75,6 +75,22 @@ class CategoryController extends Controller
         if (!$this->checkPostValues(["name"])) {
             return false;
         }
+
+
+        return true;
+    }
+
+    private function submitFormEditCategory(): bool
+    {
+        if ($this->categoryModel->doesExist("name", $_POST["name"])) {
+            Session::setErrorMsg("Error : Category name already exists !");
+            return false;
+        }
+
+        if (!$this->checkPostValues(["name"])) {
+            return false;
+        }
+
 
         return true;
     }

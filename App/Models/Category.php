@@ -21,4 +21,12 @@ class Category extends Model
         $query = "INSERT INTO categories(name) VALUES(:name)";
         return $this->db->write($query, ["name" => $name]);
     }
+
+    public function checkIfNameExistsToEdit(string $name, int $id): bool
+    {
+        $query = "SELECT * FROM $this->table WHERE name = :name";
+        $result = $this->db->readOneRow($query, ["name" => $name]);
+
+        return $result ? true : false;
+    }
 }

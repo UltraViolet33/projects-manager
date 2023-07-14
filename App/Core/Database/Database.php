@@ -53,7 +53,7 @@ class Database
     }
 
 
-    public function write(string $query, array $data = array()): bool
+    public function write(string $query, array $data = array())
     {
         $statement = $this->PDOInstance->prepare($query);
         return $statement->execute($data);

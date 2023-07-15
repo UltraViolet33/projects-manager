@@ -43,13 +43,20 @@ class ProjectController extends Controller
         return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
     }
 
+    private function getSingleProject(int $idProject): object 
+    {
+        $project  = $this->projectModel->selectByColumn("id_project", $idProject);
+        $project->categories = $this->categoryModel->getProjectCategories($idProject);
+        return $project;
+    }
+
 
     public function details(): Render
     {
 
         $idProject = $this->getIdInUrlOrRedirectTo("/");
 
-        $project  = $this->projectModel->selectByColumn("id_project", $idProject);
+        $project  = $this->getSingleProject($idProject);
 
         if (!$project) {
             header("Location: /projects/all");

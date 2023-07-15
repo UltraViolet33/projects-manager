@@ -29,7 +29,7 @@ class Category extends Model
         return $this->db->write($query, $category);
     }
 
-    
+
     public function delete(int $idCategory): bool
     {
         $query = "DELETE FROM categories WHERE id_category = :id_category";
@@ -43,5 +43,15 @@ class Category extends Model
         $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
 
         return $result ? true : false;
+    }
+
+    public function getProjectCategories(int $idProject): array
+    {
+        $query = "SELECT categories.name FROM categories
+                INNER JOIN projects_categories
+                ON categories.id_category = projects_categories.id_categorie
+                WHERE projects_categories.id_project = :id_project";
+
+        return $this->db->read($query, ["id_project" => $idProject]);
     }
 }

@@ -7,9 +7,17 @@ use App\Models\Model;
 class Project extends Model
 {
 
-    public function selectProjectsInProgress(){
-        
-        $query = "SELECT *, DATEDIFF(deadline, NOW()) AS remains_days FROM projects WHERE status = 0 ORDER BY remains_days ASC";
+    public function selectProjectsInProgress()
+    {
+
+        $query = "SELECT * FROM projects WHERE status = 0";
         return $this->db->read($query);
+    }
+
+
+    public function create(array $project): bool
+    {
+        $query = "INSERT INTO projects(name, description, created_at, github_link, priority) VALUES(:name, :description, CURDATE(), :github_link, :priority)";
+        return $this->db->write($query, $project);
     }
 }

@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">Add a Project</h1>
-        <h3>Add a project already done <a href="./addProjectDone.php">here</a></h3>
         <form action="" method="POST">
             <div class="mb-3">
                 <label for="name" class="form-label">Name : </label>
@@ -16,6 +15,7 @@
                 <textarea class="form-control" name="description" rows="3"><?= isset($_POST['description']) ? $_POST['description'] : null ?></textarea>
             </div>
             <div class="mb-3">
+                <label for="categories">Project Categories : </label>
                 <select name="categories[]" class="form-select" multiple>
                     <?php foreach ($allCategories as $category) : ?>
                         <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
@@ -23,14 +23,11 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label for="priority">Project priority : </label>
                 <select name="priority" class="form-select">
                     <option value="0">Low</option>
                     <option value="1">High</option>
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="created_at" class="form-label">Created At :</label>
-                <input type="date" class="form-control" name="created_at" value="<?= isset($_POST['created_at']) ? htmlspecialChars($_POST['created_at']) : null ?>">
             </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="addProject">
         </form>

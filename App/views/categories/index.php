@@ -24,7 +24,7 @@
                             <td><?= $category->name ?></td>
                             <td><a href="/categories/edit?id=<?= $category->id_category ?>" class="btn btn-primary">Edit</a></td>
                             <td>
-                                <form method="POST" onsubmit="return confirm('Are you sure you want to delete this category ?')">
+                                <form action="/categories/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this category ?')">
                                     <input type="hidden" name="idCategory" value="<?= $category->id_category ?>">
                                     <input type="submit" class="btn btn-warning" value="Delete" name="deleteCategory">
                                 </form>

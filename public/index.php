@@ -21,7 +21,7 @@ $router->post('/categories/create', ['App\Controllers\CategoryController', 'crea
 $router->get('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
 $router->post('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
 
-
+$router->post('/categories/delete', ['App\Controllers\CategoryController', 'delete']);
 
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

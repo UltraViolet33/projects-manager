@@ -41,6 +41,24 @@ class CategoryController extends Controller
         return Render::make("/categories/create");
     }
 
+    
+    public function delete()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if ($this->checkPostValues(["idCategory"])) {
+                $category = $this->categoryModel->selectByColumn("id_category", $_POST["idCategory"]);
+
+                if ($this->categoryModel->delete($category->id_category)) {
+                    header("Location: /categories");
+                }
+            }
+        }
+
+        header("Location: /categories");
+    }
+
+
     public function edit(): Render
     {
         $idCategory = $this->getIdInUrlOrRedirectTo("/categories");

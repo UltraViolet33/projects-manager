@@ -29,6 +29,13 @@ class Category extends Model
         return $this->db->write($query, $category);
     }
 
+    
+    public function delete(int $idCategory): bool
+    {
+        $query = "DELETE FROM categories WHERE id_category = :id_category";
+        return $this->db->write($query, ["id_category" =>  $idCategory]);
+    }
+
 
     public function checkIfNameExistsToEdit(string $name, int $id): bool
     {

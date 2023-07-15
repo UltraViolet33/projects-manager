@@ -18,21 +18,28 @@
             <div class="mb-3">
                 <select name="categories[]" class="form-select" multiple>
                     <?php foreach ($allCategories as $category) : ?>
-                        <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
+                        <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
                     <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <select name="priority" class="form-select">
+                    <option value="0">Low</option>
+                    <option value="1">High</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="created_at" class="form-label">Created At :</label>
                 <input type="date" class="form-control" name="created_at" value="<?= isset($_POST['created_at']) ? htmlspecialChars($_POST['created_at']) : null ?>">
             </div>
-            <div class="mb-3">
-                <label for="deadline" class="form-label">Deadline :</label>
-                <input type="date" class="form-control" name="deadline" value="<?= isset($_POST['deadline']) ? htmlspecialChars($_POST['deadline']) : null ?>">
-            </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="addProject">
         </form>
-        <div class="bg-danger">
-        </div>
+        <?php if (strlen($errors) !== 0) : ?>
+            <div class="bg-danger my-3 p-2">
+                <p class="text-center">
+                    <?= $errors ?>
+                </p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

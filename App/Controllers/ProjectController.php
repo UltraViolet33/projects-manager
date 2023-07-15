@@ -40,7 +40,9 @@ class ProjectController
             //     }
             // }
         }
+        
+        $allCategories = $this->categoryModel->selectAll();
 
-        return Render::make("/projects/create");
+        return Render::make("/projects/create", compact("allCategories"));
     }
 }

@@ -1,0 +1,258 @@
+-- --------------------------------------------------------
+-- Hôte:                         127.0.0.1
+-- Version du serveur:           5.7.33 - MySQL Community Server (GPL)
+-- SE du serveur:                Win64
+-- HeidiSQL Version:             11.2.0.6213
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Listage de la structure de la base pour projects-manager-debug
+CREATE DATABASE IF NOT EXISTS `projects-manager-debug` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `projects-manager-debug`;
+
+-- Listage de la structure de la table projects-manager-debug. categories
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id_category` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_category`) USING BTREE,
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+
+-- Listage des données de la table projects-manager-debug.categories : ~14 rows (environ)
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` (`id_category`, `name`) VALUES
+	(19, 'app mobile'),
+	(23, 'CLI app'),
+	(29, 'dd'),
+	(43, 'ee'),
+	(44, 'rtrtrt'),
+	(25, 'Script'),
+	(28, 'ss'),
+	(45, 'ssdsdsds'),
+	(41, 'sss'),
+	(42, 'sssss'),
+	(26, 'Static Front-end '),
+	(22, 'video game'),
+	(21, 'web app'),
+	(40, 'zz');
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+
+-- Listage de la structure de la table projects-manager-debug. projects
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id_project` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `created_at` date DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `github_link` varchar(100) DEFAULT NULL,
+  `priority` tinyint(4) NOT NULL DEFAULT '0',
+  `github_portfolio` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_project`)
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=latin1;
+
+-- Listage des données de la table projects-manager-debug.projects : ~87 rows (environ)
+/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+INSERT INTO `projects` (`id_project`, `name`, `description`, `created_at`, `status`, `github_link`, `priority`, `github_portfolio`) VALUES
+	(26, 'Project Manager', 'A web app to store and manage my programming projects', '2022-07-04', 0, 'https://github.com/UltraViolet33/Projects-Manager', 0, 0),
+	(27, 'Cheat Repo', 'A bash script to cheat on my github account (commit on a master branch)', '2022-04-17', 1, 'https://github.com/UltraViolet33/Cheat-Repo', 0, 0),
+	(28, 'Snippet - Code', 'Snippets code (HTML, CSS, bootstrap, PHP, JS, Python)', '2022-05-17', 1, 'https://github.com/UltraViolet33/Snippets-code', 0, 0),
+	(29, ' Responsive-Web-Design-FreeCodeCamp-Challenges', 'HTML/CSS Challenges FreeCodeCamp ', '2022-06-03', 1, 'https://github.com/UltraViolet33/Responsive-Web-Design-FreeCodeCamp-Challenges', 0, 0),
+	(30, ' JavaScript-Algorithms-and-Data-Structures-FreeCodeCamp-Challenges', 'JS algo FreeCodeCamp Challenges', '2022-04-24', 1, 'https://github.com/UltraViolet33/JavaScript-Algorithms-and-Data-Structures-FreeCodeCamp-Challenges', 0, 0),
+	(31, ' CS50-CS-Introduction', 'CS50 computer science introduction exercises', '2022-05-26', 1, 'https://github.com/UltraViolet33/CS50-CS-Introduction', 0, 0),
+	(33, 'Start-MVC-PHP', 'A code to start MVC with PHP', '2022-04-04', 1, 'https://github.com/UltraViolet33/Start-MVC-PHP', 0, 0),
+	(34, ' Focus Timer App', 'A mobile application with React Native to focus on a task with a timer.', '2022-05-04', 1, 'https://github.com/UltraViolet33/Focus-Timer-App', 0, 1),
+	(35, 'PHP API Training', 'An API  with PHP about books and a front-end with Vanilla JS.', '2022-05-09', 1, 'https://github.com/UltraViolet33/PHP-API-Trainig', 0, 1),
+	(36, 'Portofolio Training', 'A HTML and CSS practice in CCI at the begining of the web developer course', '2021-10-01', 1, 'https://github.com/UltraViolet33/Portofolio-Training', 0, 0),
+	(37, 'RSS-Feed-Reader-PHP', 'A little PHP project to practice PHP after I left the CCI.\r\nStore the RSS flux of website links ', '2022-05-01', 1, 'https://github.com/UltraViolet33/RSS-Feed-Reader-PHP', 0, 0),
+	(38, 'PHP Blog', 'A blog to practice MVC pattern with PHP.', '2022-04-05', 1, 'https://github.com/UltraViolet33/PHP-Blog', 0, 1),
+	(39, ' Vite mon Book E-Shop', 'E-Commerce website in PHP.', '2022-03-11', 0, 'https://github.com/UltraViolet33/Vite-mon-Book-E-Shop', 0, 1),
+	(40, ' Books Manager', 'A web app to manage books in PHP / MYSQL / Bootstrap', '2022-04-18', 1, 'https://github.com/UltraViolet33/Books-CRUD-PHP', 0, 1),
+	(41, 'OCR React App', 'Optical Recognition Character with React', '2022-03-29', 1, 'https://github.com/UltraViolet33/OCR-App-React', 0, 1),
+	(42, 'Contacts App', 'A React Native mobile application to manage your contacts\' names, emails and phone number.', '2022-03-24', 1, 'https://github.com/UltraViolet33/Contacts-App', 0, 1),
+	(43, 'Todo-List-React-Native', 'Todo List React Native', '2022-03-21', 1, 'https://github.com/UltraViolet33/Todo-List-React-Native', 0, 0),
+	(44, 'Games Mobile App', 'A React Native mobile app to search and display video games from a public API', '2022-03-08', 1, 'https://github.com/UltraViolet33/Games-Mobile-App', 0, 1),
+	(46, 'Catch-the-Brain', 'Video Game in Python (pygame)\r\nYou have to click on the brain', '2020-12-01', 1, 'https://github.com/UltraViolet33/Catch-the-Brain', 0, 0),
+	(47, ' Pong-Game', 'Pong Game with the Turtle library in Python', '2020-12-12', 1, 'https://github.com/UltraViolet33/Pong-Game', 0, 0),
+	(48, 'Virtual-Quizz-CVZone', 'Quizz, answer with your hand in front of the webcam', '2021-09-12', 1, 'https://github.com/UltraViolet33/Virtual-Quizz-CVZone', 0, 0),
+	(49, 'CodeSecret', 'Secret code', '2021-12-09', 1, 'https://github.com/UltraViolet33/CodeSecret', 0, 0),
+	(50, 'Password-Manager-Python', 'A basic password manager (bug a lot) in Python and the library PyQT5', '2021-08-12', 1, 'https://github.com/UltraViolet33/Password-Manager-Python', 0, 0),
+	(51, 'portofolio', 'My Portofolio', '2021-08-01', 1, 'https://github.com/UltraViolet33/Old-Ones-from-Ulysse28/tree/portofolio', 0, 0),
+	(52, 'CS50 Python', 'Problems from CS50 Python', '2022-08-01', 1, 'https://github.com/UltraViolet33/CS50-Python', 0, 0),
+	(53, 'Form', 'This is a joke', '2022-02-01', 1, 'https://github.com/UltraViolet33/form', 0, 0),
+	(54, 'Chess-Game-React', 'This a chess game', '2022-05-01', 0, 'https://github.com/UltraViolet33/Chess-Game-React', 0, 0),
+	(55, 'Expense-Manager-CLI', 'Expenses Manager', '2022-09-12', 1, 'https://github.com/UltraViolet33/Expense-Manager-CLI', 0, 0),
+	(56, 'Counter words for writer', 'This app counts the number of words you write (this is for my every day writing goal)', '2022-08-15', 1, 'https://github.com/UltraViolet33/counter-word-for-writer', 0, 0),
+	(57, 'C Programming Book', 'The code of C Programming Book', '2022-09-15', 1, 'https://github.com/UltraViolet33/C-Programming-Book', 0, 0),
+	(58, 'Routines Tracker Apps', 'API with vanilla PHP / Web App with React.\r\nApplications to manage my morning / evening / sport routines.', '2022-09-22', 1, 'https://github.com/UltraViolet33/Routines-Tracker-Apps', 0, 0),
+	(59, 'Github Portfolio', 'My Github portfolio', '2022-07-24', 1, 'https://github.com/UltraViolet33/Github-Portofolio', 0, 1),
+	(60, 'My CV', 'My CV', '2022-07-20', 1, 'https://github.com/UltraViolet33/My-CV', 0, 0),
+	(61, 'Automation-Create-Project-Repo', 'Create a github repo', '2022-08-06', 1, 'https://github.com/UltraViolet33/Automation-Create-Project-Repo', 0, 0),
+	(62, 'Markdown-Previewer', 'Markdown-Previewer', '2021-11-11', 1, 'https://github.com/UltraViolet33/Markdown-Previewer', 0, 0),
+	(63, 'Pendu-in-C', 'A pendu game with C langage', '2021-11-11', 1, 'https://github.com/UltraViolet33/Pendu-in-C', 0, 0),
+	(64, 'Shopping List Application', 'My shopping List', '2022-05-17', 1, 'https://github.com/UltraViolet33/Shopping-List-Application', 0, 0),
+	(65, 'Shopping List React Native', 'My mobile app for my shopping List', '2022-05-23', 0, 'https://github.com/UltraViolet33/Shopping-List-React-Native', 0, 0),
+	(66, ' Projects Manager ', 'Sample PHP/MySQL web app to manage projects.', '2022-06-07', 1, 'https://github.com/UltraViolet33/Projects-Manager-PHP', 0, 1),
+	(67, 'Game-life', 'The game of life python ', '2022-10-06', 1, 'https://github.com/UltraViolet33/Game-Life', 0, 0),
+	(68, 'Books Rating', 'Books rating web app with Flask', '2022-09-28', 1, 'https://github.com/UltraViolet33/Books-Rating', 0, 0),
+	(69, 'Tic-Tac Toe Game', 'Tic tac toe game in Python', '2022-10-07', 1, 'https://github.com/UltraViolet33/Tic-Tac-Toe-Game', 0, 0),
+	(70, 'Expenses Manager', 'Expenses manager web app', '2022-10-14', 1, 'https://github.com/UltraViolet33/Expenses-Manager-Apps', 0, 0),
+	(71, 'Logbook', 'Logbbok', '2022-10-21', 1, 'https://github.com/UltraViolet33/Logbook', 0, 0),
+	(72, 'Flask Blog', 'A blog with the web framework Flask in Python', '2022-12-10', 1, 'https://github.com/UltraViolet33/Flask-Blog', 0, 1),
+	(73, 'All Odin Projects ', 'Odin projects', '2022-11-01', 1, 'https://github.com/UltraViolet33/All-Odin-Projets', 0, 0),
+	(74, 'Rebuild sqlite', 'code sqlite in C ', '2022-11-01', 0, 'https://github.com/UltraViolet33/Rebuild-Sqlite', 0, 0),
+	(75, 'Python Freecodecamp', 'Python Challenges from freecodecamp', '2022-11-01', 1, 'https://github.com/UltraViolet33/Python-FreeCodeCamp', 0, 0),
+	(76, 'Doodle Pygame', 'A pygame video game like Doodle Jump', '2022-12-14', 1, '', 0, 0),
+	(77, ' Basic-Video-Game-Pygame', 'A pygame video game like Mario', '2022-12-15', 1, '', 0, 0),
+	(78, 'Youtube-Videos-Downloader', 'a Youtube-Videos-Downloader', '2023-01-01', 1, 'https://github.com/UltraViolet33/Youtube-Videos-Downloader', 0, 0),
+	(79, 'Raycasting-Pygame-Example', 'Raycasting-Pygame-Example', '2022-12-29', 1, 'https://github.com/UltraViolet33/Raycasting-Pygame-Example', 0, 0),
+	(80, ' Hack-Web-Camera', 'Hack-Web-Camera', '2022-12-31', 0, 'https://github.com/UltraViolet33/Hack-Web-Camera', 0, 0),
+	(81, 'Cloud Images', 'Cloud Images', '2022-12-23', 0, 'https://github.com/UltraViolet33/Cloud-Images-App', 0, 0),
+	(82, 'Flask-Login-React', 'Flask-Login-React', '2022-12-21', 1, 'https://github.com/UltraViolet33/Flask-Login-React', 0, 0),
+	(83, 'Click Me', 'Video game with pygame where you have to click as fast as possible !', '2023-01-01', 1, 'https://github.com/UltraViolet33/Click-Me', 0, 0),
+	(84, 'Laravel Blog', 'a blog with Laravel', '2023-01-02', 0, 'https://github.com/UltraViolet33/Laravel-Blog', 0, 0),
+	(85, 'PHP web server', 'a web server', '2023-01-01', 1, 'https://github.com/UltraViolet33/PHP-Web-Server', 0, 0),
+	(86, 'Pygame boilerplate', 'a boilerplate project pygame', '2023-01-01', 1, 'https://github.com/UltraViolet33/Pygame-BoilerPlate', 0, 0),
+	(87, 'Drum Machine', 'Drum Machine Freecodecamp Frontend Challenge', '2023-01-14', 1, 'https://github.com/UltraViolet33/Drum-Machine', 0, 0),
+	(88, 'Flutter-fetch-API', 'A fluuter app to practice api requests', '2023-01-10', 1, 'https://github.com/UltraViolet33/Flutter-fetch-API', 0, 0),
+	(89, ' Data-Structures-and-Algorithms-in-Dart', 'DSA in Dart', '2023-01-12', 0, 'https://github.com/UltraViolet33/Data-Structures-and-Algorithms-in-Dart', 0, 0),
+	(90, 'Tiktok Clone Flutter', 'tiktok clone', '2023-01-17', 0, 'https://github.com/UltraViolet33/TikTok-Clone-Flutter', 0, 0),
+	(91, 'Rois de France', 'Jeu react sur les rois de france', '2023-01-17', 1, 'https://github.com/UltraViolet33/Rois-de-France', 0, 0),
+	(92, 'Several-Webservers', 'To learn about server', '2023-01-19', 1, 'https://github.com/UltraViolet33/Several-Webservers', 0, 0),
+	(93, 'Client-Server-with-Sockets', 'Client-Server-with-Sockets', '2023-01-19', 1, 'https://github.com/UltraViolet33/Client-Server-with-Sockets', 0, 0),
+	(94, 'rest api php', 'a rest api template in php', '2023-01-23', 1, 'https://github.com/UltraViolet33/rest-api-php', 0, 0),
+	(95, 'Web scanner', 'a web scanner', '2023-01-28', 1, 'https://github.com/UltraViolet33/Web-Scanner', 0, 0),
+	(96, ' Calculator-in-JavaScript', 'A basic calculator in JS', '2021-07-22', 1, 'https://github.com/UltraViolet33/Calculator-in-JavaScript', 0, 0),
+	(97, 'One technology a week', 'Every week I discover a new technologie and build a little project with it.', '2023-02-05', 1, 'https://github.com/UltraViolet33/One-Technology-a-week', 0, 0),
+	(98, 'SQL-Query-Builder', 'A SQL-Query-Builder in PHP', '2023-02-01', 1, 'https://github.com/UltraViolet33/SQL-Query-Builder', 0, 0),
+	(99, 'Log-Book-PHP', 'My personal logbook', '2022-10-21', 1, 'https://github.com/UltraViolet33/Log-Book-PHP', 0, 0),
+	(100, 'Pomodoro', 'A pomodoro with react', '2023-02-16', 1, 'https://github.com/UltraViolet33/Pomodoro', 0, 0),
+	(101, 'Movies Tracker', 'a movies tracker', '2023-02-23', 0, 'https://github.com/UltraViolet33/Movies-Tracker', 0, 0),
+	(102, 'Movies App', 'A Flutter mobile app about movies with a Flask API', '2023-03-04', 1, 'https://github.com/UltraViolet33/Movies-Apps', 0, 1),
+	(103, 'Workout-Tracker', 'My personal workout tracker with the web framework Flask', '2023-03-24', 1, 'https://github.com/UltraViolet33/Workout-Tracker', 0, 1),
+	(104, 'Text Editor', 'a text editor', '2023-04-11', 1, 'https://github.com/UltraViolet33/Text-Editor', 0, 0),
+	(105, 'History Games', 'History games', '2023-04-30', 1, 'https://github.com/UltraViolet33/History-Games', 0, 0),
+	(106, 'Tic Tac Toe', 'a react app tic tac toe', '2023-04-18', 1, 'https://github.com/UltraViolet33/Tic-Tac-Toe-React', 0, 0),
+	(107, ' JS-Snippets', 'js snippets', '2023-05-06', 0, 'https://github.com/UltraViolet33/JS-Snippets', 0, 0),
+	(108, ' Hacking-Techniques-Book', 'hacking book', '2022-11-22', 0, 'https://github.com/UltraViolet33/Hacking-Techniques-Book', 0, 0),
+	(109, 'All-Freecodecamp-Projects', 'freecodecamp projects', '2023-04-06', 0, 'https://github.com/UltraViolet33/All-Freecodecamp-Projects', 0, 0),
+	(110, ' ultraviolet33.github.io', 'my blog and portfolio', '2023-04-10', 0, 'https://github.com/UltraViolet33/ultraviolet33.github.io', 0, 0),
+	(111, 'C-Hard-Way', 'hard way c book', '2023-05-18', 0, 'https://github.com/UltraViolet33/C-Hard-Way', 0, 0),
+	(112, 'iregular-verbs-revision', 'iregular-verbs-revision', '2023-05-17', 0, 'https://github.com/UltraViolet33/iregular-verbs-revision', 0, 0),
+	(113, 'Web security', 'https://github.com/UltraViolet33/Web-Security', '2023-05-27', 0, 'https://github.com/UltraViolet33/Web-Security', 0, 0),
+	(114, 'Symfony-Shop', 'Symfony-Shop', '2023-05-29', 0, 'https://github.com/UltraViolet33/Symfony-Shop', 0, 0);
+/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
+
+-- Listage de la structure de la table projects-manager-debug. projects_categories
+CREATE TABLE IF NOT EXISTS `projects_categories` (
+  `id_project` int(11) NOT NULL,
+  `id_categorie` int(11) NOT NULL,
+  PRIMARY KEY (`id_project`,`id_categorie`),
+  KEY `id_categorie` (`id_categorie`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Listage des données de la table projects-manager-debug.projects_categories : ~90 rows (environ)
+/*!40000 ALTER TABLE `projects_categories` DISABLE KEYS */;
+INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
+	(34, 19),
+	(42, 19),
+	(43, 19),
+	(44, 19),
+	(58, 19),
+	(65, 19),
+	(81, 19),
+	(88, 19),
+	(90, 19),
+	(102, 19),
+	(50, 20),
+	(67, 20),
+	(69, 20),
+	(104, 20),
+	(26, 21),
+	(29, 21),
+	(33, 21),
+	(35, 21),
+	(36, 21),
+	(37, 21),
+	(38, 21),
+	(39, 21),
+	(40, 21),
+	(41, 21),
+	(49, 21),
+	(51, 21),
+	(53, 21),
+	(56, 21),
+	(58, 21),
+	(62, 21),
+	(64, 21),
+	(66, 21),
+	(68, 21),
+	(70, 21),
+	(71, 21),
+	(72, 21),
+	(73, 21),
+	(78, 21),
+	(80, 21),
+	(81, 21),
+	(84, 21),
+	(94, 21),
+	(97, 21),
+	(99, 21),
+	(101, 21),
+	(103, 21),
+	(105, 21),
+	(106, 21),
+	(109, 21),
+	(112, 21),
+	(113, 21),
+	(114, 21),
+	(46, 22),
+	(47, 22),
+	(48, 22),
+	(54, 22),
+	(76, 22),
+	(77, 22),
+	(79, 22),
+	(83, 22),
+	(86, 22),
+	(55, 23),
+	(63, 23),
+	(74, 23),
+	(107, 23),
+	(108, 23),
+	(27, 25),
+	(28, 25),
+	(30, 25),
+	(31, 25),
+	(32, 25),
+	(52, 25),
+	(57, 25),
+	(61, 25),
+	(75, 25),
+	(85, 25),
+	(89, 25),
+	(92, 25),
+	(93, 25),
+	(95, 25),
+	(98, 25),
+	(111, 25),
+	(59, 26),
+	(60, 26),
+	(87, 26),
+	(91, 26),
+	(96, 26),
+	(100, 26),
+	(110, 26),
+	(102, 27);
+/*!40000 ALTER TABLE `projects_categories` ENABLE KEYS */;
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

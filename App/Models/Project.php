@@ -9,8 +9,14 @@ class Project extends Model
 
     public function selectProjectsInProgress()
     {
-
         $query = "SELECT * FROM projects WHERE status = 0";
+        return $this->db->read($query);
+    }
+
+
+    public function selectAll(): array
+    {
+        $query = "SELECT * FROM $this->table ORDER BY created_at DESC";
         return $this->db->read($query);
     }
 

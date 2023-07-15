@@ -31,6 +31,14 @@ class ProjectController extends Controller
     }
 
 
+    public function all(): Render
+    {
+        $allProjects = $this->projectModel->selectAll();
+        $allCategories = $this->categoryModel->selectAll();
+        return Render::make("projects/all", compact("allProjects", "allCategories"));
+    }
+
+
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {

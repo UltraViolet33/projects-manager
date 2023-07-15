@@ -24,7 +24,7 @@
                             Projects
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="allProjects.php">All Projects</a></li>
+                            <li><a class="dropdown-item" href="/projects/all">All Projects</a></li>
                             <li><a class="dropdown-item" href="portfolioProjects.php">Portfolio Projects</a></li>
                             <li><a class="dropdown-item" href="/projects/create">Add Project</a></li>
                         </ul>

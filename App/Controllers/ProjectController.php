@@ -44,6 +44,20 @@ class ProjectController extends Controller
     }
 
 
+    public function details(): Render
+    {
+
+        $idProject = $this->getIdInUrlOrRedirectTo("/");
+
+        $project  = $this->projectModel->selectByColumn("id_project", $idProject);
+
+        if (!$project) {
+            header("Location: /projects/all");
+        }
+
+        return Render::make("projects/details", compact("project"));
+    }
+
     public function makeHTMLProjectsTables(array $projects): string
     {
         $html = "";

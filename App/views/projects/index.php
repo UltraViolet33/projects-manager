@@ -5,7 +5,7 @@
     </div>
     <div class="col-12">
         <h2 class="text-center">Projects In Progress : </h2>
-        <p>Total : <?= $projectsInProgress ? count($projectsInProgress) : 0  ?> </p>
+        <p>Total : <?= $totalProjects  ?> </p>
     </div>
 </div>
 <form method="POST">
@@ -20,30 +20,6 @@
 </form>
 <div class="row">
     <div class="col-12">
-        <?php if (!$projectsInProgress) : ?>
-            <p>There is no projects in progress</p>
-        <?php else : ?>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">DETAILS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($projectsInProgress as $project) :
-                        $created_at = date('d/m/yy', strtotime($project->created_at));
-                    ?>
-                        <th scope="row"><?= $project->id_project ?></th>
-                        <td><?= $project->name ?></td>
-                        <td><?= $created_at ?></td>
-                        <td><a href="detailsProject.php?id=<?= $project->id_project ?>" class="btn btn-primary">Détails</a></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+        <?= $projectsTable ?>
     </div>
 </div>

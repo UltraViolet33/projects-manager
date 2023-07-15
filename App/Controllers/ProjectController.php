@@ -27,7 +27,10 @@ class ProjectController extends Controller
     {
         $projectsInProgress = $this->projectModel->selectProjectsInProgress();
         $allCategories = $this->categoryModel->selectAll();
-        return Render::make("projects/index", compact("projectsInProgress", "allCategories"));
+
+        $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
+        $totalProjects = count($projectsInProgress);
+        return Render::make("projects/index", compact("projectsTable", "totalProjects", "allCategories"));
     }
 
 
@@ -35,7 +38,45 @@ class ProjectController extends Controller
     {
         $allProjects = $this->projectModel->selectAll();
         $allCategories = $this->categoryModel->selectAll();
-        return Render::make("projects/all", compact("allProjects", "allCategories"));
+        $projectsTable = $this->makeHTMLProjectsTables($allProjects);
+        $totalProjects = count($allProjects);
+        return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
+    }
+
+
+    public function makeHTMLProjectsTables(array $projects): string
+    {
+        $html = "";
+
+        if (!$projects) {
+            return "<p>There is no projects in progress</p>";
+        }
+
+        $html .= '<table class="table">
+             <thead>
+             <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Created At</th>
+                <th scope="col">DETAILS</th>
+             </tr>
+             </thead>
+             <tbody>';
+        foreach ($projects as $project) {
+
+            $created_at = date('d/m/yy', strtotime($project->created_at));
+
+            $html .= '<th scope="row">' . $project->id_project . '</th>
+                        <td>' . $project->name . '</td>
+                        <td>' . $created_at . '</td>
+                        <td><a href="/projects/details?id=' . $project->id_project . '" class="btn btn-primary">Détails</a></td>
+                    </tr>';
+        }
+        $html .= '
+                </tbody>
+            </table>';
+
+        return $html;
     }
 
 

@@ -22,10 +22,18 @@ class Category extends Model
         return $this->db->write($query, ["name" => $name]);
     }
 
+
+    public function update(array $category): bool
+    {
+        $query = "UPDATE categories SET name = :name WHERE id_category = :id_category";
+        return $this->db->write($query, $category);
+    }
+
+
     public function checkIfNameExistsToEdit(string $name, int $id): bool
     {
-        $query = "SELECT * FROM $this->table WHERE name = :name";
-        $result = $this->db->readOneRow($query, ["name" => $name]);
+        $query = "SELECT * FROM $this->table WHERE name = :name AND id_category != :id";
+        $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
 
         return $result ? true : false;
     }

@@ -8,6 +8,7 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Submit" name="editCategory">
         </form>
+        
         <?php if (strlen($errors) !== 0) : ?>
             <div class="bg-danger my-3 p-2">
                 <p class="text-center">

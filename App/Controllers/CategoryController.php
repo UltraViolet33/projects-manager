@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Core\Helpers\Session;
@@ -51,12 +53,12 @@ class CategoryController extends Controller
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            echo "test";
-            if ($this->submitFormCategory()) {
+            if ($this->submitFormEditCategory($category->id_category)) {
+                echo "test";
 
-                // if ($this->categoryModel->create($_POST["name"])) {
-                // header("Location: /categories");
-                // }
+                if ($this->categoryModel->update(["name" => $_POST["name"], "id_category" => $category->id_category])) {
+                    header("Location: /categories");
+                }
             }
         }
 
@@ -80,9 +82,9 @@ class CategoryController extends Controller
         return true;
     }
 
-    private function submitFormEditCategory(): bool
+    private function submitFormEditCategory(int $idCategory): bool
     {
-        if ($this->categoryModel->doesExist("name", $_POST["name"])) {
+        if ($this->categoryModel->checkIfNameExistsToEdit($_POST["name"], $idCategory)) {
             Session::setErrorMsg("Error : Category name already exists !");
             return false;
         }

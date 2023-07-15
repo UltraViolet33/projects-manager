@@ -27,4 +27,20 @@ class ProjectController
         $allCategories = $this->categoryModel->selectAll();
         return Render::make("projects/index", compact("projectsInProgress", "allCategories"));
     }
+
+
+    public function create(): Render
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            // if ($this->submitFormCategory()) {
+
+            //     if ($this->categoryModel->create($_POST["name"])) {
+            //         header("Location: /categories");
+            //     }
+            // }
+        }
+
+        return Render::make("/projects/create");
+    }
 }

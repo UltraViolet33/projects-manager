@@ -10,6 +10,9 @@ $router = new Router();
 // projects
 $router->get('/', ['App\Controllers\ProjectController', 'index']);
 
+$router->get('/projects/create', ['App\Controllers\ProjectController', 'create']);
+$router->post('/projects/create', ['App\Controllers\ProjectController', 'create']);
+
 
 // categories
 $router->get('/categories', ['App\Controllers\CategoryController', 'index']);

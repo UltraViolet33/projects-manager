@@ -66,6 +66,26 @@ class ProjectController extends Controller
             header("Location: /projects/all");
         }
 
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if ($this->submitFormEditProject($idProject)) {
+                $project = [
+                    "name" => $_POST["name"],
+                    "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
+                    "description" => $_POST["description"] == "" ? null : $_POST["description"],
+                    "priority" => $_POST["priority"],
+                    "created_at" => $_POST["created_at"] == "" ? $project->created_at : $_POST["created_at"],
+                    "id_project" => $idProject
+                ];
+
+                if ($this->projectModel->update($project)) {
+                    header("Location: /");
+                }
+
+                die;
+            }
+        }
+
         $allCategories = $this->categoryModel->selectAll();
 
         foreach ($allCategories as $category) {
@@ -153,6 +173,23 @@ class ProjectController extends Controller
         $allCategories = $this->categoryModel->selectAll();
 
         return Render::make("/projects/create", compact("allCategories"));
+    }
+
+
+    public function submitFormEditProject(int $idProject): bool
+    {
+        $valuesToCheck = ["name", "categories", "priority"];
+
+        if (!$this->checkPostValues($valuesToCheck)) {
+            return false;
+        }
+
+        if ($this->projectModel->checkIfNameExistsToEdit($_POST["name"], $idProject)) {
+            Session::setErrorMsg("Error : Category name already exists !");
+            return false;
+        }
+
+        return true;
     }
 
 

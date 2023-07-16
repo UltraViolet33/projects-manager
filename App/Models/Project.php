@@ -20,6 +20,16 @@ class Project extends Model
         return $this->db->read($query);
     }
 
+    public function update(array $project)
+    {
+        $query = "UPDATE projects 
+        SET name = :name, description = :description,
+        github_link = :github_link, created_at=:created_at, priority = :priority
+        WHERE id_project = :id_project";
+
+        return $this->db->write($query, $project);
+    }
+
 
     public function create(array $project): bool
     {

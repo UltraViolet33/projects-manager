@@ -37,14 +37,6 @@ class Category extends Model
     }
 
 
-    public function checkIfNameExistsToEdit(string $name, int $id): bool
-    {
-        $query = "SELECT * FROM $this->table WHERE name = :name AND id_category != :id";
-        $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
-
-        return $result ? true : false;
-    }
-
     public function getProjectCategories(int $idProject): array
     {
         $query = "SELECT *  FROM categories

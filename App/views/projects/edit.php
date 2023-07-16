@@ -15,6 +15,10 @@
                 <textarea class="form-control" name="description" rows="3"><?= $project->description ?></textarea>
             </div>
             <div class="mb-3">
+                <label for="created_at" class="form-label">Date creation : </label>
+                <input type="date" class="form-control" name="created_at" value="<?= $project->created_at ?>">
+            </div>
+            <div class="mb-3">
                 <label for="categories">Project Categories : </label>
                 <select name="categories[]" class="form-select" multiple>
                     <?php foreach ($allCategories as $category) : ?>

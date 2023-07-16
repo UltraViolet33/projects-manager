@@ -29,6 +29,16 @@ abstract class Model
         return $this->db->readOneRow($query, ["id" => $id]);
     }
 
+
+    public function checkIfNameExistsToEdit(string $name, int $id): bool
+    {
+        $query = "SELECT * FROM $this->table WHERE name = :name AND $this->id != :id";
+        $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
+
+        return $result ? true : false;
+    }
+
+
     public function selectByColumn(string $column, mixed $value): object|bool
     {
         $query = "SELECT * FROM $this->table WHERE $column = :value";

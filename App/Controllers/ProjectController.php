@@ -208,4 +208,21 @@ class ProjectController extends Controller
 
         return true;
     }
+
+
+    public function delete()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if ($this->checkPostValues(["idProject"])) {
+                $project = $this->projectModel->selectByColumn("id_project", $_POST["idProject"]);
+
+                if ($this->projectModel->delete($project->id_project)) {
+                    header("Location: /projects");
+                }
+            }
+        }
+
+        header("Location: /projects");
+    }
 }

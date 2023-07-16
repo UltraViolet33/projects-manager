@@ -12,6 +12,8 @@ $router->get('/', ['App\Controllers\ProjectController', 'index']);
 $router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'index']);
 
 $router->get('/projects/all', ['App\Controllers\ProjectController', 'all']);
+$router->get('/projects', ['App\Controllers\ProjectController', 'all']);
+
 
 $router->get('/projects/details', ['App\Controllers\ProjectController', 'details']);
 
@@ -20,6 +22,8 @@ $router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 
 $router->get('/projects/create', ['App\Controllers\ProjectController', 'create']);
 $router->post('/projects/create', ['App\Controllers\ProjectController', 'create']);
+
+$router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 
 
 // categories

@@ -15,7 +15,7 @@
             <?php endforeach; ?>
         </ul>
         <a href="/projects/edit?id=<?= $project->id_project ?>" class="btn btn-primary">Edit</a>
-        <form action="" method="POST" onsubmit="return confirm('Are you sure you want to delete this project ? ')">
+        <form action="/projects/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this project ? ')">
             <input type="hidden" name="idProject" value="<?= $project->id_project ?>">
             <input class="btn btn-danger" type="submit" value="Delete" name="deleteProject"></input>
         </form>

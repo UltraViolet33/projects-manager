@@ -8,7 +8,7 @@ use \PDO;
 class Database
 {
 
-    private ?PDO $PDOInstance = null;
+    public ?PDO $PDOInstance = null;
     private static ?self $instance = null;
 
 
@@ -53,7 +53,7 @@ class Database
     }
 
 
-    public function write(string $query, array $data = array())
+    public function write(string $query, array|string $data = array())
     {
         $statement = $this->PDOInstance->prepare($query);
         return $statement->execute($data);

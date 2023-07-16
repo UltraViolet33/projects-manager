@@ -164,8 +164,19 @@ class ProjectController extends Controller
                     "priority" => $_POST["priority"],
                 ];
 
-                if ($this->projectModel->create($project)) {
-                    header("Location: /");
+                $projectCategories = $_POST["categories"];
+                if(is_string($projectCategories))
+                {
+                    $projectCategories = [];
+                    $projectCategories[] = $_POST["categories"];
+                }
+                
+                // var_dump($projectCategories);
+                // die;
+
+                if ($this->projectModel->create($project, $projectCategories)) {
+                    // header("Location: /");
+                    die;    
                 }
             }
         }

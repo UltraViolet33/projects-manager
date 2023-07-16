@@ -15,6 +15,11 @@ class ProjectController extends Controller
     private Project $projectModel;
     private Category $categoryModel;
 
+    const PRIORITIES = [
+        "0" => "LOW",
+        "1" => "HIGH",
+    ];
+
 
     public function __construct()
     {
@@ -43,7 +48,7 @@ class ProjectController extends Controller
         return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
     }
 
-    private function getSingleProject(int $idProject): object 
+    private function getSingleProject(int $idProject): object
     {
         $project  = $this->projectModel->selectByColumn("id_project", $idProject);
         $project->categories = $this->categoryModel->getProjectCategories($idProject);
@@ -51,9 +56,35 @@ class ProjectController extends Controller
     }
 
 
+    public function edit(): Render
+    {
+        $idProject = $this->getIdInUrlOrRedirectTo("/");
+
+        $project  = $this->getSingleProject($idProject);
+
+        if (!$project) {
+            header("Location: /projects/all");
+        }
+
+        $allCategories = $this->categoryModel->selectAll();
+
+        foreach ($allCategories as $category) {
+            $category->isInProject = false;
+
+            foreach ($project->categories as $projectCategory) {
+                if ($projectCategory->name === $category->name) {
+                    $category->isInProject = true;
+                }
+            }
+        }
+
+        $priorities = self::PRIORITIES;
+        return Render::make("projects/edit", compact("project", "allCategories", "priorities"));
+    }
+
+
     public function details(): Render
     {
-
         $idProject = $this->getIdInUrlOrRedirectTo("/");
 
         $project  = $this->getSingleProject($idProject);

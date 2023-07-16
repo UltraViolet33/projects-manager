@@ -47,7 +47,7 @@ class Category extends Model
 
     public function getProjectCategories(int $idProject): array
     {
-        $query = "SELECT categories.name FROM categories
+        $query = "SELECT *  FROM categories
                 INNER JOIN projects_categories
                 ON categories.id_category = projects_categories.id_categorie
                 WHERE projects_categories.id_project = :id_project";

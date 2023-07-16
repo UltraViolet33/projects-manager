@@ -15,6 +15,8 @@ $router->get('/projects/all', ['App\Controllers\ProjectController', 'all']);
 
 $router->get('/projects/details', ['App\Controllers\ProjectController', 'details']);
 
+$router->get('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
+$router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 
 $router->get('/projects/create', ['App\Controllers\ProjectController', 'create']);
 $router->post('/projects/create', ['App\Controllers\ProjectController', 'create']);

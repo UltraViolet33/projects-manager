@@ -20,14 +20,24 @@ class Project extends Model
         return $this->db->read($query);
     }
 
-    public function update(array $project)
+    public function update(array $project, array $projectCategories)
     {
         $query = "UPDATE projects 
         SET name = :name, description = :description,
         github_link = :github_link, created_at=:created_at, priority = :priority
         WHERE id_project = :id_project";
 
-        return $this->db->write($query, $project);
+        $this->db->write($query, $project);
+        
+        $this->deleteProjectCategories($project["id_project"]);
+
+        return $this->insertProjectCategories($project["id_project"], $projectCategories);
+    }
+
+    private function deleteProjectCategories(int $idProject): bool
+    {
+        $query = "DELETE FROM projects_categories WHERE id_project = :id_project";
+        return $this->db->write($query, ["id_project" => $idProject]);
     }
 
 
@@ -38,37 +48,25 @@ class Project extends Model
 
 
         $idProject = $this->db->getLastInsertId();
-        // $idProject = 150;
 
-        $this->insertProjectCategories($idProject, $projectCategories);
-
-        return true;
+        return $this->insertProjectCategories($idProject, $projectCategories);
     }
 
-    private function insertProjectCategories(int $idProject, array $categories)
+    private function insertProjectCategories(int $idProject, array $categories): bool
     {
-        $values = str_repeat('?,', 1) . '?';
+        $values = "?,?";
 
-        
-        // // construct the entire query
         $sql = "INSERT INTO projects_categories (id_project, id_categorie) VALUES " .
-        //     // repeat the (?,?) sequence for each row
-        str_repeat("($values),", count($categories) - 1) . "($values)";
-        
-        
-        $data = [];
-        
-        foreach($categories as $category)
-        {
-            $data[] = [$idProject,$category];
-        }
-        echo "<pre>";
-        var_dump($data);
-        echo "<pre>";
 
-        // $this->db->write($sql, array_merge(...$categories));
-        $stmt = $this->db->PDOInstance->prepare($sql);
-        // // execute with all values from $data
-        $stmt->execute(array_merge(...$data));
+            str_repeat("($values),", count($categories) - 1) . "($values)";
+
+
+        $data = [];
+
+        foreach ($categories as $category) {
+            $data[] = [$idProject, $category];
+        }
+
+        return $this->db->write($sql, array_merge(...$data));
     }
 }

@@ -8,7 +8,7 @@ use \PDO;
 class Database
 {
 
-    public ?PDO $PDOInstance = null;
+    private ?PDO $PDOInstance = null;
     private static ?self $instance = null;
 
 

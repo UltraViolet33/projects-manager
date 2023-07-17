@@ -78,11 +78,16 @@ class ProjectController extends Controller
                     "id_project" => $idProject
                 ];
 
-                if ($this->projectModel->update($project)) {
-                    header("Location: /");
+                $projectCategories = $_POST["categories"];
+
+                if (is_string($projectCategories)) {
+                    $projectCategories = [];
+                    $projectCategories[] = $_POST["categories"];
                 }
 
-                die;
+                if ($this->projectModel->update($project, $projectCategories)) {
+                    header("Location: /");
+                }
             }
         }
 
@@ -165,18 +170,14 @@ class ProjectController extends Controller
                 ];
 
                 $projectCategories = $_POST["categories"];
-                if(is_string($projectCategories))
-                {
+
+                if (is_string($projectCategories)) {
                     $projectCategories = [];
                     $projectCategories[] = $_POST["categories"];
                 }
-                
-                // var_dump($projectCategories);
-                // die;
 
                 if ($this->projectModel->create($project, $projectCategories)) {
-                    // header("Location: /");
-                    die;    
+                    header("Location: /");
                 }
             }
         }

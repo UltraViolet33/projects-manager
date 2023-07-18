@@ -70,7 +70,7 @@ class ProjectController extends Controller
             return json_encode(["error", "project not found"]);
         }
 
-        return json_encode([$project]);
+        return json_encode($project);
     }
 
 

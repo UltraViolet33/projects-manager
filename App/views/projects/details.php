@@ -5,9 +5,6 @@
         <p>Name : <?= $project->name ?></p>
         <p>Description : <?= $project->description ?></p>
         <p>Github link : <?= $project->github_link ?  " <a href='$project->github_link' target='_blanck'>Lien vers github</a> " : "non renseigné" ?></p>
-        <p>Is in Github Portfolio : <?= $project->github_portfolio ? "yes" : "no" ?></p>
-        <p>Status : <?= $project->status ? "Done" : "In progress" ?></p>
-        <p>Priority : <?= $project->priority > 0 ? "High" : "Low" ?></p>
         <p>Created at : <?= $project->created_at ?></p>
         <div id="btn-toggle-status">
 

@@ -1,5 +1,7 @@
 const btn_status_div = document.querySelector("#btn-toggle-status");
 
+let project;
+
 const displayBtns = project => {
   let buttonsHTML = "";
   buttonsHTML += getBtnStatus(project);
@@ -10,9 +12,36 @@ const displayBtns = project => {
 };
 
 const toggle = el => {
-  // console.log(el);
   const idElement = el.getAttribute("id");
-  console.log(idElement);
+  switch (idElement) {
+    case "status":
+      project.status = !project.status;
+      break;
+    case "github":
+      project.github_portfolio = !project.github_portfolio;
+      break;
+    case "priority":
+      project.priority = !project.priority;
+      break;
+  }
+  editProject(project);
+};
+
+const editProject = async project => {
+  const url = `/api/projects/edit`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(project),
+    });
+
+    project = await response.json();
+
+    displayBtns(project);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getBtnPriority = project => {
@@ -43,8 +72,8 @@ const getProject = async idProject => {
 
   try {
     const response = await fetch(url);
-    const project = await response.json();
-    console.log(project);
+    project = await response.json();
+
     displayBtns(project);
   } catch (error) {
     console.log(error);

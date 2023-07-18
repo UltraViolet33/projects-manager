@@ -26,8 +26,7 @@ $router->post('/projects/create', ['App\Controllers\ProjectController', 'create'
 $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 
 $router->get('/api/projects/single-project', ['App\Controllers\ProjectController', 'getSingleProjectJSON']);
-
-
+$router->post('/api/projects/edit', ['App\Controllers\ProjectController', 'apiEdit']);
 
 
 // categories

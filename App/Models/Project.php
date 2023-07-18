@@ -20,7 +20,8 @@ class Project extends Model
         return $this->db->read($query);
     }
 
-    public function update(array $project, array $projectCategories)
+
+    public function updateProjectWithCategories(array $project, array $projectCategories): bool
     {
         $query = "UPDATE projects 
         SET name = :name, description = :description,
@@ -28,11 +29,22 @@ class Project extends Model
         WHERE id_project = :id_project";
 
         $this->db->write($query, $project);
-        
+
         $this->deleteProjectCategories($project["id_project"]);
 
         return $this->insertProjectCategories($project["id_project"], $projectCategories);
     }
+
+
+    public function update(array $project): bool
+    {
+        $query = "UPDATE projects SET name = :name, description = :description,
+        github_link = :github_link, github_portfolio = :github_portfolio, status= :status, created_at=:created_at, priority = :priority
+        WHERE id_project = :id_project";
+
+        return $this->db->write($query, $project);
+    }
+
 
     private function deleteProjectCategories(int $idProject): bool
     {

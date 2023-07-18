@@ -8,7 +8,6 @@ use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
-use Exception;
 
 class ProjectController extends Controller
 {
@@ -66,8 +65,37 @@ class ProjectController extends Controller
         $idProject = (int) $_GET["id"];
         $project  = $this->getSingleProject($idProject);
 
+        $project->status = $project->status > 0 ? true : false;
+        $project->priority = $project->priority > 0 ? true : false;
+        $project->github_portfolio = $project->github_portfolio > 0 ? true : false;
+
+
         if (!$project) {
             return json_encode(["error", "project not found"]);
+        }
+
+        return json_encode($project);
+    }
+
+
+    public function apiEdit(): string
+    {
+        $data = file_get_contents("php://input");
+
+        $project = json_decode($data);
+
+        $project->status = $project->status ? 1 : 0;
+        $project->priority = $project->priority ? 1 : 0;
+        $project->github_portfolio = $project->github_portfolio ? 1 : 0;
+
+        unset($project->categories);
+        $newProject = (array) $project;
+
+        if ($this->projectModel->update($newProject)) {
+            $project  = $this->getSingleProject($project->id_project);
+
+            $project->status = $project->status > 0 ? true : false;
+            return json_encode($project);
         }
 
         return json_encode($project);
@@ -103,7 +131,7 @@ class ProjectController extends Controller
                     $projectCategories[] = $_POST["categories"];
                 }
 
-                if ($this->projectModel->update($project, $projectCategories)) {
+                if ($this->projectModel->updateProjectWithCategories($project, $projectCategories)) {
                     header("Location: /");
                 }
             }

@@ -26,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && is_numeric($_POST['idProject'])) {
         <p>Created at : <?= $singleProject->created_at ?></p>
         <p>Deadline : <?= $singleProject->deadline ? $singleProject->deadline : "DONE" ?></p>
         <p>Date end : <?= $singleProject->date_end ? $singleProject->date_end : "unknown" ?></p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Toggle button</button>
+        <button type="button" class="btn btn-primary active" data-bs-toggle="button" autocomplete="off" aria-pressed="true">Active toggle button</button>
         <h2>Categories : </h2>
         <?php foreach ($categories as $category) : ?>
             <p><?= $category->name ?></p>

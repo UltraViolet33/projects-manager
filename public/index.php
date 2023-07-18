@@ -25,6 +25,10 @@ $router->post('/projects/create', ['App\Controllers\ProjectController', 'create'
 
 $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 
+$router->get('/api/projects/single-project', ['App\Controllers\ProjectController', 'getSingleProjectJSON']);
+
+
+
 
 // categories
 $router->get('/categories', ['App\Controllers\CategoryController', 'index']);

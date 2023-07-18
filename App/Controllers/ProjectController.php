@@ -8,6 +8,7 @@ use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
+use Exception;
 
 class ProjectController extends Controller
 {
@@ -53,6 +54,23 @@ class ProjectController extends Controller
         $project  = $this->projectModel->selectByColumn("id_project", $idProject);
         $project->categories = $this->categoryModel->getProjectCategories($idProject);
         return $project;
+    }
+
+
+    public function getSingleProjectJSON(): string
+    {
+        if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+            return json_encode(["error", "id project missing"]);
+        }
+
+        $idProject = (int) $_GET["id"];
+        $project  = $this->getSingleProject($idProject);
+
+        if (!$project) {
+            return json_encode(["error", "project not found"]);
+        }
+
+        return json_encode([$project]);
     }
 
 

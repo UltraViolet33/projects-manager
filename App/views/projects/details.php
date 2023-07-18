@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../assets/css/buttonToggle.css">
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">Details Project : <?= $project->name ?></h1>
@@ -8,6 +9,9 @@
         <p>Status : <?= $project->status ? "Done" : "In progress" ?></p>
         <p>Priority : <?= $project->priority > 0 ? "High" : "Low" ?></p>
         <p>Created at : <?= $project->created_at ?></p>
+        <div id="btn-toggle-status">
+
+        </div>
         <h4>Categories :</h4>
         <ul>
             <?php foreach ($project->categories as $category) : ?>
@@ -21,3 +25,4 @@
         </form>
     </div>
 </div>
+<script src="../assets/js/editProject.js"></script>

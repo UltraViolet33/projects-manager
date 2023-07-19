@@ -8,12 +8,12 @@
         <p>Total : </p>
     </div>
 </div>
-<form method="POST">
+<form id="form-categories">
     <div class="mb-3">
-        <select onchange="this.form.submit()" name="categoryFilter" class="form-select">
+        <select id="form-categories-select"  name="categoryFilter" class="form-select">
             <option selected>Choose categories</option>
             <?php foreach ($allCategories as $category) : ?>
-                <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
+                <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
             <?php endforeach; ?>
         </select>
     </div>

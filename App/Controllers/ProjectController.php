@@ -30,17 +30,12 @@ class ProjectController extends Controller
 
     public function index(): Render
     {
-        // $projectsInProgress = $this->projectModel->selectProjectsInProgress();
         $allCategories = $this->categoryModel->selectAll();
-
-        // $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
-        // $totalProjects = count($projectsInProgress);
-
         return Render::make("projects/index", compact("allCategories"));
     }
 
 
-    public function apiGetAllProjects(): string 
+    public function apiGetAllProjects(): string
     {
         $allProjects = $this->projectModel->selectAll();
         return json_encode($allProjects);
@@ -83,6 +78,19 @@ class ProjectController extends Controller
         }
 
         return json_encode($project);
+    }
+
+
+    public function apiGetProjectsByCategory(): string
+    {
+        if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+            return json_encode(["error", "id category missing"]);
+        }
+
+        $idCategory = (int) $_GET["id"];
+        $projects  = $this->projectModel->selectProjectsByCategory($idCategory);
+
+        return json_encode($projects);
     }
 
 

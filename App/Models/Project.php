@@ -21,6 +21,16 @@ class Project extends Model
     }
 
 
+    public function selectProjectsByCategory(int $idCategory): array
+    {
+        $query = "SELECT * FROM projects INNER JOIN projects_categories 
+        ON projects.id_project = projects_categories.id_project 
+        WHERE projects_categories.id_categorie = :id_category";
+
+        return $this->db->read($query, ["id_category" => $idCategory]);
+    }
+
+
     public function updateProjectWithCategories(array $project, array $projectCategories): bool
     {
         $query = "UPDATE projects 

@@ -30,6 +30,8 @@ $router->get('/api/projects/single-project', ['App\Controllers\ProjectController
 $router->post('/api/projects/edit', ['App\Controllers\ProjectController', 'apiEdit']);
 
 $router->get('/api/projects/all', ['App\Controllers\ProjectController', 'apiGetAllProjects']);
+$router->get('/api/projects/category', ['App\Controllers\ProjectController', 'apiGetProjectsByCategory']);
+
 
 // categories
 $router->get('/categories', ['App\Controllers\CategoryController', 'index']);

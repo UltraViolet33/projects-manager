@@ -30,12 +30,20 @@ class ProjectController extends Controller
 
     public function index(): Render
     {
-        $projectsInProgress = $this->projectModel->selectProjectsInProgress();
+        // $projectsInProgress = $this->projectModel->selectProjectsInProgress();
         $allCategories = $this->categoryModel->selectAll();
 
-        $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
-        $totalProjects = count($projectsInProgress);
-        return Render::make("projects/index", compact("projectsTable", "totalProjects", "allCategories"));
+        // $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
+        // $totalProjects = count($projectsInProgress);
+
+        return Render::make("projects/index", compact("allCategories"));
+    }
+
+
+    public function apiGetAllProjects(): string 
+    {
+        $allProjects = $this->projectModel->selectAll();
+        return json_encode($allProjects);
     }
 
 

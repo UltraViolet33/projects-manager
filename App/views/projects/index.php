@@ -4,8 +4,8 @@
         <p>The web app to manage all the programming projects you dream</p>
     </div>
     <div class="col-12">
-        <h2 class="text-center">Projects In Progress : </h2>
-        <p>Total : <?= $totalProjects  ?> </p>
+        <h2 class="text-center">Projects : </h2>
+        <p>Total : </p>
     </div>
 </div>
 <form method="POST">
@@ -20,6 +20,19 @@
 </form>
 <div class="row">
     <div class="col-12">
-        <?= $projectsTable ?>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">DETAILS</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
     </div>
 </div>
+<script src="../assets/js/projects.js"></script>

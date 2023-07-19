@@ -9,11 +9,12 @@ $router = new Router();
 
 // projects
 $router->get('/', ['App\Controllers\ProjectController', 'index']);
-$router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'index']);
+// $router->get('/projects/all', ['App\Controllers\ProjectController', 'all']);
+$router->get('/projects', ['App\Controllers\ProjectController', 'index']);
 
-$router->get('/projects/all', ['App\Controllers\ProjectController', 'all']);
-$router->get('/projects', ['App\Controllers\ProjectController', 'all']);
 
+
+// $router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'index']);
 
 $router->get('/projects/details', ['App\Controllers\ProjectController', 'details']);
 
@@ -28,6 +29,7 @@ $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete'
 $router->get('/api/projects/single-project', ['App\Controllers\ProjectController', 'getSingleProjectJSON']);
 $router->post('/api/projects/edit', ['App\Controllers\ProjectController', 'apiEdit']);
 
+$router->get('/api/projects/all', ['App\Controllers\ProjectController', 'apiGetAllProjects']);
 
 // categories
 $router->get('/categories', ['App\Controllers\CategoryController', 'index']);

@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="../assets/css/buttonToggle.css">
 <div class="row">
     <div class="col-12">
-        <h1 class="text-center">Details Project : <?= $project->name ?></h1>
+        <h1 class="text-center">Details Project: <?= $project->name ?></h1>
         <p>Name : <?= $project->name ?></p>
         <p>Description : <?= $project->description ?></p>
         <p>Github link : <?= $project->github_link ?  " <a href='$project->github_link' target='_blanck'>Lien vers github</a> " : "non renseigné" ?></p>

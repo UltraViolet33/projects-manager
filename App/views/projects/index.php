@@ -9,12 +9,23 @@
     </div>
 </div>
 <form id="form-categories">
+    <h3>Categories</h3>
     <div class="mb-3">
-        <select id="form-categories-select"  name="categoryFilter" class="form-select">
-            <option selected>Choose categories</option>
+        <select id="form-categories-select" name="categoryFilter" class="form-select">
+            <option value="all" selected>All</option>
             <?php foreach ($allCategories as $category) : ?>
                 <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
             <?php endforeach; ?>
+        </select>
+    </div>
+</form>
+<form id="form-categories">
+    <h3>Projects Status</h3>
+    <div class="mb-3">
+        <select id="form-status-select" name="projects-status" class="form-select">
+            <option value="all">All</option>
+            <option value="0">in_progress</option>
+            <option value="1">done</option>
         </select>
     </div>
 </form>
@@ -29,9 +40,7 @@
                     <th scope="col">DETAILS</th>
                 </tr>
             </thead>
-            <tbody id="table-body">
-
-            </tbody>
+            <tbody id="table-body"></tbody>
         </table>
     </div>
 </div>

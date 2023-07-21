@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Model;
@@ -7,7 +9,7 @@ use App\Models\Model;
 class Project extends Model
 {
 
-    public function selectProjectsInProgress()
+    public function selectProjectsInProgress(): array
     {
         $query = "SELECT * FROM projects WHERE status = 0";
         return $this->db->read($query);
@@ -31,6 +33,13 @@ class Project extends Model
     }
 
 
+    public function selectProjectsByStatus(int $status): array
+    {
+        $query = "SELECT * FROM projects WHERE status = :status";
+        return $this->db->read($query, ["status" => $status]);
+    }
+
+
     public function updateProjectWithCategories(array $project, array $projectCategories): bool
     {
         $query = "UPDATE projects 
@@ -39,9 +48,7 @@ class Project extends Model
         WHERE id_project = :id_project";
 
         $this->db->write($query, $project);
-
         $this->deleteProjectCategories($project["id_project"]);
-
         return $this->insertProjectCategories($project["id_project"], $projectCategories);
     }
 
@@ -68,11 +75,10 @@ class Project extends Model
         $query = "INSERT INTO projects(name, description, created_at, github_link, priority) VALUES(:name, :description, CURDATE(), :github_link, :priority)";
         $this->db->write($query, $project);
 
-
         $idProject = $this->db->getLastInsertId();
-
         return $this->insertProjectCategories($idProject, $projectCategories);
     }
+    
 
     private function insertProjectCategories(int $idProject, array $categories): bool
     {

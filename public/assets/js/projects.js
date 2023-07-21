@@ -4,12 +4,38 @@ const tableProjectsBody = document.querySelector("#table-body");
 
 const categoriesFilter = document.querySelector("#form-categories-select");
 
+const statusFilter = document.querySelector("#form-status-select");
+
 categoriesFilter.addEventListener("change", () => {
-  getProjectsByCategory(categoriesFilter.value);
+  getProjectsByCategoryAndStatus(categoriesFilter.value, statusFilter.value);
 });
 
-const getProjectsByCategory = async idCategory => {
-  const url = `/api/projects/category?id=${idCategory}`;
+statusFilter.addEventListener("change", () => {
+  getProjectsByCategoryAndStatus(categoriesFilter.value, statusFilter.value);
+});
+
+const getProjectsByCategoryAndStatus = async (idCategory, status) => {
+  console.log(idCategory);
+  console.log(status);
+  if (status == "all" && idCategory == "all") {
+    getAllProjects();
+    return;
+  }
+
+  let url = "";
+
+  if (status == "all") {
+    url = `/api/projects/category?id=${idCategory}`;
+  }
+
+  if (idCategory == "all") {
+    console.log("ok");
+    url = `/api/projects/status?status=${status}`;
+  }
+
+  if (idCategory !== "all" && status !== "all") {
+    url = `/api/projects/category?id=${idCategory}&status=${status}`;
+  }
 
   try {
     const response = await fetch(url);
@@ -32,7 +58,7 @@ const getAllProjects = async () => {
   }
 };
 
-getAllProjects();
+// getAllProjects();
 
 const getProjectsTable = projects => {
   let htmlTable = projects.map(project => {
@@ -47,3 +73,6 @@ const getProjectsTable = projects => {
   });
   tableProjectsBody.innerHTML = htmlTable.join("");
 };
+
+console.log(statusFilter.value);
+getProjectsByCategoryAndStatus(categoriesFilter.value, statusFilter.value);

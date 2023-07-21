@@ -11,7 +11,6 @@ use App\Models\Category;
 
 class ProjectController extends Controller
 {
-
     private Project $projectModel;
     private Category $categoryModel;
 
@@ -51,6 +50,7 @@ class ProjectController extends Controller
         return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
     }
 
+
     private function getSingleProject(int $idProject): object
     {
         $project  = $this->projectModel->selectByColumn("id_project", $idProject);
@@ -78,6 +78,19 @@ class ProjectController extends Controller
         }
 
         return json_encode($project);
+    }
+
+
+    public function apiGetProjectsByStatus(): string
+    {
+        if (!isset($_GET["status"]) || !is_numeric($_GET["status"])) {
+            return json_encode(["error", "status missing"]);
+        }
+
+        $status = (int) $_GET["status"];
+        $projects  = $this->projectModel->selectProjectsByStatus($status);
+
+        return json_encode($projects);
     }
 
 
@@ -121,7 +134,6 @@ class ProjectController extends Controller
     public function edit(): Render
     {
         $idProject = $this->getIdInUrlOrRedirectTo("/");
-
         $project  = $this->getSingleProject($idProject);
 
         if (!$project) {
@@ -173,7 +185,6 @@ class ProjectController extends Controller
     public function details(): Render
     {
         $idProject = $this->getIdInUrlOrRedirectTo("/");
-
         $project  = $this->getSingleProject($idProject);
 
         if (!$project) {
@@ -182,6 +193,7 @@ class ProjectController extends Controller
 
         return Render::make("projects/details", compact("project"));
     }
+    
 
     public function makeHTMLProjectsTables(array $projects): string
     {

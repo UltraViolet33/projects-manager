@@ -6,9 +6,7 @@
         <p>Description : <?= $project->description ?></p>
         <p>Github link : <?= $project->github_link ?  " <a href='$project->github_link' target='_blanck'>Lien vers github</a> " : "non renseigné" ?></p>
         <p>Created at : <?= $project->created_at ?></p>
-        <div id="btn-toggle-status">
-
-        </div>
+        <div id="btn-toggle-status"></div>
         <h4>Categories :</h4>
         <ul>
             <?php foreach ($project->categories as $category) : ?>

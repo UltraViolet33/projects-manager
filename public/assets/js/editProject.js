@@ -80,4 +80,6 @@ const getProject = async idProject => {
   }
 };
 
-getProject(26);
+const url = new URL(window.location.href);
+const idProject = url.searchParams.get("id");
+getProject(idProject);

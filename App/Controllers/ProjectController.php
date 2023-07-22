@@ -296,8 +296,11 @@ class ProjectController extends Controller
         // die;
         file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
         // $commands = file_get_contents("./core/classes/pushPortfolio.sh");
-        // $test = shell_exec("sh ./core/classes/pushPortfolio.sh");
-        // var_dump($test);
+        $test = shell_exec("sh ../App/Core/commands/push_portfolio.sh");
+        // $test = shell_exec("pwd");
+
+        var_dump($test);
+        header("Location: /");
     }
 
 

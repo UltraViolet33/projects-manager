@@ -9,6 +9,9 @@ use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
 
+define('PATH_PROJECTS_JSON', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\Core" . DIRECTORY_SEPARATOR . "data\\projects.json");
+
+
 class ProjectController extends Controller
 {
     private Project $projectModel;
@@ -280,6 +283,21 @@ class ProjectController extends Controller
         $allCategories = $this->categoryModel->selectAll();
 
         return Render::make("/projects/create", compact("allCategories"));
+    }
+
+
+    public function commitPortfolio() 
+    {
+        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
+        // var_dump($projectsPortfolio);
+        $projectsPortfolioJson = json_encode($projectsPortfolio);
+        // echo $projectsPortfolioJson;
+        var_dump(PATH_PROJECTS_JSON);
+        // die;
+        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
+        // $commands = file_get_contents("./core/classes/pushPortfolio.sh");
+        // $test = shell_exec("sh ./core/classes/pushPortfolio.sh");
+        // var_dump($test);
     }
 
 

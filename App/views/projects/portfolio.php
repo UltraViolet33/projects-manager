@@ -9,3 +9,4 @@
         <?= $projectsTable ?>
     </div>
 </div>
+<a href="/projects/commit-portfolio" class="btn btn-primary">Commit to github portfolio</a>

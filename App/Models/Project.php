@@ -15,6 +15,13 @@ class Project extends Model
         return $this->db->read($query);
     }
 
+    
+    public function selectProjectsPortfolio(): array
+    {
+        $query = "SELECT * FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
+        return $this->db->read($query);
+    }
+
 
     public function selectAll(): array
     {

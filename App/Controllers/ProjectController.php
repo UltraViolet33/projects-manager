@@ -51,6 +51,15 @@ class ProjectController extends Controller
     }
 
 
+    public function getProjectsPortfolio(): Render 
+    {
+        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();        
+        $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
+        $totalProjects = count($projectsPortfolio);
+        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects"));
+    }
+
+
     private function getSingleProject(int $idProject): object
     {
         $project  = $this->projectModel->selectByColumn("id_project", $idProject);

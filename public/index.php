@@ -14,6 +14,8 @@ $router->get('/projects/details', ['App\Controllers\ProjectController', 'details
 
 $router->get('/projects/portfolio', ['App\Controllers\ProjectController', 'getProjectsPortfolio']);
 
+$router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'getProjectsInProgress']);
+
 
 $router->get('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 $router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);

@@ -27,6 +27,7 @@
                             <li><a class="dropdown-item" href="/projects">All Projects</a></li>
                             <li><a class="dropdown-item" href="/projects/create">Add Project</a></li>
                             <li><a class="dropdown-item" href="/projects/portfolio">Portfolio Projects</a></li>
+                            <li><a class="dropdown-item" href="/projects/in-progress">Projects in Progress</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

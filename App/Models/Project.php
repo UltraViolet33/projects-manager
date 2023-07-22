@@ -11,11 +11,11 @@ class Project extends Model
 
     public function selectProjectsInProgress(): array
     {
-        $query = "SELECT * FROM projects WHERE status = 0";
+        $query = "SELECT * FROM projects WHERE status = 0 ORDER BY priority DESC, created_at";
         return $this->db->read($query);
     }
 
-    
+
     public function selectProjectsPortfolio(): array
     {
         $query = "SELECT * FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
@@ -85,7 +85,7 @@ class Project extends Model
         $idProject = $this->db->getLastInsertId();
         return $this->insertProjectCategories($idProject, $projectCategories);
     }
-    
+
 
     private function insertProjectCategories(int $idProject, array $categories): bool
     {

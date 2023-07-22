@@ -51,12 +51,20 @@ class ProjectController extends Controller
     }
 
 
-    public function getProjectsPortfolio(): Render 
+    public function getProjectsPortfolio(): Render
     {
-        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();        
+        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
         $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
         $totalProjects = count($projectsPortfolio);
         return Render::make("projects/portfolio", compact("projectsTable", "totalProjects"));
+    }
+
+    public function getProjectsInProgress(): Render
+    {
+        $projectsInProgress = $this->projectModel->selectProjectsInProgress();
+        $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
+        $totalProjects = count($projectsInProgress);
+        return Render::make("projects/in-progress", compact("projectsTable", "totalProjects"));
     }
 
 
@@ -202,7 +210,7 @@ class ProjectController extends Controller
 
         return Render::make("projects/details", compact("project"));
     }
-    
+
 
     public function makeHTMLProjectsTables(array $projects): string
     {
@@ -217,6 +225,7 @@ class ProjectController extends Controller
              <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
+                <th scope="col">Priority</th>
                 <th scope="col">Created At</th>
                 <th scope="col">DETAILS</th>
              </tr>
@@ -225,9 +234,12 @@ class ProjectController extends Controller
         foreach ($projects as $project) {
 
             $created_at = date('d/m/yy', strtotime($project->created_at));
+            $priority = $project->priority ? "high" : "";
 
             $html .= '<th scope="row">' . $project->id_project . '</th>
                         <td>' . $project->name . '</td>
+                        <td>' . $priority  . '</td>
+
                         <td>' . $created_at . '</td>
                         <td><a href="/projects/details?id=' . $project->id_project . '" class="btn btn-primary">Détails</a></td>
                     </tr>';

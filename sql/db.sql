@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 
--- Listage des données de la table projects-manager-debug.categories : ~14 rows (environ)
+-- Listage des données de la table projects-manager-debug.categories : ~15 rows (environ)
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id_category`, `name`) VALUES
 	(19, 'app mobile'),
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `id_project` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` text,
-  `created_at` date DEFAULT NULL,
+  `created_at` date NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `github_link` varchar(100) DEFAULT NULL,
   `priority` tinyint(4) NOT NULL DEFAULT '0',
@@ -57,10 +57,10 @@ CREATE TABLE IF NOT EXISTS `projects` (
   PRIMARY KEY (`id_project`)
 ) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=latin1;
 
--- Listage des données de la table projects-manager-debug.projects : ~87 rows (environ)
+-- Listage des données de la table projects-manager-debug.projects : ~89 rows (environ)
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
 INSERT INTO `projects` (`id_project`, `name`, `description`, `created_at`, `status`, `github_link`, `priority`, `github_portfolio`) VALUES
-	(26, 'Project Manager', 'A web app to store and manage my programming projects', '2022-07-04', 0, 'https://github.com/UltraViolet33/Projects-Manager', 0, 0),
+	(26, 'Project Managera', 'A web app to store and manage my programming projectshhh', '2022-07-04', 0, 'https://github.com/UltraViolet33/Projects-Manager', 1, 0),
 	(27, 'Cheat Repo', 'A bash script to cheat on my github account (commit on a master branch)', '2022-04-17', 1, 'https://github.com/UltraViolet33/Cheat-Repo', 0, 0),
 	(28, 'Snippet - Code', 'Snippets code (HTML, CSS, bootstrap, PHP, JS, Python)', '2022-05-17', 1, 'https://github.com/UltraViolet33/Snippets-code', 0, 0),
 	(29, ' Responsive-Web-Design-FreeCodeCamp-Challenges', 'HTML/CSS Challenges FreeCodeCamp ', '2022-06-03', 1, 'https://github.com/UltraViolet33/Responsive-Web-Design-FreeCodeCamp-Challenges', 0, 0),
@@ -122,7 +122,7 @@ INSERT INTO `projects` (`id_project`, `name`, `description`, `created_at`, `stat
 	(87, 'Drum Machine', 'Drum Machine Freecodecamp Frontend Challenge', '2023-01-14', 1, 'https://github.com/UltraViolet33/Drum-Machine', 0, 0),
 	(88, 'Flutter-fetch-API', 'A fluuter app to practice api requests', '2023-01-10', 1, 'https://github.com/UltraViolet33/Flutter-fetch-API', 0, 0),
 	(89, ' Data-Structures-and-Algorithms-in-Dart', 'DSA in Dart', '2023-01-12', 0, 'https://github.com/UltraViolet33/Data-Structures-and-Algorithms-in-Dart', 0, 0),
-	(90, 'Tiktok Clone Flutter', 'tiktok clone', '2023-01-17', 0, 'https://github.com/UltraViolet33/TikTok-Clone-Flutter', 0, 0),
+	(90, 'Tiktok Clone Flutter', 'tiktok clone', '2023-01-17', 0, 'https://github.com/UltraViolet33/TikTok-Clone-Flutter', 1, 0),
 	(91, 'Rois de France', 'Jeu react sur les rois de france', '2023-01-17', 1, 'https://github.com/UltraViolet33/Rois-de-France', 0, 0),
 	(92, 'Several-Webservers', 'To learn about server', '2023-01-19', 1, 'https://github.com/UltraViolet33/Several-Webservers', 0, 0),
 	(93, 'Client-Server-with-Sockets', 'Client-Server-with-Sockets', '2023-01-19', 1, 'https://github.com/UltraViolet33/Client-Server-with-Sockets', 0, 0),
@@ -144,7 +144,7 @@ INSERT INTO `projects` (`id_project`, `name`, `description`, `created_at`, `stat
 	(109, 'All-Freecodecamp-Projects', 'freecodecamp projects', '2023-04-06', 0, 'https://github.com/UltraViolet33/All-Freecodecamp-Projects', 0, 0),
 	(110, ' ultraviolet33.github.io', 'my blog and portfolio', '2023-04-10', 0, 'https://github.com/UltraViolet33/ultraviolet33.github.io', 0, 0),
 	(111, 'C-Hard-Way', 'hard way c book', '2023-05-18', 0, 'https://github.com/UltraViolet33/C-Hard-Way', 0, 0),
-	(112, 'iregular-verbs-revision', 'iregular-verbs-revision', '2023-05-17', 0, 'https://github.com/UltraViolet33/iregular-verbs-revision', 0, 0),
+	(112, 'iregular-verbs-revision', 'iregular-verbs-revision', '2023-05-17', 1, 'https://github.com/UltraViolet33/iregular-verbs-revision', 0, 0),
 	(113, 'Web security', 'https://github.com/UltraViolet33/Web-Security', '2023-05-27', 0, 'https://github.com/UltraViolet33/Web-Security', 0, 0),
 	(114, 'Symfony-Shop', 'Symfony-Shop', '2023-05-29', 0, 'https://github.com/UltraViolet33/Symfony-Shop', 0, 0);
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
@@ -157,9 +157,12 @@ CREATE TABLE IF NOT EXISTS `projects_categories` (
   KEY `id_categorie` (`id_categorie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Listage des données de la table projects-manager-debug.projects_categories : ~90 rows (environ)
+-- Listage des données de la table projects-manager-debug.projects_categories : ~138 rows (environ)
 /*!40000 ALTER TABLE `projects_categories` DISABLE KEYS */;
 INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
+	(19, 1),
+	(23, 1),
+	(29, 1),
 	(34, 19),
 	(42, 19),
 	(43, 19),
@@ -170,11 +173,13 @@ INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
 	(88, 19),
 	(90, 19),
 	(102, 19),
+	(126, 19),
+	(127, 19),
+	(128, 19),
 	(50, 20),
 	(67, 20),
 	(69, 20),
 	(104, 20),
-	(26, 21),
 	(29, 21),
 	(33, 21),
 	(35, 21),
@@ -212,6 +217,7 @@ INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
 	(112, 21),
 	(113, 21),
 	(114, 21),
+	(26, 22),
 	(46, 22),
 	(47, 22),
 	(48, 22),
@@ -221,11 +227,18 @@ INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
 	(79, 22),
 	(83, 22),
 	(86, 22),
+	(0, 23),
 	(55, 23),
 	(63, 23),
 	(74, 23),
 	(107, 23),
 	(108, 23),
+	(124, 23),
+	(125, 23),
+	(126, 23),
+	(127, 23),
+	(128, 23),
+	(150, 23),
 	(27, 25),
 	(28, 25),
 	(30, 25),
@@ -242,6 +255,7 @@ INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
 	(95, 25),
 	(98, 25),
 	(111, 25),
+	(126, 25),
 	(59, 26),
 	(60, 26),
 	(87, 26),
@@ -249,7 +263,41 @@ INSERT INTO `projects_categories` (`id_project`, `id_categorie`) VALUES
 	(96, 26),
 	(100, 26),
 	(110, 26),
-	(102, 27);
+	(102, 27),
+	(126, 28),
+	(0, 29),
+	(124, 29),
+	(125, 29),
+	(126, 29),
+	(127, 29),
+	(128, 29),
+	(150, 29),
+	(23, 30),
+	(29, 30),
+	(43, 30),
+	(0, 43),
+	(124, 43),
+	(125, 43),
+	(126, 43),
+	(127, 43),
+	(128, 43),
+	(150, 43),
+	(126, 44),
+	(126, 45),
+	(19, 119),
+	(23, 119),
+	(43, 119),
+	(23, 121),
+	(43, 121),
+	(23, 122),
+	(29, 122),
+	(43, 122),
+	(23, 130),
+	(29, 130),
+	(43, 130),
+	(23, 150),
+	(29, 150),
+	(43, 150);
 /*!40000 ALTER TABLE `projects_categories` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

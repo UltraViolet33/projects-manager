@@ -27,6 +27,6 @@ abstract class Controller
             header("Location: $urlRedirect");
         }
 
-        return $_GET["id"];
+        return (int) $_GET["id"];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core\Database;
 
 use Exception;
@@ -62,6 +64,6 @@ class Database
 
     public function getLastInsertId(): int
     {
-        return $this->PDOInstance->lastInsertId();
+        return (int) $this->PDOInstance->lastInsertId();
     }
 }

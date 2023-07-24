@@ -17,7 +17,6 @@ $router->get('/projects/portfolio', ['App\Controllers\ProjectController', 'getPr
 $router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'getProjectsInProgress']);
 $router->get('/projects/commit-portfolio', ['App\Controllers\ProjectController', 'commitPortfolio']);
 
-
 $router->get('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 $router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 

@@ -22,7 +22,8 @@ class CategoryController extends Controller
     public function index(): Render
     {
         $allCategories = $this->categoryModel->selectAll();
-        return Render::make("categories/index", compact("allCategories"));
+        $titlePage = "All Categories";
+        return Render::make("categories/index", compact("allCategories", "titlePage"));
     }
 
 
@@ -37,8 +38,8 @@ class CategoryController extends Controller
                 }
             }
         }
-
-        return Render::make("/categories/create");
+        $titlePage = "Create category";
+        return Render::make("/categories/create", compact("titlePage"));
     }
 
     
@@ -80,8 +81,8 @@ class CategoryController extends Controller
             }
         }
 
-
-        return Render::make("/categories/edit", compact("category"));
+        $titlePage = "Edit ".$category->name;
+        return Render::make("/categories/edit", compact("category","titlePage"));
     }
 
 

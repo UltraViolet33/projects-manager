@@ -33,7 +33,8 @@ class ProjectController extends Controller
     public function index(): Render
     {
         $allCategories = $this->categoryModel->selectAll();
-        return Render::make("projects/index", compact("allCategories"));
+        $titlePage = "All Projects";
+        return Render::make("projects/index", compact("allCategories", "titlePage"));
     }
 
 
@@ -59,7 +60,8 @@ class ProjectController extends Controller
         $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
         $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
         $totalProjects = count($projectsPortfolio);
-        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects"));
+        $titlePage = "Portfolio Projects";
+        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
     }
 
     public function getProjectsInProgress(): Render
@@ -67,7 +69,8 @@ class ProjectController extends Controller
         $projectsInProgress = $this->projectModel->selectProjectsInProgress();
         $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
         $totalProjects = count($projectsInProgress);
-        return Render::make("projects/in-progress", compact("projectsTable", "totalProjects"));
+        $titlePage = "Projects in progress";
+        return Render::make("projects/in-progress", compact("projectsTable", "totalProjects", "titlePage"));
     }
 
 
@@ -198,7 +201,8 @@ class ProjectController extends Controller
         }
 
         $priorities = self::PRIORITIES;
-        return Render::make("projects/edit", compact("project", "allCategories", "priorities"));
+        $titlePage = "Edit " . $project->name;
+        return Render::make("projects/edit", compact("project", "allCategories", "priorities", "titlePage"));
     }
 
 
@@ -211,7 +215,9 @@ class ProjectController extends Controller
             header("Location: /projects/all");
         }
 
-        return Render::make("projects/details", compact("project"));
+        $titlePage = "Details " . $project->name;
+
+        return Render::make("projects/details", compact("project", "titlePage"));
     }
 
 
@@ -282,11 +288,13 @@ class ProjectController extends Controller
 
         $allCategories = $this->categoryModel->selectAll();
 
-        return Render::make("/projects/create", compact("allCategories"));
+        $titlePage = "Create a project";
+
+        return Render::make("/projects/create", compact("allCategories", "titlePage"));
     }
 
 
-    public function commitPortfolio() 
+    public function commitPortfolio()
     {
         $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
         // var_dump($projectsPortfolio);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Database\Config;
 use App\Core\Helpers\Session;
 
 define('BASE_VIEW_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\views" . DIRECTORY_SEPARATOR);
@@ -28,6 +29,9 @@ class Render
         $errors = Session::get("error");
         ob_start();
         extract($this->args);
+        if (Config::$debug) {
+            echo "DEBUG";
+        }
         require BASE_VIEW_PATH . 'layouts\header.php';
         require BASE_VIEW_PATH . $this->viewPath . '.php';
         require BASE_VIEW_PATH . 'layouts\footer.php';

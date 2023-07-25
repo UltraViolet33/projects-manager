@@ -9,9 +9,13 @@
         <div id="btn-toggle-status"></div>
         <h4>Categories :</h4>
         <ul>
-            <?php foreach ($project->categories as $category) : ?>
-                <li><?= $category->name ?></li>
-            <?php endforeach; ?>
+            <?php if ($project->categories) : ?>
+                <?php foreach ($project->categories as $category) : ?>
+                    <li><?= $category->name ?></li>
+                <?php endforeach; ?>
+            <?php else : ?>
+                There is no category for this project
+            <?php endif; ?>
         </ul>
         <div class="m-2">
             <a href="/projects/edit?id=<?= $project->id_project ?>" class="btn btn-primary">Edit</a>

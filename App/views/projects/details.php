@@ -13,11 +13,15 @@
                 <li><?= $category->name ?></li>
             <?php endforeach; ?>
         </ul>
-        <a href="/projects/edit?id=<?= $project->id_project ?>" class="btn btn-primary">Edit</a>
-        <form action="/projects/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this project ? ')">
-            <input type="hidden" name="idProject" value="<?= $project->id_project ?>">
-            <input class="btn btn-danger" type="submit" value="Delete" name="deleteProject"></input>
-        </form>
+        <div class="m-2">
+            <a href="/projects/edit?id=<?= $project->id_project ?>" class="btn btn-primary">Edit</a>
+        </div>
+        <div class="m-2">
+            <form action="/projects/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this project ? ')">
+                <input type="hidden" name="idProject" value="<?= $project->id_project ?>">
+                <input class="btn btn-danger" type="submit" value="Delete" name="deleteProject"></input>
+            </form>
+        </div>
     </div>
 </div>
 <script src="../assets/js/editProject.js"></script>

@@ -2,13 +2,18 @@ const btn_status_div = document.querySelector("#btn-toggle-status");
 
 let project;
 
-const displayBtns = project => {
-  let buttonsHTML = "";
-  buttonsHTML += getBtnStatus(project);
-  buttonsHTML += getBtnPriority(project);
-  buttonsHTML += getBtnGithubPortfolio(project);
+let btnPriority;
+let btnStatus;
+let btnPortfolio;
 
-  btn_status_div.innerHTML = buttonsHTML;
+const displayBtns = project => {
+  btnPriority = getBtnProperty(project, "priority");
+  btnStatus = getBtnProperty(project, "status");
+  btnPortfolio = getBtnProperty(project, "portfolio");
+
+  btn_status_div.appendChild(btnPriority);
+  btn_status_div.appendChild(btnStatus);
+  btn_status_div.appendChild(btnPortfolio);
 };
 
 const toggle = el => {
@@ -37,34 +42,38 @@ const editProject = async project => {
     });
 
     project = await response.json();
-
+    removeButtons();
     displayBtns(project);
   } catch (error) {
     console.log(error);
   }
 };
 
-const getBtnPriority = project => {
-  if (project.priority) {
-    return "<button class='btn btn-danger' id='priority' onclick='toggle(this)' >High</button>";
+const getBtnProperty = (project, property) => {
+  switch (property) {
+    case "priority":
+      return project.priority
+        ? createButton("btn-danger", "priority", "High")
+        : createButton("btn-primary", "priority", "Low");
+    case "status":
+      return project.status
+        ? createButton("btn-primary", "status", "Done")
+        : createButton("btn-danger", "status", "In Progress");
+    case "portfolio":
+      return project.github_portfolio
+        ? createButton("btn-primary", "github", "In Github Portfolio")
+        : createButton("btn-primary", "github", "Not In Github Portfolio");
   }
-  return "<button class='btn btn-primary'  id='priority' onclick='toggle(this)'>Low</button>";
 };
 
-const getBtnStatus = project => {
-  if (project.status) {
-    return "<button class='btn btn-primary' id='status' onclick='toggle(this)'>Done</button>";
-  }
-
-  return "<button class='btn btn-primary' id='status' onclick='toggle(this)'>In Progress</button>";
-};
-
-const getBtnGithubPortfolio = project => {
-  if (project.github_portfolio) {
-    return "<button class='btn btn-primary' id='github' onclick='toggle(this)'>In github portfolio</button>";
-  }
-
-  return "<button class='btn btn-primary' id='github' onclick='toggle(this)'>Not in github portfolio</button>";
+const createButton = (className, id, textContent) => {
+  const button = document.createElement("button");
+  button.classList.add("btn");
+  button.classList.add(className);
+  button.setAttribute("id", id);
+  button.addEventListener("click", () => toggle(button));
+  button.textContent = textContent;
+  return button;
 };
 
 const getProject = async idProject => {
@@ -78,6 +87,12 @@ const getProject = async idProject => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const removeButtons = () => {
+  btn_status_div.removeChild(btnPriority);
+  btn_status_div.removeChild(btnStatus);
+  btn_status_div.removeChild(btnPortfolio);
 };
 
 const url = new URL(window.location.href);

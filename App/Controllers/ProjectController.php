@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Database\Config;
 use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
@@ -297,18 +298,19 @@ class ProjectController extends Controller
 
     public function commitPortfolio()
     {
-        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
-        // var_dump($projectsPortfolio);
+        $projectsPortfolio = $this->projectModel->selectDataProjectsPortfolio();
         $projectsPortfolioJson = json_encode($projectsPortfolio);
-        // echo $projectsPortfolioJson;
-        var_dump(PATH_PROJECTS_JSON);
-        // die;
-        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
-        // $commands = file_get_contents("./core/classes/pushPortfolio.sh");
-        $test = shell_exec("sh ../App/Core/commands/push_portfolio.sh");
-        // $test = shell_exec("pwd");
 
-        var_dump($test);
+        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
+
+        if (Config::$debug) {
+            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+        } else {
+            $command = "sh ../App/Core/commands/push_portfolio.sh";
+        }
+
+        shell_exec($command);
+
         header("Location: /");
     }
 

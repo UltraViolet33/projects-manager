@@ -4,6 +4,3 @@
 
 cp ../App/Core/data/projects.json ../../Github-Portofolio/projects.json
 cd ../../Github-Portofolio/
-git add *
-git commit -m "modif projects.json"
-git push origin master

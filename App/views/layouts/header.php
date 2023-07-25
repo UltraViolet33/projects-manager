@@ -24,9 +24,9 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/projects">All Projects</a></li>
-                            <li><a class="dropdown-item" href="/projects/create">Add Project</a></li>
-                            <li><a class="dropdown-item" href="/projects/portfolio">Portfolio Projects</a></li>
                             <li><a class="dropdown-item" href="/projects/in-progress">Projects in Progress</a></li>
+                            <li><a class="dropdown-item" href="/projects/portfolio">Portfolio Projects</a></li>
+                            <li><a class="dropdown-item" href="/projects/create">Add Project</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -34,8 +34,8 @@
                             Categories
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/categories/create">Add Category</a></li>
                             <li><a class="dropdown-item" href="/categories">All Categories</a></li>
+                            <li><a class="dropdown-item" href="/categories/create">Add Category</a></li>
                         </ul>
                     </li>
                 </ul>

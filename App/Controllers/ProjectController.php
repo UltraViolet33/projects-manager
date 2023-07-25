@@ -244,10 +244,11 @@ class ProjectController extends Controller
 
             $created_at = date('d/m/yy', strtotime($project->created_at));
             $priority = $project->priority ? "high" : "";
+            $classPriority = $project->priority ? "bg-danger" : "";
 
             $html .= '<th scope="row">' . $project->id_project . '</th>
                         <td>' . $project->name . '</td>
-                        <td>' . $priority  . '</td>
+                        <td class=' . $classPriority . '> ' . $priority  . '</td>
 
                         <td>' . $created_at . '</td>
                         <td><a href="/projects/details?id=' . $project->id_project . '" class="btn btn-primary">Détails</a></td>

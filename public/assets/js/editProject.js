@@ -67,13 +67,16 @@ const getBtnProperty = (project, property) => {
 };
 
 const createButton = (className, id, textContent) => {
+  const div_btn = document.createElement("div");
+  div_btn.classList.add("m-2");
   const button = document.createElement("button");
   button.classList.add("btn");
   button.classList.add(className);
   button.setAttribute("id", id);
   button.addEventListener("click", () => toggle(button));
   button.textContent = textContent;
-  return button;
+  div_btn.appendChild(button);
+  return div_btn;
 };
 
 const getProject = async idProject => {

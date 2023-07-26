@@ -21,9 +21,9 @@ class TechController extends Controller
 
     public function index(): Render
     {
-        $allCategories = $this->techModel->selectAll();
-        $titlePage = "All Categories";
-        return Render::make("categories/index", compact("allCategories", "titlePage"));
+        $allTechs = $this->techModel->selectAll();
+        $titlePage = "All Techs";
+        return Render::make("techs/index", compact("allTechs", "titlePage"));
     }
 
 
@@ -33,9 +33,6 @@ class TechController extends Controller
 
             if ($this->checkPostValues(["name"])) {
                 if ($this->checkIfNameAvailable($_POST["name"])) {
-                    // insert new tech
-                    // redirect
-                    echo "ok";
                     $this->techModel->create($_POST["name"]);
                     header("Location: /techs");
                 }

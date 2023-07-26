@@ -29,7 +29,7 @@ class Project extends Model
         return $this->db->read($query);
     }
 
-    
+
     public function selectAll(): array
     {
         $query = "SELECT * FROM $this->table ORDER BY created_at DESC";

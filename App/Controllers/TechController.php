@@ -58,23 +58,6 @@ class TechController extends Controller
     }
 
 
-    // public function delete()
-    // {
-    //     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    //         if ($this->checkPostValues(["idCategory"])) {
-    //             $category = $this->categoryModel->selectByColumn("id_category", $_POST["idCategory"]);
-
-    //             if ($this->categoryModel->delete($category->id_category)) {
-    //                 header("Location: /categories");
-    //             }
-    //         }
-    //     }
-
-    //     header("Location: /categories");
-    // }
-
-
     public function edit(): Render
     {
         $idTech = $this->getIdInUrlOrRedirectTo("/techs");
@@ -95,5 +78,22 @@ class TechController extends Controller
 
         $titlePage = "Edit " . $tech->name;
         return Render::make("/techs/edit", compact("tech", "titlePage"));
+    }
+
+    public function delete()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if ($this->checkPostValues(["idTech"])) {
+                $tech = $this->techModel->selectByColumn("id_tech", $_POST["idTech"]);
+
+                if ($this->techModel->delete($tech->id_tech)) {
+                    header("Location: /techs");
+                    exit();
+                }
+            }
+        }
+
+        header("Location: /techs");
     }
 }

@@ -56,7 +56,7 @@ $router->post('/techs/create', ['App\Controllers\TechController', 'create']);
 $router->get('/techs/edit', ['App\Controllers\TechController', 'edit']);
 $router->post('/techs/edit', ['App\Controllers\TechController', 'edit']);
 
-// $router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
+$router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
 
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

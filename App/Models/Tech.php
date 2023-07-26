@@ -32,20 +32,12 @@ class Tech extends Model
     }
 
 
-    // public function delete(int $idCategory): bool
-    // {
-    //     $query = "DELETE FROM categories WHERE id_category = :id_category";
-    //     return $this->db->write($query, ["id_category" =>  $idCategory]);
-    // }
+    public function getProjectTechs(int $idProject): array
+    {
+        $query = "SELECT * FROM $this->table INNER JOIN projects_techs
+                ON techs.id_tech = projects_techs.id_tech
+                WHERE projects_techs.id_project = :id_project";
 
-
-    // public function getProjectCategories(int $idProject): array
-    // {
-    //     $query = "SELECT *  FROM categories
-    //             INNER JOIN projects_categories
-    //             ON categories.id_category = projects_categories.id_categorie
-    //             WHERE projects_categories.id_project = :id_project";
-
-    //     return $this->db->read($query, ["id_project" => $idProject]);
-    // }
+        return $this->db->read($query, ["id_project" => $idProject]);
+    }
 }

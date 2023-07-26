@@ -83,6 +83,7 @@ class ProjectController extends Controller
     {
         $project = $this->projectModel->selectByColumn("id_project", $idProject);
         $project->categories = $this->categoryModel->getProjectCategories($idProject);
+        $project->techs = $this->techModel->getProjectTechs($idProject);
         return $project;
     }
 

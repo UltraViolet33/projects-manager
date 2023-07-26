@@ -17,6 +17,16 @@
                 There is no category for this project
             <?php endif; ?>
         </ul>
+        <h4>Technologies :</h4>
+        <ul>
+            <?php if ($project->techs) : ?>
+                <?php foreach ($project->techs as $tech) : ?>
+                    <li><?= $tech->name ?></li>
+                <?php endforeach; ?>
+            <?php else : ?>
+                There is no techs for this project
+            <?php endif; ?>
+        </ul>
         <div class="m-2">
             <a href="/projects/edit?id=<?= $project->id_project ?>" class="btn btn-primary">Edit</a>
         </div>

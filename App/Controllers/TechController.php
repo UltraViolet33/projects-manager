@@ -31,15 +31,16 @@ class TechController extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            if ($this->submitFormCategory()) {
+            // if ($this->submitFormCategory()) {
 
-                if ($this->categoryModel->create($_POST["name"])) {
-                    header("Location: /categories");
-                }
-            }
+            //     if ($this->categoryModel->create($_POST["name"])) {
+            //         header("Location: /categories");
+            //     }
+            // }
         }
-        $titlePage = "Create category";
-        return Render::make("/categories/create", compact("titlePage"));
+
+        $titlePage = "Create Tech";
+        return Render::make("/techs/create", compact("titlePage"));
     }
 
     

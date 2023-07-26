@@ -45,4 +45,18 @@ $router->post('/categories/edit', ['App\Controllers\CategoryController', 'edit']
 $router->post('/categories/delete', ['App\Controllers\CategoryController', 'delete']);
 
 
+//technologies
+
+// $router->get('/techs', ['App\Controllers\TechController', 'index']);
+// $router->get('/techs/index', ['App\Controllers\TechController', 'index']);
+
+$router->get('/techs/create', ['App\Controllers\TechController', 'create']);
+$router->post('/techs/create', ['App\Controllers\TechController', 'create']);
+
+// $router->get('/techs/edit', ['App\Controllers\TechController', 'edit']);
+// $router->post('/techs/edit', ['App\Controllers\TechController', 'edit']);
+
+// $router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
+
+
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

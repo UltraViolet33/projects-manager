@@ -270,26 +270,7 @@ class ProjectController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->submitFormCreateProject()) {
-                $project = [
-                    "name" => $_POST["name"],
-                    "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
-                    "description" => $_POST["description"] == "" ? null : $_POST["description"],
-                    "priority" => $_POST["priority"],
-                ];
-
-                $projectCategories = $_POST["categories"];
-
-                if (is_string($projectCategories)) {
-                    $projectCategories = [];
-                    $projectCategories[] = $_POST["categories"];
-                }
-
-                if ($this->projectModel->create($project, $projectCategories)) {
-                    header("Location: /");
-                }
-            }
+            $this->handleCreateProject();
         }
 
         $allCategories = $this->categoryModel->selectAll();
@@ -297,6 +278,32 @@ class ProjectController extends Controller
         $titlePage = "Create a project";
 
         return Render::make("/projects/create", compact("allCategories", "allTechs", "titlePage"));
+    }
+
+    private function handleCreateProject()
+    {
+        if ($this->submitFormCreateProject()) {
+            $project = [
+                "name" => $_POST["name"],
+                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
+                "description" => $_POST["description"] == "" ? null : $_POST["description"],
+                "priority" => $_POST["priority"],
+            ];
+            
+            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
+            
+            $projectCategories = $_POST["categories"];
+
+            if (is_string($projectCategories)) {
+                $projectCategories = [];
+                $projectCategories[] = $_POST["categories"];
+            }
+
+            if ($this->projectModel->create($project, $projectCategories, $projectTechs)) {
+                header("Location: /");
+            }
+        }
+        
     }
 
 
@@ -345,7 +352,7 @@ class ProjectController extends Controller
         }
 
         if ($this->projectModel->doesExist("name", $_POST["name"])) {
-            Session::setErrorMsg("Error : Category name already exists !");
+            Session::setErrorMsg("Error : Project name already exists !");
             return false;
         }
 

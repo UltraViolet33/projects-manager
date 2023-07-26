@@ -84,12 +84,17 @@ class Project extends Model
     }
 
 
-    public function create(array $project, array $projectCategories): bool
+    public function create(array $project, array $projectCategories, array $projectTechs): bool
     {
         $query = "INSERT INTO projects(name, description, created_at, github_link, priority) VALUES(:name, :description, CURDATE(), :github_link, :priority)";
         $this->db->write($query, $project);
 
         $idProject = $this->db->getLastInsertId();
+
+        $projectTechs = array_map(fn($value): array => [$idProject, $value], $projectTechs);
+
+        $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
+        
         return $this->insertProjectCategories($idProject, $projectCategories);
     }
 

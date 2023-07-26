@@ -19,10 +19,19 @@ abstract class Model
         $this->id = $this->setId();
     }
 
+    protected function insertMultipleValues(array $columns, string $table, array $values): bool
+    {
+        $placeholder = "?";
+        $placeholder .= str_repeat(",?", count($columns) - 1);
 
-    // abstract protected function create(array $data): bool;
+        $columnsStr = implode(", ", $columns);
+        
+        $sql = "INSERT INTO $table ($columnsStr) VALUES " .
+        
+        str_repeat("($placeholder),", count($values) - 1) . "($placeholder)";
 
-    // abstract protected function update(array $data): bool;
+        return $this->db->write($sql, array_merge(...$values));
+    }
 
 
     public function selectOneById(int $id): object
@@ -91,4 +100,5 @@ abstract class Model
         $table = strtolower(explode("\\", get_class($this))[2]);
         return "id_" . $table;
     }
+
 }

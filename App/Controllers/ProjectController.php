@@ -9,6 +9,7 @@ use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
+use App\Models\Tech;
 
 define('PATH_PROJECTS_JSON', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\Core" . DIRECTORY_SEPARATOR . "data\\projects.json");
 
@@ -17,6 +18,8 @@ class ProjectController extends Controller
 {
     private Project $projectModel;
     private Category $categoryModel;
+
+    private Tech $techModel;
 
     const PRIORITIES = [
         "0" => "LOW",
@@ -28,6 +31,7 @@ class ProjectController extends Controller
     {
         $this->projectModel = new Project();
         $this->categoryModel = new Category();
+        $this->techModel = new Tech();
     }
 
 
@@ -77,7 +81,7 @@ class ProjectController extends Controller
 
     private function getSingleProject(int $idProject): object
     {
-        $project  = $this->projectModel->selectByColumn("id_project", $idProject);
+        $project = $this->projectModel->selectByColumn("id_project", $idProject);
         $project->categories = $this->categoryModel->getProjectCategories($idProject);
         return $project;
     }
@@ -90,7 +94,7 @@ class ProjectController extends Controller
         }
 
         $idProject = (int) $_GET["id"];
-        $project  = $this->getSingleProject($idProject);
+        $project = $this->getSingleProject($idProject);
 
         $project->status = $project->status > 0 ? true : false;
         $project->priority = $project->priority > 0 ? true : false;
@@ -112,7 +116,7 @@ class ProjectController extends Controller
         }
 
         $status = (int) $_GET["status"];
-        $projects  = $this->projectModel->selectProjectsByStatus($status);
+        $projects = $this->projectModel->selectProjectsByStatus($status);
 
         return json_encode($projects);
     }
@@ -125,7 +129,7 @@ class ProjectController extends Controller
         }
 
         $idCategory = (int) $_GET["id"];
-        $projects  = $this->projectModel->selectProjectsByCategory($idCategory);
+        $projects = $this->projectModel->selectProjectsByCategory($idCategory);
 
         return json_encode($projects);
     }
@@ -145,7 +149,7 @@ class ProjectController extends Controller
         $newProject = (array) $project;
 
         if ($this->projectModel->update($newProject)) {
-            $project  = $this->getSingleProject($project->id_project);
+            $project = $this->getSingleProject($project->id_project);
 
             $project->status = $project->status > 0 ? true : false;
             return json_encode($project);
@@ -158,7 +162,7 @@ class ProjectController extends Controller
     public function edit(): Render
     {
         $idProject = $this->getIdInUrlOrRedirectTo("/");
-        $project  = $this->getSingleProject($idProject);
+        $project = $this->getSingleProject($idProject);
 
         if (!$project) {
             header("Location: /projects/all");
@@ -210,7 +214,7 @@ class ProjectController extends Controller
     public function details(): Render
     {
         $idProject = $this->getIdInUrlOrRedirectTo("/");
-        $project  = $this->getSingleProject($idProject);
+        $project = $this->getSingleProject($idProject);
 
         if (!$project) {
             header("Location: /projects/all");
@@ -249,7 +253,7 @@ class ProjectController extends Controller
 
             $html .= '<th scope="row">' . $project->id_project . '</th>
                         <td>' . $project->name . '</td>
-                        <td class=' . $classPriority . '> ' . $priority  . '</td>
+                        <td class=' . $classPriority . '> ' . $priority . '</td>
 
                         <td>' . $created_at . '</td>
                         <td><a href="/projects/details?id=' . $project->id_project . '" class="btn btn-primary">Détails</a></td>
@@ -289,10 +293,10 @@ class ProjectController extends Controller
         }
 
         $allCategories = $this->categoryModel->selectAll();
-
+        $allTechs = $this->techModel->selectAll();
         $titlePage = "Create a project";
 
-        return Render::make("/projects/create", compact("allCategories", "titlePage"));
+        return Render::make("/projects/create", compact("allCategories", "allTechs", "titlePage"));
     }
 
 

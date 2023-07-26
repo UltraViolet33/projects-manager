@@ -46,18 +46,6 @@ class TechController extends Controller
     }
 
 
-    private function checkIfNameAvailable(string $name): bool
-    {
-        return !$this->techModel->doesExist("name", $name);
-    }
-
-
-    private function isNameAvailableToEdit(string $name, int $id): bool
-    {
-        return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
-    }
-
-
     public function edit(): Render
     {
         $idTech = $this->getIdInUrlOrRedirectTo("/techs");
@@ -95,5 +83,17 @@ class TechController extends Controller
         }
 
         header("Location: /techs");
+    }
+
+    
+    private function checkIfNameAvailable(string $name): bool
+    {
+        return !$this->techModel->doesExist("name", $name);
+    }
+
+
+    private function isNameAvailableToEdit(string $name, int $id): bool
+    {
+        return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
     }
 }

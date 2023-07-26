@@ -41,6 +41,14 @@ abstract class Model
     }
 
 
+    public function checkIfArgAlreadyExistsInAnotherColumn(string $arg, mixed $value, int $id): bool
+    {
+        $query = "SELECT * FROM $this->table WHERE $arg = :value AND $this->id != :id";
+        $result = $this->db->readOneRow($query, ["value" => $value, "id" => $id]);
+        return $result ? true : false;
+    }
+
+
     public function selectByColumn(string $column, mixed $value): object|bool
     {
         $query = "SELECT * FROM $this->table WHERE $column = :value";

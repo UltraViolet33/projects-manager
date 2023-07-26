@@ -52,6 +52,12 @@ class TechController extends Controller
     }
 
 
+    private function isNameAvailableToEdit(string $name, int $id): bool
+    {
+        return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
+    }
+
+
     // public function delete()
     // {
     //     if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -69,59 +75,25 @@ class TechController extends Controller
     // }
 
 
-    // public function edit(): Render
-    // {
-    //     $idCategory = $this->getIdInUrlOrRedirectTo("/categories");
+    public function edit(): Render
+    {
+        $idTech = $this->getIdInUrlOrRedirectTo("/techs");
 
-    //     $category = $this->categoryModel->selectByColumn("id_category", $idCategory);
+        $tech = $this->techModel->selectByColumn("id_tech", $idTech);
 
-    //     if (!$category) {
-    //         header("Location: /categories");
-    //     }
+        if (!$tech) {
+            header("Location: /techs");
+        }
 
-    //     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($this->checkPostValues(["name"]) && $this->isNameAvailableToEdit($_POST["name"], $tech->id_tech)) {
+                $this->techModel->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
+                header("Location: /techs");
+            }
+            Session::setErrorMsg("Error : Tech name already exists !");
+        }
 
-    //         if ($this->submitFormEditCategory($category->id_category)) {
-    //             echo "test";
-
-    //             if ($this->categoryModel->update(["name" => $_POST["name"], "id_category" => $category->id_category])) {
-    //                 header("Location: /categories");
-    //             }
-    //         }
-    //     }
-
-    //     $titlePage = "Edit ".$category->name;
-    //     return Render::make("/categories/edit", compact("category","titlePage"));
-    // }
-
-
-    // private function submitFormCategory(): bool
-    // {
-    //     if ($this->categoryModel->doesExist("name", $_POST["name"])) {
-    //         Session::setErrorMsg("Error : Category name already exists !");
-    //         return false;
-    //     }
-
-    //     if (!$this->checkPostValues(["name"])) {
-    //         return false;
-    //     }
-
-
-    //     return true;
-    // }
-
-    // private function submitFormEditCategory(int $idCategory): bool
-    // {
-    //     if ($this->categoryModel->checkIfNameExistsToEdit($_POST["name"], $idCategory)) {
-    //         Session::setErrorMsg("Error : Category name already exists !");
-    //         return false;
-    //     }
-
-    //     if (!$this->checkPostValues(["name"])) {
-    //         return false;
-    //     }
-
-
-    //     return true;
-    // }
+        $titlePage = "Edit " . $tech->name;
+        return Render::make("/techs/edit", compact("tech", "titlePage"));
+    }
 }

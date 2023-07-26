@@ -5,9 +5,9 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <?php if (!$allTechs) : ?>
+        <?php if (!$allTechs): ?>
             <p>There is no technologies</p>
-        <?php else : ?>
+        <?php else: ?>
             <table class="table">
                 <thead>
                     <tr>
@@ -18,13 +18,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($allTechs as $tech) : ?>
+                    <?php foreach ($allTechs as $tech): ?>
                         <tr>
-                            <th scope="row"><?= $tech->id_tech ?></th>
-                            <td><?= $tech->name ?></td>
-                            <td><a href="/categories/edit?id=<?= $tech->id_tech ?>" class="btn btn-primary">Edit</a></td>
+                            <th scope="row">
+                                <?= $tech->id_tech ?>
+                            </th>
                             <td>
-                                <form action="/categories/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this tech ?')">
+                                <?= $tech->name ?>
+                            </td>
+                            <td><a href="/techs/edit?id=<?= $tech->id_tech ?>" class="btn btn-primary">Edit</a></td>
+                            <td>
+                                <form action="/techs/delete" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this tech ?')">
                                     <input type="hidden" name="idTech" value="<?= $tech->id_tech ?>">
                                     <input type="submit" class="btn btn-warning" value="Delete">
                                 </form>
@@ -33,6 +38,13 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+        <?php endif; ?>
+        <?php if (strlen($errors) !== 0): ?>
+            <div class="bg-danger my-3 p-2">
+                <p class="text-center">
+                    <?= $errors ?>
+                </p>
+            </div>
         <?php endif; ?>
     </div>
 </div>

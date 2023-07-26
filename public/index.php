@@ -53,8 +53,8 @@ $router->get('/techs/all', ['App\Controllers\TechController', 'index']);
 $router->get('/techs/create', ['App\Controllers\TechController', 'create']);
 $router->post('/techs/create', ['App\Controllers\TechController', 'create']);
 
-// $router->get('/techs/edit', ['App\Controllers\TechController', 'edit']);
-// $router->post('/techs/edit', ['App\Controllers\TechController', 'edit']);
+$router->get('/techs/edit', ['App\Controllers\TechController', 'edit']);
+$router->post('/techs/edit', ['App\Controllers\TechController', 'edit']);
 
 // $router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
 

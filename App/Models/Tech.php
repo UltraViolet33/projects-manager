@@ -25,11 +25,11 @@ class Tech extends Model
     }
 
 
-    // public function update(array $category): bool
-    // {
-    //     $query = "UPDATE categories SET name = :name WHERE id_category = :id_category";
-    //     return $this->db->write($query, $category);
-    // }
+    public function update(array $tech): bool
+    {
+        $query = "UPDATE $this->table SET name = :name WHERE $this->id = :id";
+        return $this->db->write($query, $tech);
+    }
 
 
     // public function delete(int $idCategory): bool

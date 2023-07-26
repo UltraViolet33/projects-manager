@@ -31,19 +31,30 @@ class TechController extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            // if ($this->submitFormCategory()) {
+            if ($this->checkPostValues(["name"])) {
+                if ($this->checkIfNameAvailable($_POST["name"])) {
+                    // insert new tech
+                    // redirect
+                    echo "ok";
+                    $this->techModel->create($_POST["name"]);
+                    header("Location: /techs");
+                }
 
-            //     if ($this->categoryModel->create($_POST["name"])) {
-            //         header("Location: /categories");
-            //     }
-            // }
+                Session::setErrorMsg("Error : Tech name already exists !");
+            }
         }
 
         $titlePage = "Create Tech";
         return Render::make("/techs/create", compact("titlePage"));
     }
 
-    
+
+    private function checkIfNameAvailable(string $name): bool
+    {
+        return !$this->techModel->doesExist("name", $name);
+    }
+
+
     // public function delete()
     // {
     //     if ($_SERVER["REQUEST_METHOD"] === "POST") {

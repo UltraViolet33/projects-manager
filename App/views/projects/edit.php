@@ -31,6 +31,18 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label for="techs">Project Techs : </label>
+                <select name="techs[]" class="form-select" multiple>
+                    <?php foreach ($allTechs as $tech) : ?>
+                        <?php if ($tech->isInProject) : ?>
+                            <option value="<?= $tech->id_tech ?>" selected><?= $tech->name ?></option>
+                        <?php else : ?>
+                            <option value="<?= $tech->id_tech ?>"><?= $tech->name ?></option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="priority">Project priority : </label>
                 <select name="priority" class="form-select">
                     <?php foreach ($priorities as $key => $priority) : ?>

@@ -32,6 +32,7 @@ class ProjectController extends Controller
         $this->projectModel = new Project();
         $this->categoryModel = new Category();
         $this->techModel = new Tech();
+        $this->model = new Project();
     }
 
 
@@ -170,31 +171,11 @@ class ProjectController extends Controller
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->submitFormEditProject($idProject)) {
-                $project = [
-                    "name" => $_POST["name"],
-                    "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
-                    "description" => $_POST["description"] == "" ? null : $_POST["description"],
-                    "priority" => $_POST["priority"],
-                    "created_at" => $_POST["created_at"] == "" ? $project->created_at : $_POST["created_at"],
-                    "id_project" => $idProject
-                ];
-
-                $projectCategories = $_POST["categories"];
-
-                if (is_string($projectCategories)) {
-                    $projectCategories = [];
-                    $projectCategories[] = $_POST["categories"];
-                }
-
-                if ($this->projectModel->updateProjectWithCategories($project, $projectCategories)) {
-                    header("Location: /");
-                }
-            }
+            $this->handleEditProject($project);
         }
 
         $allCategories = $this->categoryModel->selectAll();
+
 
         foreach ($allCategories as $category) {
             $category->isInProject = false;
@@ -206,9 +187,44 @@ class ProjectController extends Controller
             }
         }
 
+        $allTechs = $this->techModel->selectAll();
+
+        foreach ($allTechs as $tech) {
+            $tech->isInProject = false;
+
+            foreach ($project->techs as $projectTech) {
+                if ($projectTech->name === $tech->name) {
+                    $tech->isInProject = true;
+                }
+            }
+        }
+
         $priorities = self::PRIORITIES;
         $titlePage = "Edit " . $project->name;
-        return Render::make("projects/edit", compact("project", "allCategories", "priorities", "titlePage"));
+        return Render::make("projects/edit", compact("project", "allCategories", "allTechs", "priorities", "titlePage"));
+    }
+
+
+    private function handleEditProject(object $project)
+    {
+        if ($this->submitFormEditProject($project->id_project)) {
+            $project = [
+                "name" => $_POST["name"],
+                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
+                "description" => $_POST["description"] == "" ? null : $_POST["description"],
+                "priority" => $_POST["priority"],
+                "created_at" => $_POST["created_at"] == "" ? $project->created_at : $_POST["created_at"],
+                "id_project" => $project->id_project
+            ];
+
+            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
+            $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
+
+            if ($this->projectModel->updateProjectWithCategories($project, $projectCategories, $projectTechs)) {
+                header("Location: /");
+            }
+
+        }
     }
 
 
@@ -290,9 +306,9 @@ class ProjectController extends Controller
                 "description" => $_POST["description"] == "" ? null : $_POST["description"],
                 "priority" => $_POST["priority"],
             ];
-            
+
             $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
-            
+
             $projectCategories = $_POST["categories"];
 
             if (is_string($projectCategories)) {
@@ -304,7 +320,7 @@ class ProjectController extends Controller
                 header("Location: /");
             }
         }
-        
+
     }
 
 

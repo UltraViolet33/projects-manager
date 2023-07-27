@@ -54,16 +54,22 @@ class Project extends Model
     }
 
 
-    public function updateProjectWithCategories(array $project, array $projectCategories): bool
+    public function updateProjectWithCategories(array $project, array $projectCategories, array $projectTechs): bool
     {
         $query = "UPDATE projects 
         SET name = :name, description = :description,
         github_link = :github_link, created_at=:created_at, priority = :priority
         WHERE id_project = :id_project";
 
+        $idProject = $project["id_project"];
+
+        $projectTechs = array_map(fn($value): array => [$idProject, $value], $projectTechs);
+
         $this->db->write($query, $project);
-        $this->deleteProjectCategories($project["id_project"]);
-        return $this->insertProjectCategories($project["id_project"], $projectCategories);
+        $this->deleteProjectCategories($idProject);
+        $this->deleteProjectTechs($idProject);
+        $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
+        return $this->insertProjectCategories($idProject, $projectCategories);
     }
 
 
@@ -84,6 +90,13 @@ class Project extends Model
     }
 
 
+    private function deleteProjectTechs(int $idProject): bool
+    {
+        $query = "DELETE FROM projects_techs WHERE id_project = :id_project";
+        return $this->db->write($query, ["id_project" => $idProject]);
+    }
+
+
     public function create(array $project, array $projectCategories, array $projectTechs): bool
     {
         $query = "INSERT INTO projects(name, description, created_at, github_link, priority) VALUES(:name, :description, CURDATE(), :github_link, :priority)";
@@ -94,7 +107,7 @@ class Project extends Model
         $projectTechs = array_map(fn($value): array => [$idProject, $value], $projectTechs);
 
         $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
-        
+
         return $this->insertProjectCategories($idProject, $projectCategories);
     }
 

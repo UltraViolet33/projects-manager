@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Helpers\Session;
+use App\Models\Model;
 
 abstract class Controller
 {
+    protected Model $model;
     protected function checkPostValues(array $values): bool
     {
         foreach ($values as $value) {
@@ -28,5 +30,10 @@ abstract class Controller
         }
 
         return (int) $_GET["id"];
+    }
+
+    protected function isNameAvailableToEdit(string $name, int $id): bool
+    {
+        return !$this->model->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
     }
 }

@@ -16,6 +16,7 @@ class TechController extends Controller
     public function __construct()
     {
         $this->techModel = new Tech();
+        $this->model = new Tech();
     }
 
 
@@ -61,6 +62,7 @@ class TechController extends Controller
                 $this->techModel->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
                 header("Location: /techs");
             }
+            
             Session::setErrorMsg("Error : Tech name already exists !");
         }
 
@@ -92,8 +94,8 @@ class TechController extends Controller
     }
 
 
-    private function isNameAvailableToEdit(string $name, int $id): bool
-    {
-        return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
-    }
+    // private function isNameAvailableToEdit(string $name, int $id): bool
+    // {
+    //     return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
+    // }
 }

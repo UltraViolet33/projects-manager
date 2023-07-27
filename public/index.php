@@ -46,7 +46,6 @@ $router->post('/categories/delete', ['App\Controllers\CategoryController', 'dele
 
 
 //technologies
-
 $router->get('/techs', ['App\Controllers\TechController', 'index']);
 $router->get('/techs/all', ['App\Controllers\TechController', 'index']);
 

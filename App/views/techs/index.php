@@ -26,7 +26,9 @@
                             <td>
                                 <?= $tech->name ?>
                             </td>
-                            <td><a href="/techs/edit?id=<?= $tech->id_tech ?>" class="btn btn-primary">Edit</a></td>
+                            <td>
+                                <a href="/techs/edit?id=<?= $tech->id_tech ?>" class="btn btn-primary">Edit</a>
+                            </td>
                             <td>
                                 <form action="/techs/delete" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this tech ?')">
@@ -38,13 +40,6 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        <?php endif; ?>
-        <?php if (strlen($errors) !== 0): ?>
-            <div class="bg-danger my-3 p-2">
-                <p class="text-center">
-                    <?= $errors ?>
-                </p>
-            </div>
         <?php endif; ?>
     </div>
 </div>

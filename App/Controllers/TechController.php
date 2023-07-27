@@ -10,19 +10,15 @@ use App\Models\Tech;
 
 class TechController extends Controller
 {
-
-    private Tech $techModel;
-
     public function __construct()
     {
-        $this->techModel = new Tech();
         $this->model = new Tech();
     }
 
 
     public function index(): Render
     {
-        $allTechs = $this->techModel->selectAll();
+        $allTechs = $this->model->selectAll();
         $titlePage = "All Techs";
         return Render::make("techs/index", compact("allTechs", "titlePage"));
     }
@@ -31,14 +27,8 @@ class TechController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->checkPostValues(["name"])) {
-                if ($this->checkIfNameAvailable($_POST["name"])) {
-                    $this->techModel->create($_POST["name"]);
-                    header("Location: /techs");
-                }
-
-                Session::setErrorMsg("Error : Tech name already exists !");
+            if ($this->handleSubmitCreate()) {
+                header("Location: /techs");
             }
         }
 
@@ -47,11 +37,29 @@ class TechController extends Controller
     }
 
 
+    private function handleSubmitCreate(): bool
+    {
+        if (!isset($_POST["name"]) || $_POST["name"] == "") {
+            Session::setErrorMsg("Error : Missing name field !");
+            return false;
+        }
+
+        $name = $_POST["name"];
+
+        if ($this->doesNameAlreadyExists($name)) {
+            Session::setErrorMsg("Error : Tech name already exists !");
+            return false;
+        }
+
+        return $this->model->create($name);
+    }
+
+
     public function edit(): Render
     {
         $idTech = $this->getIdInUrlOrRedirectTo("/techs");
 
-        $tech = $this->techModel->selectByColumn("id_tech", $idTech);
+        $tech = $this->model->selectByColumn("id_tech", $idTech);
 
         if (!$tech) {
             header("Location: /techs");
@@ -59,10 +67,10 @@ class TechController extends Controller
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($this->checkPostValues(["name"]) && $this->isNameAvailableToEdit($_POST["name"], $tech->id_tech)) {
-                $this->techModel->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
+                $this->model->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
                 header("Location: /techs");
             }
-            
+
             Session::setErrorMsg("Error : Tech name already exists !");
         }
 
@@ -70,14 +78,15 @@ class TechController extends Controller
         return Render::make("/techs/edit", compact("tech", "titlePage"));
     }
 
+
     public function delete()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($this->checkPostValues(["idTech"])) {
-                $tech = $this->techModel->selectByColumn("id_tech", $_POST["idTech"]);
+                $tech = $this->model->selectByColumn("id_tech", $_POST["idTech"]);
 
-                if ($this->techModel->delete($tech->id_tech)) {
+                if ($this->model->delete($tech->id_tech)) {
                     header("Location: /techs");
                     exit();
                 }
@@ -87,15 +96,9 @@ class TechController extends Controller
         header("Location: /techs");
     }
 
-    
-    private function checkIfNameAvailable(string $name): bool
-    {
-        return !$this->techModel->doesExist("name", $name);
-    }
 
-
-    // private function isNameAvailableToEdit(string $name, int $id): bool
+    // private function checkIfNameAvailable(string $name): bool
     // {
-    //     return !$this->techModel->checkIfArgAlreadyExistsInAnotherColumn("name", $name, $id);
+    //     return !$this->model->doesExist("name", $name);
     // }
 }

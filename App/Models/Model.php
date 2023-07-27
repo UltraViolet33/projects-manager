@@ -41,13 +41,13 @@ abstract class Model
     }
 
 
-    public function checkIfNameExistsToEdit(string $name, int $id): bool
-    {
-        $query = "SELECT * FROM $this->table WHERE name = :name AND $this->id != :id";
-        $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
+    // public function checkIfNameExistsToEdit(string $name, int $id): bool
+    // {
+    //     $query = "SELECT * FROM $this->table WHERE name = :name AND $this->id != :id";
+    //     $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
 
-        return $result ? true : false;
-    }
+    //     return $result ? true : false;
+    // }
 
 
     public function checkIfArgAlreadyExistsInAnotherColumn(string $arg, mixed $value, int $id): bool

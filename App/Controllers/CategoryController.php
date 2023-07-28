@@ -11,17 +11,18 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
 
-    private Category $categoryModel;
+    // private Category $categoryModel;
 
     public function __construct()
     {
-        $this->categoryModel = new Category();
+        // $this->categoryModel = new Category();
+        $this->model = new Category();
     }
 
 
     public function index(): Render
     {
-        $allCategories = $this->categoryModel->selectAll();
+        $allCategories = $this->model->selectAll();
         $titlePage = "All Categories";
         return Render::make("categories/index", compact("allCategories", "titlePage"));
     }
@@ -30,89 +31,94 @@ class CategoryController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->submitFormCategory()) {
-
-                if ($this->categoryModel->create($_POST["name"])) {
-                    header("Location: /categories");
-                }
+            if ($this->handleSubmitCreate()) {
+                header("Location: /categories");
+                exit();
             }
         }
+
         $titlePage = "Create category";
         return Render::make("/categories/create", compact("titlePage"));
     }
 
-    
-    public function delete()
+
+    private function handleSubmitCreate(): bool
     {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->checkPostValues(["idCategory"])) {
-                $category = $this->categoryModel->selectByColumn("id_category", $_POST["idCategory"]);
-
-                if ($this->categoryModel->delete($category->id_category)) {
-                    header("Location: /categories");
-                }
-            }
+        if (!isset($_POST["name"]) || empty($_POST["name"])) {
+            Session::setErrorMsg("Error : Missing name field !");
+            return false;
         }
 
-        header("Location: /categories");
-    }
+        $name = $_POST["name"];
 
+        if ($this->doesNameAlreadyExists($name)) {
+            Session::setErrorMsg("Error : Category name already exists !");
+            return false;
+        }
+
+        return $this->model->create($name);
+    }
 
     public function edit(): Render
     {
         $idCategory = $this->getIdInUrlOrRedirectTo("/categories");
 
-        $category = $this->categoryModel->selectByColumn("id_category", $idCategory);
+        $category = $this->model->selectByColumn("id_category", $idCategory);
 
         if (!$category) {
             header("Location: /categories");
+            exit();
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            if ($this->submitFormEditCategory($category->id_category)) {
-                echo "test";
-
-                if ($this->categoryModel->update(["name" => $_POST["name"], "id_category" => $category->id_category])) {
-                    header("Location: /categories");
-                }
+            if ($this->handleSubmitEdit($category)) {
+                header("Location: /categories");
+                exit();
             }
         }
 
-        $titlePage = "Edit ".$category->name;
-        return Render::make("/categories/edit", compact("category","titlePage"));
+        $titlePage = "Edit " . $category->name;
+        return Render::make("/categories/edit", compact("category", "titlePage"));
     }
 
 
-    private function submitFormCategory(): bool
+    private function handleSubmitEdit(object $category): bool
     {
-        if ($this->categoryModel->doesExist("name", $_POST["name"])) {
-            Session::setErrorMsg("Error : Category name already exists !");
+        if (!isset($_POST["name"]) || empty($_POST["name"])) {
+            Session::setErrorMsg("Error : Missing name field !");
             return false;
         }
 
-        if (!$this->checkPostValues(["name"])) {
-            return false;
+        $name = $_POST["name"];
+
+        if ($this->isNameAvailableToEdit($name, $category->id_category)) {
+            $this->model->update(["name" => $_POST["name"], "id_category" => $category->id_category]);
+            return true;
         }
 
-
-        return true;
+        Session::setErrorMsg("Error : Category name already exists !");
+        return false;
     }
 
-    private function submitFormEditCategory(int $idCategory): bool
+
+    public function delete()
     {
-        if ($this->categoryModel->checkIfNameExistsToEdit($_POST["name"], $idCategory)) {
-            Session::setErrorMsg("Error : Category name already exists !");
-            return false;
+       if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if (isset($_POST["id_category"]) && !empty($_POST["id_category"])) {
+
+                $category = $this->model->selectByColumn("id_category", $_POST["id_category"]);
+
+                if (!$category) {
+                    // not found category
+                }
+
+                $this->model->delete($category->id_category);
+            }
         }
 
-        if (!$this->checkPostValues(["name"])) {
-            return false;
-        }
-
-
-        return true;
+        header("Location: /categories");
+        exit();
     }
 }

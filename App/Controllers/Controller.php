@@ -9,7 +9,7 @@ use App\Models\Model;
 
 abstract class Controller
 {
-    protected Model $model;
+    protected $model;
     // protected function checkPostValues(array $values): bool
     // {
     //     foreach ($values as $value) {

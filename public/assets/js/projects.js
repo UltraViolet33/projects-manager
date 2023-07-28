@@ -15,8 +15,6 @@ statusFilter.addEventListener("change", () => {
 });
 
 const getProjectsByCategoryAndStatus = async (idCategory, status) => {
-  console.log(idCategory);
-  console.log(status);
   if (status == "all" && idCategory == "all") {
     getAllProjects();
     return;

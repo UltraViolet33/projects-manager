@@ -105,28 +105,29 @@ class Project extends Model
         $idProject = $this->db->getLastInsertId();
 
         $projectTechs = array_map(fn($value): array => [$idProject, $value], $projectTechs);
+        $projectCategories = array_map(fn($value): array => [$idProject, $value], $projectCategories);
+
 
         $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
-
-        return $this->insertProjectCategories($idProject, $projectCategories);
+        return $this->insertMultipleValues(["id_project", "id_categorie"], "projects_categories", $projectCategories);
     }
 
 
-    private function insertProjectCategories(int $idProject, array $categories): bool
-    {
-        $values = "?,?";
+    // private function insertProjectCategories(int $idProject, array $categories): bool
+    // {
+    //     $values = "?,?";
 
-        $sql = "INSERT INTO projects_categories (id_project, id_categorie) VALUES " .
+    //     $sql = "INSERT INTO projects_categories (id_project, id_categorie) VALUES " .
 
-            str_repeat("($values),", count($categories) - 1) . "($values)";
+    //         str_repeat("($values),", count($categories) - 1) . "($values)";
 
 
-        $data = [];
+    //     $data = [];
 
-        foreach ($categories as $category) {
-            $data[] = [$idProject, $category];
-        }
+    //     foreach ($categories as $category) {
+    //         $data[] = [$idProject, $category];
+    //     }
 
-        return $this->db->write($sql, array_merge(...$data));
-    }
+    //     return $this->db->write($sql, array_merge(...$data));
+    // }
 }

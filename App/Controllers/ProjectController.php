@@ -16,9 +16,8 @@ define('PATH_PROJECTS_JSON', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\Core" .
 
 class ProjectController extends Controller
 {
-    private Project $projectModel;
+    // private Project $model;
     private Category $categoryModel;
-
     private Tech $techModel;
 
     const PRIORITIES = [
@@ -29,10 +28,9 @@ class ProjectController extends Controller
 
     public function __construct()
     {
-        $this->projectModel = new Project();
+        $this->model = new Project();
         $this->categoryModel = new Category();
         $this->techModel = new Tech();
-        $this->model = new Project();
     }
 
 
@@ -42,37 +40,117 @@ class ProjectController extends Controller
         $titlePage = "All Projects";
         return Render::make("projects/index", compact("allCategories", "titlePage"));
     }
+    
+
+    public function create(): Render
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if($this->handleSubmitCreate()){
+                header("Location: /");
+                exit();
+            }
+        }
+
+        $allCategories = $this->categoryModel->selectAll();
+        $allTechs = $this->techModel->selectAll();
+        $titlePage = "Create a project";
+        return Render::make("/projects/create", compact("allCategories", "allTechs", "titlePage"));
+    }
+
+
+    private function handleSubmitCreate(): bool
+    {
+        if ($this->submitFormCreateProject()) {
+            $project = [
+                "name" => $_POST["name"],
+                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
+                "description" => $_POST["description"] == "" ? null : $_POST["description"],
+                "priority" => $_POST["priority"],
+            ];
+
+            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
+            $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
+
+            return $this->model->create($project, $projectCategories, $projectTechs);
+        }
+
+        return false;
+    }
+
+
+    public function submitFormCreateProject(): bool
+    {
+        $valuesToCheck = ["name", "categories", "priority", "techs"];
+
+        if (!$this->checkPostValues($valuesToCheck)) {
+            return false;
+        }
+
+        if ($this->model->doesExist("name", $_POST["name"])) {
+            Session::setErrorMsg("Error : Project name already exists !");
+            return false;
+        }
+
+        return true;
+    }
 
 
     public function apiGetAllProjects(): string
     {
-        $allProjects = $this->projectModel->selectAll();
+        $allProjects = $this->model->selectAll();
         return json_encode($allProjects);
     }
 
 
-    public function all(): Render
+    public function apiGetProjectsByCategory(): string
     {
-        $allProjects = $this->projectModel->selectAll();
-        $allCategories = $this->categoryModel->selectAll();
-        $projectsTable = $this->makeHTMLProjectsTables($allProjects);
-        $totalProjects = count($allProjects);
-        return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
+        if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+            return json_encode(["error", "id category missing"]);
+        }
+
+        $idCategory = (int) $_GET["id"];
+        $projects = $this->model->selectProjectsByCategory($idCategory);
+
+        return json_encode($projects);
     }
+
+
+    public function apiGetProjectsByStatus(): string
+    {
+        if (!isset($_GET["status"]) || !is_numeric($_GET["status"])) {
+            return json_encode(["error", "status missing"]);
+        }
+
+        $status = (int) $_GET["status"];
+        $projects = $this->model->selectProjectsByStatus($status);
+
+        return json_encode($projects);
+    }
+
+
+    // public function all(): Render
+    // {
+    //     $allProjects = $this->projectModel->selectAll();
+    //     $allCategories = $this->categoryModel->selectAll();
+    //     $projectsTable = $this->makeHTMLProjectsTables($allProjects);
+    //     $totalProjects = count($allProjects);
+    //     return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
+    // }
 
 
     public function getProjectsPortfolio(): Render
     {
-        $projectsPortfolio = $this->projectModel->selectProjectsPortfolio();
+        $projectsPortfolio = $this->model->selectProjectsPortfolio();
         $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
         $totalProjects = count($projectsPortfolio);
         $titlePage = "Portfolio Projects";
         return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
     }
 
+
     public function getProjectsInProgress(): Render
     {
-        $projectsInProgress = $this->projectModel->selectProjectsInProgress();
+        $projectsInProgress = $this->model->selectProjectsInProgress();
         $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
         $totalProjects = count($projectsInProgress);
         $titlePage = "Projects in progress";
@@ -80,9 +158,26 @@ class ProjectController extends Controller
     }
 
 
+    public function details(): Render
+    {
+        $idProject = $this->getIdInUrlOrRedirectTo("/");
+
+        $project = $this->getSingleProject($idProject);
+
+        if (!$project) {
+            header("Location: /projects/all");
+            exit();
+        }
+
+        $titlePage = "Details " . $project->name;
+
+        return Render::make("projects/details", compact("project", "titlePage"));
+    }
+
+
     private function getSingleProject(int $idProject): object
     {
-        $project = $this->projectModel->selectByColumn("id_project", $idProject);
+        $project = $this->model->selectByColumn("id_project", $idProject);
         $project->categories = $this->categoryModel->getProjectCategories($idProject);
         $project->techs = $this->techModel->getProjectTechs($idProject);
         return $project;
@@ -111,32 +206,6 @@ class ProjectController extends Controller
     }
 
 
-    public function apiGetProjectsByStatus(): string
-    {
-        if (!isset($_GET["status"]) || !is_numeric($_GET["status"])) {
-            return json_encode(["error", "status missing"]);
-        }
-
-        $status = (int) $_GET["status"];
-        $projects = $this->projectModel->selectProjectsByStatus($status);
-
-        return json_encode($projects);
-    }
-
-
-    public function apiGetProjectsByCategory(): string
-    {
-        if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
-            return json_encode(["error", "id category missing"]);
-        }
-
-        $idCategory = (int) $_GET["id"];
-        $projects = $this->projectModel->selectProjectsByCategory($idCategory);
-
-        return json_encode($projects);
-    }
-
-
     public function apiEdit(): string
     {
         $data = file_get_contents("php://input");
@@ -148,13 +217,13 @@ class ProjectController extends Controller
         $project->github_portfolio = $project->github_portfolio ? 1 : 0;
 
         unset($project->categories);
+        unset($project->techs);
+
         $newProject = (array) $project;
 
-        if ($this->projectModel->update($newProject)) {
+        if ($this->model->update($newProject)) {
             $project = $this->getSingleProject($project->id_project);
-
             $project->status = $project->status > 0 ? true : false;
-            return json_encode($project);
         }
 
         return json_encode($project);
@@ -220,7 +289,7 @@ class ProjectController extends Controller
             $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
             $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
 
-            if ($this->projectModel->updateProjectWithCategories($project, $projectCategories, $projectTechs)) {
+            if ($this->model->updateProjectWithCategories($project, $projectCategories, $projectTechs)) {
                 header("Location: /");
             }
 
@@ -228,19 +297,7 @@ class ProjectController extends Controller
     }
 
 
-    public function details(): Render
-    {
-        $idProject = $this->getIdInUrlOrRedirectTo("/");
-        $project = $this->getSingleProject($idProject);
 
-        if (!$project) {
-            header("Location: /projects/all");
-        }
-
-        $titlePage = "Details " . $project->name;
-
-        return Render::make("projects/details", compact("project", "titlePage"));
-    }
 
 
     public function makeHTMLProjectsTables(array $projects): string
@@ -284,49 +341,10 @@ class ProjectController extends Controller
     }
 
 
-    public function create(): Render
-    {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $this->handleCreateProject();
-        }
-
-        $allCategories = $this->categoryModel->selectAll();
-        $allTechs = $this->techModel->selectAll();
-        $titlePage = "Create a project";
-
-        return Render::make("/projects/create", compact("allCategories", "allTechs", "titlePage"));
-    }
-
-    private function handleCreateProject()
-    {
-        if ($this->submitFormCreateProject()) {
-            $project = [
-                "name" => $_POST["name"],
-                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
-                "description" => $_POST["description"] == "" ? null : $_POST["description"],
-                "priority" => $_POST["priority"],
-            ];
-
-            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
-
-            $projectCategories = $_POST["categories"];
-
-            if (is_string($projectCategories)) {
-                $projectCategories = [];
-                $projectCategories[] = $_POST["categories"];
-            }
-
-            if ($this->projectModel->create($project, $projectCategories, $projectTechs)) {
-                header("Location: /");
-            }
-        }
-
-    }
-
 
     public function commitPortfolio()
     {
-        $projectsPortfolio = $this->projectModel->selectDataProjectsPortfolio();
+        $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
         $projectsPortfolioJson = json_encode($projectsPortfolio);
 
         file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
@@ -351,25 +369,8 @@ class ProjectController extends Controller
             return false;
         }
 
-        if ($this->projectModel->checkIfNameExistsToEdit($_POST["name"], $idProject)) {
+        if ($this->model->checkIfNameExistsToEdit($_POST["name"], $idProject)) {
             Session::setErrorMsg("Error : Category name already exists !");
-            return false;
-        }
-
-        return true;
-    }
-
-
-    public function submitFormCreateProject(): bool
-    {
-        $valuesToCheck = ["name", "categories", "priority"];
-
-        if (!$this->checkPostValues($valuesToCheck)) {
-            return false;
-        }
-
-        if ($this->projectModel->doesExist("name", $_POST["name"])) {
-            Session::setErrorMsg("Error : Project name already exists !");
             return false;
         }
 
@@ -382,9 +383,9 @@ class ProjectController extends Controller
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($this->checkPostValues(["idProject"])) {
-                $project = $this->projectModel->selectByColumn("id_project", $_POST["idProject"]);
+                $project = $this->model->selectByColumn("id_project", $_POST["idProject"]);
 
-                if ($this->projectModel->delete($project->id_project)) {
+                if ($this->model->delete($project->id_project)) {
                     header("Location: /projects");
                 }
             }

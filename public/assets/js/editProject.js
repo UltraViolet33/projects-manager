@@ -42,6 +42,7 @@ const editProject = async project => {
     });
 
     project = await response.json();
+    console.log(project);
     removeButtons();
     displayBtns(project);
   } catch (error) {

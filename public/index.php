@@ -25,12 +25,14 @@ $router->post('/projects/create', ['App\Controllers\ProjectController', 'create'
 
 $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 
-$router->get('/api/projects/single-project', ['App\Controllers\ProjectController', 'getSingleProjectJSON']);
-$router->post('/api/projects/edit', ['App\Controllers\ProjectController', 'apiEdit']);
-
+// api projects
 $router->get('/api/projects/all', ['App\Controllers\ProjectController', 'apiGetAllProjects']);
 $router->get('/api/projects/category', ['App\Controllers\ProjectController', 'apiGetProjectsByCategory']);
 $router->get('/api/projects/status', ['App\Controllers\ProjectController', 'apiGetProjectsByStatus']);
+
+$router->get('/api/projects/single-project', ['App\Controllers\ProjectController', 'getSingleProjectJSON']);
+$router->post('/api/projects/edit', ['App\Controllers\ProjectController', 'apiEdit']);
+
 
 // categories
 $router->get('/categories', ['App\Controllers\CategoryController', 'index']);

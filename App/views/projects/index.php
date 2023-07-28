@@ -13,7 +13,7 @@
     <div class="mb-3">
         <select id="form-categories-select" name="categoryFilter" class="form-select">
             <option value="all" selected>All</option>
-            <?php foreach ($allCategories as $category) : ?>
+            <?php foreach ($allCategories as $category): ?>
                 <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
             <?php endforeach; ?>
         </select>

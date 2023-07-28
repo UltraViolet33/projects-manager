@@ -29,6 +29,7 @@ class TechController extends Controller
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($this->handleSubmitCreate()) {
                 header("Location: /techs");
+                exit();
             }
         }
 
@@ -39,7 +40,7 @@ class TechController extends Controller
 
     private function handleSubmitCreate(): bool
     {
-        if (!isset($_POST["name"]) || $_POST["name"] == "") {
+        if (!isset($_POST["name"]) || empty($_POST["name"])) {
             Session::setErrorMsg("Error : Missing name field !");
             return false;
         }
@@ -63,15 +64,14 @@ class TechController extends Controller
 
         if (!$tech) {
             header("Location: /techs");
+            exit();
         }
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if ($this->checkPostValues(["name"]) && $this->isNameAvailableToEdit($_POST["name"], $tech->id_tech)) {
-                $this->model->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if ($this->handleSubmitEdit($tech)) {
                 header("Location: /techs");
+                exit();
             }
-
-            Session::setErrorMsg("Error : Tech name already exists !");
         }
 
         $titlePage = "Edit " . $tech->name;
@@ -79,26 +79,42 @@ class TechController extends Controller
     }
 
 
-    public function delete()
+    private function handleSubmitEdit(object $tech): bool
+    {
+        if (!isset($_POST["name"]) || empty($_POST["name"])) {
+            Session::setErrorMsg("Error : Missing name field !");
+            return false;
+        }
+
+        $name = $_POST["name"];
+
+        if ($this->isNameAvailableToEdit($name, $tech->id_tech)) {
+            $this->model->update(["name" => $_POST["name"], "id" => $tech->id_tech]);
+            return true;
+        }
+
+        Session::setErrorMsg("Error : Tech name already exists !");
+        return false;
+    }
+
+
+    public function delete(): void
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            if ($this->checkPostValues(["idTech"])) {
-                $tech = $this->model->selectByColumn("id_tech", $_POST["idTech"]);
+            if (isset($_POST["id_tech"]) && !empty($_POST["id_tech"])) {
 
-                if ($this->model->delete($tech->id_tech)) {
-                    header("Location: /techs");
-                    exit();
+                $tech = $this->model->selectByColumn("id_tech", $_POST["id_tech"]);
+
+                if (!$tech) {
+                    // not found tech
                 }
+
+                $this->model->delete($tech->id_tech);
             }
         }
 
         header("Location: /techs");
+        exit();
     }
-
-
-    // private function checkIfNameAvailable(string $name): bool
-    // {
-    //     return !$this->model->doesExist("name", $name);
-    // }
 }

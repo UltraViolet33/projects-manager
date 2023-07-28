@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Models\Model;
 use App\Core\Database\Database;
-use Exception;
 
 class Tech extends Model
 {

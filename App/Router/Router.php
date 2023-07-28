@@ -32,7 +32,6 @@ class Router
       
         $action = $this->routes[$method][$path] ?? null;
 
-      
 
         if (is_callable($action)) {
             return $action();

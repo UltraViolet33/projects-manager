@@ -32,7 +32,7 @@
                             <td>
                                 <form action="/techs/delete" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this tech ?')">
-                                    <input type="hidden" name="idTech" value="<?= $tech->id_tech ?>">
+                                    <input type="hidden" name="id_tech" value="<?= $tech->id_tech ?>">
                                     <input type="submit" class="btn btn-warning" value="Delete">
                                 </form>
                             </td>

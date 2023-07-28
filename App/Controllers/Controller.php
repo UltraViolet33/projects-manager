@@ -40,6 +40,7 @@ abstract class Controller
     {
         if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             header("Location: $urlRedirect");
+            exit();
         }
 
         return (int) $_GET["id"];

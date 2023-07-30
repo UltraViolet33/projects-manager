@@ -9,7 +9,7 @@ class Config
 
     private static $instance;
     public static array $dbConfig;
-    public static bool $debug = true;
+    public static bool $debug = false;
 
     private function __construct()
     {

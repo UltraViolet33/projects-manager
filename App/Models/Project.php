@@ -25,7 +25,7 @@ class Project extends Model
 
     public function selectDataProjectsPortfolio(): array
     {
-        $query = "SELECT name, description, github_link FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
+        $query = "SELECT id_project, name, description, github_link FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
         return $this->db->read($query);
     }
 

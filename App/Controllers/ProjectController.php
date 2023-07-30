@@ -79,18 +79,28 @@ class ProjectController extends Controller
     }
 
 
-    public function commitPortfolio()
+    public function commitPortfolio(): void
     {
         $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
+        $projectsPortfolio = array_map(function ($project) {
+
+            $techs = $this->techModel->getProjectTechs($project->id_project);
+            $project->techs = array_map(fn($tech) => $tech->name, $techs);
+            return $project;
+
+        }, $projectsPortfolio);
+
         $projectsPortfolioJson = json_encode($projectsPortfolio);
 
         file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
 
-        if (Config::$debug) {
-            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-        } else {
-            $command = "sh ../App/Core/commands/push_portfolio.sh";
-        }
+        $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+
+        // if (Config::$debug) {
+        //     $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+        // } else {
+        //     $command = "sh ../App/Core/commands/push_portfolio.sh";
+        // }
 
         shell_exec($command);
 

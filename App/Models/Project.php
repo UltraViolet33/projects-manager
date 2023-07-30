@@ -65,11 +65,13 @@ class Project extends Model
 
         $projectTechs = array_map(fn($value): array => [$idProject, $value], $projectTechs);
 
+        $projectCategories = array_map(fn($value): array => [$idProject, $value], $projectCategories);
+
         $this->db->write($query, $project);
         $this->deleteProjectCategories($idProject);
         $this->deleteProjectTechs($idProject);
         $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
-        return $this->insertProjectCategories($idProject, $projectCategories);
+        return $this->insertMultipleValues(["id_project", "id_categorie"], "projects_categories", $projectCategories);
     }
 
 

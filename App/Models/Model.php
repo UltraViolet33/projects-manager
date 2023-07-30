@@ -34,11 +34,11 @@ abstract class Model
     }
 
 
-    public function selectOneById(int $id): object
-    {
-        $query = "SELECT * FROM $this->table WHERE $this->id = :id";
-        return $this->db->readOneRow($query, ["id" => $id]);
-    }
+    // public function selectOneById(int $id): object
+    // {
+    //     $query = "SELECT * FROM $this->table WHERE $this->id = :id";
+    //     return $this->db->readOneRow($query, ["id" => $id]);
+    // }
 
 
     // public function checkIfNameExistsToEdit(string $name, int $id): bool

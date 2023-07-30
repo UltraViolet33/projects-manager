@@ -16,7 +16,6 @@ define('PATH_PROJECTS_JSON', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\Core" .
 
 class ProjectController extends Controller
 {
-    // private Project $model;
     private Category $categoryModel;
     private Tech $techModel;
 
@@ -37,15 +36,73 @@ class ProjectController extends Controller
     public function index(): Render
     {
         $allCategories = $this->categoryModel->selectAll();
+        $allProjects = $this->model->selectAll();
+        $projectsTable = $this->makeHTMLProjectsTables($allProjects);
         $titlePage = "All Projects";
-        return Render::make("projects/index", compact("allCategories", "titlePage"));
+        return Render::make("projects/index", compact("projectsTable", "allCategories", "titlePage"));
     }
-    
+
+
+    public function details(): Render
+    {
+        $idProject = $this->getIdInUrlOrRedirectTo("/");
+
+        $project = $this->getSingleProject($idProject);
+
+        if (!$project) {
+            header("Location: /projects/all");
+            exit();
+        }
+
+        $titlePage = "Details " . $project->name;
+        return Render::make("projects/details", compact("project", "titlePage"));
+    }
+
+
+    public function getProjectsInProgress(): Render
+    {
+        $projectsInProgress = $this->model->selectProjectsInProgress();
+        $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
+        $totalProjects = count($projectsInProgress);
+        $titlePage = "Projects in progress";
+        return Render::make("projects/in-progress", compact("projectsTable", "totalProjects", "titlePage"));
+    }
+
+
+    public function getProjectsPortfolio(): Render
+    {
+        $projectsPortfolio = $this->model->selectProjectsPortfolio();
+        $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
+        $totalProjects = count($projectsPortfolio);
+        $titlePage = "Portfolio Projects";
+        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
+    }
+
+
+    public function commitPortfolio()
+    {
+        $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
+        $projectsPortfolioJson = json_encode($projectsPortfolio);
+
+        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
+
+        if (Config::$debug) {
+            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+        } else {
+            $command = "sh ../App/Core/commands/push_portfolio.sh";
+        }
+
+        shell_exec($command);
+
+        header("Location: /");
+        exit();
+    }
+
 
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if($this->handleSubmitCreate()){
+            if ($this->handleSubmitCreate()) {
                 header("Location: /");
                 exit();
             }
@@ -94,6 +151,109 @@ class ProjectController extends Controller
         return true;
     }
 
+    public function edit(): Render
+    {
+        $idProject = $this->getIdInUrlOrRedirectTo("/");
+        $project = $this->getSingleProject($idProject);
+
+        if (!$project) {
+            header("Location: /projects/all");
+            exit();
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if ($this->handleEditProject($project)) {
+                header("Location: /projects/details?id=" . $project->id_project);
+                exit();
+            }
+        }
+
+        $allCategories = $this->categoryModel->selectAll();
+
+
+        foreach ($allCategories as $category) {
+            $category->isInProject = false;
+
+            foreach ($project->categories as $projectCategory) {
+                if ($projectCategory->name === $category->name) {
+                    $category->isInProject = true;
+                }
+            }
+        }
+
+        $allTechs = $this->techModel->selectAll();
+
+        foreach ($allTechs as $tech) {
+            $tech->isInProject = false;
+
+            foreach ($project->techs as $projectTech) {
+                if ($projectTech->name === $tech->name) {
+                    $tech->isInProject = true;
+                }
+            }
+        }
+
+        $priorities = self::PRIORITIES;
+        $titlePage = "Edit " . $project->name;
+        return Render::make("projects/edit", compact("project", "allCategories", "allTechs", "priorities", "titlePage"));
+    }
+
+
+    private function handleEditProject(object $project): bool
+    {
+        if ($this->submitFormEditProject($project->id_project)) {
+            $project = [
+                "name" => $_POST["name"],
+                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
+                "description" => $_POST["description"] == "" ? null : $_POST["description"],
+                "priority" => $_POST["priority"],
+                "created_at" => $_POST["created_at"] == "" ? $project->created_at : $_POST["created_at"],
+                "id_project" => $project->id_project
+            ];
+
+            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
+            $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
+
+            return $this->model->updateProjectWithCategories($project, $projectCategories, $projectTechs);
+
+        }
+
+        return false;
+    }
+
+
+    private function submitFormEditProject(int $idProject): bool
+    {
+        $valuesToCheck = ["name", "categories", "priority"];
+
+        if (!$this->checkPostValues($valuesToCheck)) {
+            return false;
+        }
+
+        if ($this->isNameAvailableToEdit($_POST["name"], $idProject)) {
+            return true;
+        }
+
+        Session::setErrorMsg("Error : Project name already exists !");
+        return false;
+
+    }
+
+
+    public function delete(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if (isset($_POST["id_project"]) && !empty($_POST["id_project"])) {
+                $project = $this->model->selectByColumn("id_project", $_POST["id_project"]);
+                $this->model->delete($project->id_project);
+            }
+        }
+
+        header("Location: /projects");
+        exit();
+    }
+
 
     public function apiGetAllProjects(): string
     {
@@ -125,53 +285,6 @@ class ProjectController extends Controller
         $projects = $this->model->selectProjectsByStatus($status);
 
         return json_encode($projects);
-    }
-
-
-    // public function all(): Render
-    // {
-    //     $allProjects = $this->projectModel->selectAll();
-    //     $allCategories = $this->categoryModel->selectAll();
-    //     $projectsTable = $this->makeHTMLProjectsTables($allProjects);
-    //     $totalProjects = count($allProjects);
-    //     return Render::make("projects/all", compact("projectsTable", "totalProjects", "allCategories"));
-    // }
-
-
-    public function getProjectsPortfolio(): Render
-    {
-        $projectsPortfolio = $this->model->selectProjectsPortfolio();
-        $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
-        $totalProjects = count($projectsPortfolio);
-        $titlePage = "Portfolio Projects";
-        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
-    }
-
-
-    public function getProjectsInProgress(): Render
-    {
-        $projectsInProgress = $this->model->selectProjectsInProgress();
-        $projectsTable = $this->makeHTMLProjectsTables($projectsInProgress);
-        $totalProjects = count($projectsInProgress);
-        $titlePage = "Projects in progress";
-        return Render::make("projects/in-progress", compact("projectsTable", "totalProjects", "titlePage"));
-    }
-
-
-    public function details(): Render
-    {
-        $idProject = $this->getIdInUrlOrRedirectTo("/");
-
-        $project = $this->getSingleProject($idProject);
-
-        if (!$project) {
-            header("Location: /projects/all");
-            exit();
-        }
-
-        $titlePage = "Details " . $project->name;
-
-        return Render::make("projects/details", compact("project", "titlePage"));
     }
 
 
@@ -229,77 +342,6 @@ class ProjectController extends Controller
         return json_encode($project);
     }
 
-
-    public function edit(): Render
-    {
-        $idProject = $this->getIdInUrlOrRedirectTo("/");
-        $project = $this->getSingleProject($idProject);
-
-        if (!$project) {
-            header("Location: /projects/all");
-        }
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $this->handleEditProject($project);
-        }
-
-        $allCategories = $this->categoryModel->selectAll();
-
-
-        foreach ($allCategories as $category) {
-            $category->isInProject = false;
-
-            foreach ($project->categories as $projectCategory) {
-                if ($projectCategory->name === $category->name) {
-                    $category->isInProject = true;
-                }
-            }
-        }
-
-        $allTechs = $this->techModel->selectAll();
-
-        foreach ($allTechs as $tech) {
-            $tech->isInProject = false;
-
-            foreach ($project->techs as $projectTech) {
-                if ($projectTech->name === $tech->name) {
-                    $tech->isInProject = true;
-                }
-            }
-        }
-
-        $priorities = self::PRIORITIES;
-        $titlePage = "Edit " . $project->name;
-        return Render::make("projects/edit", compact("project", "allCategories", "allTechs", "priorities", "titlePage"));
-    }
-
-
-    private function handleEditProject(object $project)
-    {
-        if ($this->submitFormEditProject($project->id_project)) {
-            $project = [
-                "name" => $_POST["name"],
-                "github_link" => $_POST["github_link"] == "" ? null : $_POST["github_link"],
-                "description" => $_POST["description"] == "" ? null : $_POST["description"],
-                "priority" => $_POST["priority"],
-                "created_at" => $_POST["created_at"] == "" ? $project->created_at : $_POST["created_at"],
-                "id_project" => $project->id_project
-            ];
-
-            $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
-            $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
-
-            if ($this->model->updateProjectWithCategories($project, $projectCategories, $projectTechs)) {
-                header("Location: /");
-            }
-
-        }
-    }
-
-
-
-
-
     public function makeHTMLProjectsTables(array $projects): string
     {
         $html = "";
@@ -338,59 +380,5 @@ class ProjectController extends Controller
             </table>';
 
         return $html;
-    }
-
-
-
-    public function commitPortfolio()
-    {
-        $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
-        $projectsPortfolioJson = json_encode($projectsPortfolio);
-
-        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
-
-        if (Config::$debug) {
-            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-        } else {
-            $command = "sh ../App/Core/commands/push_portfolio.sh";
-        }
-
-        shell_exec($command);
-
-        header("Location: /");
-    }
-
-
-    public function submitFormEditProject(int $idProject): bool
-    {
-        $valuesToCheck = ["name", "categories", "priority"];
-
-        if (!$this->checkPostValues($valuesToCheck)) {
-            return false;
-        }
-
-        if ($this->model->checkIfNameExistsToEdit($_POST["name"], $idProject)) {
-            Session::setErrorMsg("Error : Category name already exists !");
-            return false;
-        }
-
-        return true;
-    }
-
-
-    public function delete()
-    {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            if ($this->checkPostValues(["idProject"])) {
-                $project = $this->model->selectByColumn("id_project", $_POST["idProject"]);
-
-                if ($this->model->delete($project->id_project)) {
-                    header("Location: /projects");
-                }
-            }
-        }
-
-        header("Location: /projects");
     }
 }

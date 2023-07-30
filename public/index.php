@@ -10,18 +10,20 @@ $router = new Router();
 // projects
 $router->get('/', ['App\Controllers\ProjectController', 'index']);
 $router->get('/projects', ['App\Controllers\ProjectController', 'index']);
+
 $router->get('/projects/details', ['App\Controllers\ProjectController', 'details']);
 
-$router->get('/projects/portfolio', ['App\Controllers\ProjectController', 'getProjectsPortfolio']);
+$router->get('/projects/create', ['App\Controllers\ProjectController', 'create']);
+$router->post('/projects/create', ['App\Controllers\ProjectController', 'create']);
 
 $router->get('/projects/in-progress', ['App\Controllers\ProjectController', 'getProjectsInProgress']);
+
+$router->get('/projects/portfolio', ['App\Controllers\ProjectController', 'getProjectsPortfolio']);
 $router->get('/projects/commit-portfolio', ['App\Controllers\ProjectController', 'commitPortfolio']);
 
 $router->get('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 $router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 
-$router->get('/projects/create', ['App\Controllers\ProjectController', 'create']);
-$router->post('/projects/create', ['App\Controllers\ProjectController', 'create']);
 
 $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 

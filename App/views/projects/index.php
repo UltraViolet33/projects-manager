@@ -8,7 +8,7 @@
         <p>Total : </p>
     </div>
 </div>
-<form id="form-categories">
+<!-- <form id="form-categories">
     <h3>Categories</h3>
     <div class="mb-3">
         <select id="form-categories-select" name="categoryFilter" class="form-select">
@@ -28,7 +28,7 @@
             <option value="1">done</option>
         </select>
     </div>
-</form>
+</form> -->
 <div class="row">
     <div class="col-12">
         <table class="table">
@@ -40,8 +40,10 @@
                     <th scope="col">DETAILS</th>
                 </tr>
             </thead>
-            <tbody id="table-body"></tbody>
+            <tbody id="table-body">
+                <?= $projectsTable ?>
+            </tbody>
         </table>
     </div>
 </div>
-<script src="../assets/js/projects.js"></script>
+<!-- <script src="../assets/js/projects.js"></script> -->

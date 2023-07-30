@@ -32,7 +32,7 @@
         </div>
         <div class="m-2">
             <form action="/projects/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this project ? ')">
-                <input type="hidden" name="idProject" value="<?= $project->id_project ?>">
+                <input type="hidden" name="id_project" value="<?= $project->id_project ?>">
                 <input class="btn btn-danger" type="submit" value="Delete" name="deleteProject"></input>
             </form>
         </div>

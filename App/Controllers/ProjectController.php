@@ -94,13 +94,12 @@ class ProjectController extends Controller
 
         file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
 
-        $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
 
-        // if (Config::$debug) {
-        //     $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-        // } else {
-        //     $command = "sh ../App/Core/commands/push_portfolio.sh";
-        // }
+        if (Config::$debug) {
+            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+        } else {
+            $command = "sh ../App/Core/commands/push_portfolio.sh";
+        }
 
         shell_exec($command);
 

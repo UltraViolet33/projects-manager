@@ -19,6 +19,8 @@ class PortfolioController extends Controller
 {
     private Category $categoryModel;
     private Tech $techModel;
+    private Project $projectModel;
+
 
 
     public function __construct()
@@ -26,6 +28,7 @@ class PortfolioController extends Controller
         $this->model = new Portfolio();
         $this->categoryModel = new Category();
         $this->techModel = new Tech();
+        $this->projectModel = new Project();
     }
 
 
@@ -50,10 +53,6 @@ class PortfolioController extends Controller
 
                 header('Location: /portfolios');
             }
-            // if ($this->handleSubmitCreate()) {
-            //     header("Location: /");
-            //     exit();
-            // }
         }
 
         $allCategories = $this->categoryModel->selectAll();
@@ -61,6 +60,25 @@ class PortfolioController extends Controller
         $titlePage = "Create a portfolio";
         
         return Render::make("/portfolios/create", compact("allCategories", "titlePage"));
+    }
+
+
+    public function addProjects(): Render
+    {
+        $idPortfolio = $this->getIdInUrlOrRedirectTo("/portfolios");
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if($this->checkPostValues(['projects']))
+            {
+                $this->model->addProjects($_POST["projects"], $idPortfolio);
+                header('Location: /portfolios');
+            }
+        }
+
+        $portfolio = $this->model->selectByColumn("id_portfolio", $idPortfolio);
+        $projects = $this->projectModel->selectProjectsByCategory($portfolio->category_id);
+        $titlePage = "add projects to portfolio";
+        
+        return Render::make("/portfolios/add_projects", compact("projects", "titlePage"));
     }
 
 

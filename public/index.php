@@ -62,9 +62,13 @@ $router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
 
 // portfolios
 $router->get('/portfolios', ['App\Controllers\PortfolioController', 'index']);
+
 $router->get('/portfolios/create', ['App\Controllers\PortfolioController', 'create']);
 $router->post('/portfolios/create', ['App\Controllers\PortfolioController', 'create']);
 
+
+$router->get('/portfolios/add-projects', ['App\Controllers\PortfolioController', 'addProjects']);
+$router->post('/portfolios/add-projects', ['App\Controllers\PortfolioController', 'addProjects']);
 
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

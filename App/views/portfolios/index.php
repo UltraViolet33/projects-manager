@@ -5,37 +5,37 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <?php if (!$allPortfolios): ?>
+        <?php if (!$allPortfolios) : ?>
             <p>There is no portfolio</p>
             <a href="/portfolios/create">create one</a>
-        <?php else: ?>
+        <?php else : ?>
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">EDIT</th>
-                        <th scope="col">DELETE</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">See projects</th>
+                        <th scope="col">Add projects</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($allPortfolios as $tech): ?>
+                    <?php foreach ($allPortfolios as $portfolio) : ?>
                         <tr>
                             <th scope="row">
-                                <?= $tech->id_tech ?>
+                                <?= $portfolio->id_portfolio ?>
                             </th>
                             <td>
-                                <?= $tech->name ?>
+                                <?= $portfolio->portfolio_name ?>
                             </td>
                             <td>
-                                <a href="/techs/edit?id=<?= $tech->id_tech ?>" class="btn btn-primary">Edit</a>
+                                <?= $portfolio->category_name ?>
                             </td>
                             <td>
-                                <form action="/techs/delete" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to delete this tech ?')">
-                                    <input type="hidden" name="id_tech" value="<?= $tech->id_tech ?>">
-                                    <input type="submit" class="btn btn-warning" value="Delete">
-                                </form>
+                                <a href="/techs/edit?id=" class="btn btn-primary">See</a>
+                            </td>
+                            <td>
+                                <a href="/techs/edit?id=" class="btn btn-primary">Add</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

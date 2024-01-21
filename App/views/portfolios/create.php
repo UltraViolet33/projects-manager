@@ -7,8 +7,8 @@
                 <input type="text" class="form-control" name="name">
             </div>
             <div class="mb-3">
-                <label for="categories">Categories : </label>
-                <select name="category" class="form-select" >
+                <label for="category_id">Categories : </label>
+                <select name="category_id" class="form-select" >
                     <?php foreach ($allCategories as $category) : ?>
                         <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
                     <?php endforeach; ?>

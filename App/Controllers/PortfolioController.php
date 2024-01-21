@@ -9,6 +9,7 @@ use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
+use App\Models\Portfolio;
 use App\Models\Tech;
 
 define('PATH_PROJECTS_JSON', dirname(__DIR__) . DIRECTORY_SEPARATOR . "\\Core" . DIRECTORY_SEPARATOR . "data\\projects.json");
@@ -22,7 +23,7 @@ class PortfolioController extends Controller
 
     public function __construct()
     {
-        $this->model = new Project();
+        $this->model = new Portfolio();
         $this->categoryModel = new Category();
         $this->techModel = new Tech();
     }
@@ -31,7 +32,10 @@ class PortfolioController extends Controller
     public function index(): Render
     {
         $titlePage = "All portfolios";
-        $allPortfolios = [];
+        $allPortfolios = $this->model->selectNameWithCategory();
+        var_dump($allPortfolios);
+        // die;
+     
         return Render::make("portfolios/index", compact("titlePage", "allPortfolios"));
     }
 
@@ -39,12 +43,12 @@ class PortfolioController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if($this->checkPostValues(['name', 'category']))
+            if($this->checkPostValues(['name', 'category_id']))
             {
                 var_dump($_POST);
-                die;
+                $this->model->create(['name' => $_POST["name"], 'category_id' => $_POST["category_id"]]);
 
-                header('Location: /portfolio');
+                header('Location: /portfolios');
             }
             // if ($this->handleSubmitCreate()) {
             //     header("Location: /");

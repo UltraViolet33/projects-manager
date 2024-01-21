@@ -24,7 +24,6 @@ $router->get('/projects/commit-portfolio', ['App\Controllers\ProjectController',
 $router->get('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 $router->post('/projects/edit', ['App\Controllers\ProjectController', 'edit']);
 
-
 $router->post('/projects/delete', ['App\Controllers\ProjectController', 'delete']);
 
 // api projects
@@ -45,7 +44,6 @@ $router->post('/categories/create', ['App\Controllers\CategoryController', 'crea
 
 $router->get('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
 $router->post('/categories/edit', ['App\Controllers\CategoryController', 'edit']);
-
 $router->post('/categories/delete', ['App\Controllers\CategoryController', 'delete']);
 
 
@@ -60,6 +58,13 @@ $router->get('/techs/edit', ['App\Controllers\TechController', 'edit']);
 $router->post('/techs/edit', ['App\Controllers\TechController', 'edit']);
 
 $router->post('/techs/delete', ['App\Controllers\TechController', 'delete']);
+
+
+// portfolios
+$router->get('/portfolios', ['App\Controllers\PortfolioController', 'index']);
+$router->get('/portfolios/create', ['App\Controllers\PortfolioController', 'create']);
+$router->post('/portfolios/create', ['App\Controllers\PortfolioController', 'create']);
+
 
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

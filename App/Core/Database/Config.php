@@ -6,7 +6,6 @@ namespace App\Core\Database;
 
 class Config
 {
-
     private static $instance;
     public static array $dbConfig;
     public static bool $debug = true;

@@ -59,7 +59,6 @@ class TechController extends Controller
     public function edit(): Render
     {
         $idTech = $this->getIdInUrlOrRedirectTo("/techs");
-
         $tech = $this->model->selectByColumn("id_tech", $idTech);
 
         if (!$tech) {
@@ -101,9 +100,7 @@ class TechController extends Controller
     public function delete(): void
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
             if (isset($_POST["id_tech"]) && !empty($_POST["id_tech"])) {
-
                 $tech = $this->model->selectByColumn("id_tech", $_POST["id_tech"]);
 
                 if (!$tech) {

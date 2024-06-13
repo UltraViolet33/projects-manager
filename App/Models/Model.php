@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 namespace App\Models;
-
 use App\Core\Database\Database;
 
 abstract class Model
@@ -23,13 +22,10 @@ abstract class Model
     {
         $placeholder = "?";
         $placeholder .= str_repeat(",?", count($columns) - 1);
-
         $columnsStr = implode(", ", $columns);
         
         $sql = "INSERT INTO $table ($columnsStr) VALUES " .
-        
         str_repeat("($placeholder),", count($values) - 1) . "($placeholder)";
-
         return $this->db->write($sql, array_merge(...$values));
     }
 
@@ -69,7 +65,6 @@ abstract class Model
     {
         $query = "SELECT * FROM $this->table WHERE $arg = :value";
         $result = $this->db->readOneRow($query, ["value" => $value]);
-
         return $result ? true : false;
     }
 
@@ -90,9 +85,9 @@ abstract class Model
 
     private function setTableName(): string
     {
-        $table = get_class($this);
         return strtolower(explode("\\", get_class($this))[2] . 's');
     }
+
 
     private function setId(): string
     {
@@ -100,5 +95,4 @@ abstract class Model
         $table = strtolower(explode("\\", get_class($this))[2]);
         return "id_" . $table;
     }
-
 }

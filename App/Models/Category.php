@@ -44,7 +44,6 @@ class Category extends Model
                 INNER JOIN projects_categories
                 ON categories.id_category = projects_categories.id_categorie
                 WHERE projects_categories.id_project = :id_project";
-
         return $this->db->read($query, ["id_project" => $idProject]);
     }
 }

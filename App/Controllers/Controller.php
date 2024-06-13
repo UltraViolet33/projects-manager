@@ -3,13 +3,12 @@
 declare(strict_types=1);
 
 namespace App\Controllers;
-
 use App\Core\Helpers\Session;
-use App\Models\Model;
 
 abstract class Controller
 {
     protected $model;
+
     protected function checkPostValues(array $values): bool
     {
         foreach ($values as $value) {
@@ -22,19 +21,6 @@ abstract class Controller
         return true;
     }
 
-    // protected function checkPostValues(array $values): array
-    // {
-    //     $missingFields = [];
-
-    //     foreach ($values as $value) {
-    //         if (!isset($_POST[$value]) || $_POST[$value] == "") {
-    //             $missingFields[] = $value;
-    //         }
-    //     }
-
-    //     return $missingFields;
-    // }
-
 
     protected function getIdInUrlOrRedirectTo(string $urlRedirect): bool|int
     {
@@ -45,12 +31,6 @@ abstract class Controller
 
         return (int) $_GET["id"];
     }
-
-
-    // protected function isNameAvailable(string $name): bool
-    // {
-    //     return !$this->model->doesExist("name", $name);
-    // }
 
 
     protected function doesNameAlreadyExists(string $name): bool

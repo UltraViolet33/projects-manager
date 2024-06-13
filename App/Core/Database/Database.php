@@ -9,7 +9,6 @@ use \PDO;
 
 class Database
 {
-
     private ?PDO $PDOInstance = null;
     private static ?self $instance = null;
 

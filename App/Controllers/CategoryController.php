@@ -10,12 +10,8 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-
-    // private Category $categoryModel;
-
     public function __construct()
     {
-        // $this->categoryModel = new Category();
         $this->model = new Category();
     }
 

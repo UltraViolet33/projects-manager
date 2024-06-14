@@ -55,10 +55,10 @@ class CategoryController extends Controller
         return $this->model->create($name);
     }
 
+
     public function edit(): Render
     {
         $idCategory = $this->getIdInUrlOrRedirectTo("/categories");
-
         $category = $this->model->selectByColumn("id_category", $idCategory);
 
         if (!$category) {
@@ -100,7 +100,7 @@ class CategoryController extends Controller
 
     public function delete()
     {
-       if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (isset($_POST["id_category"]) && !empty($_POST["id_category"])) {
 

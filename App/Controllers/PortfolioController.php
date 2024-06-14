@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Database\Config;
-use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;
 use App\Models\Category;
@@ -20,7 +18,6 @@ class PortfolioController extends Controller
     private Category $categoryModel;
     private Tech $techModel;
     private Project $projectModel;
-
 
 
     public function __construct()
@@ -101,47 +98,9 @@ class PortfolioController extends Controller
     }
 
 
-    public function commitPortfolio(): void
-    {
-        $idPortfolio = $this->getIdInUrlOrRedirectTo("/portfolios");
-        $projectsPortfolio = $this->model->selectProjectsPortfolio($idPortfolio);
-
-        $projectsPortfolio = array_map(function ($project) {
-
-            $techs = $this->techModel->getProjectTechs($project->id_project);
-            $project->techs = array_map(fn($tech) => $tech->name, $techs);
-            return $project;
-
-        }, $projectsPortfolio);
-        
-
-        $projects_json_content = file_get_contents(PATH_PROJECTS_JSON);
-        $projects_json_content = json_decode($projects_json_content);
-        
-
-        $projectsPortfolioJson = json_encode($projectsPortfolio);
-
-        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
-
-
-        if (Config::$debug) {
-            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-        } else {
-            $command = "sh ../App/Core/commands/push_portfolio.sh";
-        }
-
-        shell_exec($command);
-
-        header("Location: /");
-        exit();
-    }
-
-
     public function commitAllPortfolio(): void
     {
-
         $final_data = [];
-
         $allPortfolios = $this->model->selectNameWithCategory();
 
         foreach($allPortfolios as $p) {
@@ -152,19 +111,11 @@ class PortfolioController extends Controller
                 return $project;
     
             }, $projectsPortfolio);
-
             $final_data[$p->category_name] = $projectsPortfolio;
         }
 
-       
-
-
-
-       
         $final_data = json_encode($final_data);
-
         file_put_contents(PATH_PROJECTS_JSON, $final_data);
-
 
         // if (Config::$debug) {
         //     $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
@@ -177,6 +128,4 @@ class PortfolioController extends Controller
         header("Location: /");
         exit();
     }
-
-
 }

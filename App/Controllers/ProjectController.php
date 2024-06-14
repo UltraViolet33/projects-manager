@@ -46,7 +46,6 @@ class ProjectController extends Controller
     public function details(): Render
     {
         $idProject = $this->getIdInUrlOrRedirectTo("/");
-
         $project = $this->getSingleProject($idProject);
 
         if (!$project) {
@@ -69,43 +68,39 @@ class ProjectController extends Controller
     }
 
 
-    public function getProjectsPortfolio(): Render
-    {
-        $projectsPortfolio = $this->model->selectProjectsPortfolio();
-        $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
-        $totalProjects = count($projectsPortfolio);
-        $titlePage = "Portfolio Projects";
-        return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
-    }
+    // public function getProjectsPortfolio(): Render
+    // {
+    //     $projectsPortfolio = $this->model->selectProjectsPortfolio();
+    //     $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
+    //     $totalProjects = count($projectsPortfolio);
+    //     $titlePage = "Portfolio Projects";
+    //     return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
+    // }
 
 
-    public function commitPortfolio(): void
-    {
-        $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
-        $projectsPortfolio = array_map(function ($project) {
+    // public function commitPortfolio(): void
+    // {
+    //     $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
+    //     $projectsPortfolio = array_map(function ($project) {
+    //         $techs = $this->techModel->getProjectTechs($project->id_project);
+    //         $project->techs = array_map(fn($tech) => $tech->name, $techs);
+    //         return $project;
+    //     }, $projectsPortfolio);
 
-            $techs = $this->techModel->getProjectTechs($project->id_project);
-            $project->techs = array_map(fn($tech) => $tech->name, $techs);
-            return $project;
+    //     $projectsPortfolioJson = json_encode($projectsPortfolio);
+    //     file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
 
-        }, $projectsPortfolio);
+    //     if (Config::$debug) {
+    //         $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
+    //     } else {
+    //         $command = "sh ../App/Core/commands/push_portfolio.sh";
+    //     }
 
-        $projectsPortfolioJson = json_encode($projectsPortfolio);
+    //     shell_exec($command);
 
-        file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
-
-
-        if (Config::$debug) {
-            $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-        } else {
-            $command = "sh ../App/Core/commands/push_portfolio.sh";
-        }
-
-        shell_exec($command);
-
-        header("Location: /");
-        exit();
-    }
+    //     header("Location: /");
+    //     exit();
+    // }
 
 
     public function create(): Render
@@ -136,7 +131,6 @@ class ProjectController extends Controller
 
             $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
             $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
-
             return $this->model->create($project, $projectCategories, $projectTechs);
         }
 
@@ -178,7 +172,6 @@ class ProjectController extends Controller
         }
 
         $allCategories = $this->categoryModel->selectAll();
-
 
         foreach ($allCategories as $category) {
             $category->isInProject = false;
@@ -222,9 +215,7 @@ class ProjectController extends Controller
 
             $projectTechs = is_array($_POST["techs"]) ? $_POST["techs"] : [$_POST["techs"]];
             $projectCategories = is_array($_POST["categories"]) ? $_POST["categories"] : [$_POST["categories"]];
-
             return $this->model->updateProjectWithCategories($project, $projectCategories, $projectTechs);
-
         }
 
         return false;
@@ -245,7 +236,6 @@ class ProjectController extends Controller
 
         Session::setErrorMsg("Error : Project name already exists !");
         return false;
-
     }
 
 
@@ -279,7 +269,6 @@ class ProjectController extends Controller
 
         $idCategory = (int) $_GET["id"];
         $projects = $this->model->selectProjectsByCategory($idCategory);
-
         return json_encode($projects);
     }
 
@@ -292,7 +281,6 @@ class ProjectController extends Controller
 
         $status = (int) $_GET["status"];
         $projects = $this->model->selectProjectsByStatus($status);
-
         return json_encode($projects);
     }
 
@@ -333,7 +321,6 @@ class ProjectController extends Controller
         $data = file_get_contents("php://input");
 
         $project = json_decode($data);
-
         $project->status = $project->status ? 1 : 0;
         $project->priority = $project->priority ? 1 : 0;
         $project->github_portfolio = $project->github_portfolio ? 1 : 0;
@@ -342,7 +329,6 @@ class ProjectController extends Controller
         unset($project->techs);
 
         $newProject = (array) $project;
-
         if ($this->model->update($newProject)) {
             $project = $this->getSingleProject($project->id_project);
             $project->status = $project->status > 0 ? true : false;
@@ -350,6 +336,7 @@ class ProjectController extends Controller
 
         return json_encode($project);
     }
+    
 
     public function makeHTMLProjectsTables(array $projects): string
     {

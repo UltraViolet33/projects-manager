@@ -1,6 +1,3 @@
 ## Projects Manager
 
-# Technologies used :
-
-- PHP
-- MySQL
+With PHP and MySQL

@@ -17,6 +17,11 @@
                         <th scope="col">Category</th>
                         <th scope="col">See projects</th>
                         <th scope="col">Add projects</th>
+                        <th scope="col">
+                            <form method="post" action="/portfolios/commit-all">
+                                <input type="submit" value="Commit all">
+                            </form>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +41,9 @@
                             </td>
                             <td>
                                 <a href="/portfolios/add-projects?id=<?= $portfolio->id_portfolio ?>" class="btn btn-primary">Add</a>
+                            </td>
+                            <td>
+                                <a href="/portfolios/commit?id=<?= $portfolio->id_portfolio ?>" class="btn btn-primary">Add</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -53,5 +53,8 @@ $router->get('/portfolios/add-projects', ['App\Controllers\PortfolioController',
 $router->post('/portfolios/add-projects', ['App\Controllers\PortfolioController', 'addProjects']);
 
 $router->get('/portfolios/projects', ['App\Controllers\PortfolioController', 'projects']);
+$router->get('/portfolios/commit', ['App\Controllers\PortfolioController', 'commitPortfolio']);
+$router->post('/portfolios/commit-all', ['App\Controllers\PortfolioController', 'commitAllPortfolio']);
+
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

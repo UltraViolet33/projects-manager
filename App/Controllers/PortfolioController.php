@@ -36,9 +36,6 @@ class PortfolioController extends Controller
     {
         $titlePage = "All portfolios";
         $allPortfolios = $this->model->selectNameWithCategory();
-        var_dump($allPortfolios);
-        // die;
-     
         return Render::make("portfolios/index", compact("titlePage", "allPortfolios"));
     }
 
@@ -46,19 +43,14 @@ class PortfolioController extends Controller
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if($this->checkPostValues(['name', 'category_id']))
-            {
-                var_dump($_POST);
+            if ($this->checkPostValues(['name', 'category_id'])) {
                 $this->model->create(['name' => $_POST["name"], 'category_id' => $_POST["category_id"]]);
-
                 header('Location: /portfolios');
             }
         }
 
         $allCategories = $this->categoryModel->selectAll();
-
         $titlePage = "Create a portfolio";
-        
         return Render::make("/portfolios/create", compact("allCategories", "titlePage"));
     }
 
@@ -67,8 +59,8 @@ class PortfolioController extends Controller
     {
         $idPortfolio = $this->getIdInUrlOrRedirectTo("/portfolios");
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if($this->checkPostValues(['projects']))
-            {
+            if ($this->checkPostValues(['projects'])) {
+                $this->model->deleteProjectsPortfolio($idPortfolio);
                 $this->model->addProjects($_POST["projects"], $idPortfolio);
                 header('Location: /portfolios');
             }
@@ -76,11 +68,35 @@ class PortfolioController extends Controller
 
         $portfolio = $this->model->selectByColumn("id_portfolio", $idPortfolio);
         $projects = $this->projectModel->selectProjectsByCategory($portfolio->category_id);
+        $portfolioProjects = $this->model->selectProjectsPortfolio($idPortfolio);
+
+        foreach ($projects as $project) {
+            $project->isInPortfolio = false;
+            foreach ($portfolioProjects as $pp) {
+                if ($project->id_project === $pp->id_project) {
+                    $project->isInPortfolio = true;
+                }
+            }
+        }
         $titlePage = "add projects to portfolio";
-        
         return Render::make("/portfolios/add_projects", compact("projects", "titlePage"));
     }
 
 
+    public function projects(): Render
+    {
+        $idPortfolio = $this->getIdInUrlOrRedirectTo("/portfolios");
+        $portfolio = $this->model->selectByColumn("id_portfolio", $idPortfolio);
 
+        if (!$portfolio) {
+            header("Location: /portfolios");
+            exit();
+        }
+
+        $titlePage = "Portfolio " . $portfolio->name;
+        $projects = [];
+
+        $projects = $this->model->selectProjectsPortfolio($idPortfolio);
+        return Render::make("/portfolios/projects", compact("portfolio", "projects", "titlePage"));
+    }
 }

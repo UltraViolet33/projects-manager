@@ -32,4 +32,22 @@ class Portfolio extends Model
         $portfolioProjects = array_map(fn ($projectId): array => [$projectId, $portfolioId], $projectsId);
         return $this->insertMultipleValues(["project_id", "portfolio_id"], "portfolio_projects", $portfolioProjects);
     }
+
+
+    public function selectProjectsPortfolio(int $portfolioId): array 
+    {
+        $query = "SELECT pro.name, pro.id_project FROM projects as pro
+                    INNER JOIN portfolio_projects AS pp 
+                    ON pro.id_project = pp.project_id
+                    WHERE pp.portfolio_id = :portfolio_id";
+
+        return $this->db->read($query, ['portfolio_id' => $portfolioId]);
+    }
+
+
+    public function deleteProjectsPortfolio(int $portfolioId): bool  
+    {
+        $query = "DELETE FROM portfolio_projects as pp WHERE pp.portfolio_id = :portfolio_id";
+        return $this->db->write($query, ["portfolio_id" => $portfolioId]);
+    }
 }

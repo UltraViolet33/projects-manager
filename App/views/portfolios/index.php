@@ -32,7 +32,7 @@
                                 <?= $portfolio->category_name ?>
                             </td>
                             <td>
-                                <a href="/techs/edit?id=" class="btn btn-primary">See</a>
+                                <a href="/portfolios/projects?id=<?= $portfolio->id_portfolio ?>" class="btn btn-primary">See</a>
                             </td>
                             <td>
                                 <a href="/portfolios/add-projects?id=<?= $portfolio->id_portfolio ?>" class="btn btn-primary">Add</a>

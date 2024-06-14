@@ -31,6 +31,8 @@
 </form> -->
 <div class="row">
     <div class="col-12">
+    <?= $projectsTable ?>
+<!-- 
         <table class="table">
             <thead>
                 <tr>
@@ -43,7 +45,7 @@
             <tbody id="table-body">
                 <?= $projectsTable ?>
             </tbody>
-        </table>
+        </table> -->
     </div>
 </div>
 <!-- <script src="../assets/js/projects.js"></script> -->

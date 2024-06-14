@@ -6,7 +6,11 @@
                 <label for="projects">Projects : </label>
                 <select name="projects[]" class="form-select" multiple>
                     <?php foreach ($projects as $project) : ?>
-                        <option value="<?= $project->id_project ?>"><?= $project->name ?></option>
+                        <?php if ($project->isInPortfolio) : ?>
+                            <option value="<?= $project->id_project ?>" selected><?= $project->name ?></option>
+                        <?php else : ?>
+                            <option value="<?= $project->id_project ?>"><?= $project->name ?></option>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </select>
             </div>

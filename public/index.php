@@ -52,5 +52,6 @@ $router->post('/portfolios/create', ['App\Controllers\PortfolioController', 'cre
 $router->get('/portfolios/add-projects', ['App\Controllers\PortfolioController', 'addProjects']);
 $router->post('/portfolios/add-projects', ['App\Controllers\PortfolioController', 'addProjects']);
 
+$router->get('/portfolios/projects', ['App\Controllers\PortfolioController', 'projects']);
 
 (new App($router, ["method" => $_SERVER["REQUEST_METHOD"], "uri" => $_SERVER["REQUEST_URI"]]))->run();

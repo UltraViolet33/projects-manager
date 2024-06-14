@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Database\Config;
 use App\Core\Helpers\Session;
 use App\Core\Render;
 use App\Models\Project;

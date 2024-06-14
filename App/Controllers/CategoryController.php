@@ -98,7 +98,7 @@ class CategoryController extends Controller
     }
 
 
-    public function delete()
+    public function delete(): void
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 

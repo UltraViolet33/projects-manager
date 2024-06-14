@@ -8,14 +8,13 @@ use App\Models\Model;
 
 class Portfolio extends Model
 {
-
-
     public function create(array $portfolio): bool
     {
         $query = "INSERT INTO portfolios(name, category_id) VALUES(:name, :category_id)";
         return  $this->db->write($query, $portfolio);
     }
 
+    
     public function selectNameWithCategory(): array
     {
         $query = "SELECT p.id_portfolio, p.name AS portfolio_name, c.name as category_name 

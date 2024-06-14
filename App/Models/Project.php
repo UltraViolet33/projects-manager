@@ -16,20 +16,6 @@ class Project extends Model
     }
 
 
-    public function selectProjectsPortfolio(): array
-    {
-        $query = "SELECT * FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
-        return $this->db->read($query);
-    }
-
-
-    public function selectDataProjectsPortfolio(): array
-    {
-        $query = "SELECT id_project, name, description, github_link FROM $this->table WHERE github_portfolio = 1 ORDER BY created_at DESC";
-        return $this->db->read($query);
-    }
-
-
     public function selectAll(): array
     {
         $query = "SELECT * FROM $this->table ORDER BY created_at DESC";
@@ -78,7 +64,7 @@ class Project extends Model
     public function update(array $project): bool
     {
         $query = "UPDATE projects SET name = :name, description = :description,
-        github_link = :github_link, github_portfolio = :github_portfolio, status= :status, created_at=:created_at, priority = :priority
+        github_link = :github_link, status= :status, created_at=:created_at, priority = :priority
         WHERE id_project = :id_project";
 
         return $this->db->write($query, $project);

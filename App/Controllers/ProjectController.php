@@ -68,41 +68,6 @@ class ProjectController extends Controller
     }
 
 
-    // public function getProjectsPortfolio(): Render
-    // {
-    //     $projectsPortfolio = $this->model->selectProjectsPortfolio();
-    //     $projectsTable = $this->makeHTMLProjectsTables($projectsPortfolio);
-    //     $totalProjects = count($projectsPortfolio);
-    //     $titlePage = "Portfolio Projects";
-    //     return Render::make("projects/portfolio", compact("projectsTable", "totalProjects", "titlePage"));
-    // }
-
-
-    // public function commitPortfolio(): void
-    // {
-    //     $projectsPortfolio = $this->model->selectDataProjectsPortfolio();
-    //     $projectsPortfolio = array_map(function ($project) {
-    //         $techs = $this->techModel->getProjectTechs($project->id_project);
-    //         $project->techs = array_map(fn($tech) => $tech->name, $techs);
-    //         return $project;
-    //     }, $projectsPortfolio);
-
-    //     $projectsPortfolioJson = json_encode($projectsPortfolio);
-    //     file_put_contents(PATH_PROJECTS_JSON, $projectsPortfolioJson);
-
-    //     if (Config::$debug) {
-    //         $command = "sh ../App/Core/commands/push_portfolio_debug.sh";
-    //     } else {
-    //         $command = "sh ../App/Core/commands/push_portfolio.sh";
-    //     }
-
-    //     shell_exec($command);
-
-    //     header("Location: /");
-    //     exit();
-    // }
-
-
     public function create(): Render
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -305,7 +270,7 @@ class ProjectController extends Controller
 
         $project->status = $project->status > 0 ? true : false;
         $project->priority = $project->priority > 0 ? true : false;
-        $project->github_portfolio = $project->github_portfolio > 0 ? true : false;
+       
 
 
         if (!$project) {
@@ -323,7 +288,7 @@ class ProjectController extends Controller
         $project = json_decode($data);
         $project->status = $project->status ? 1 : 0;
         $project->priority = $project->priority ? 1 : 0;
-        $project->github_portfolio = $project->github_portfolio ? 1 : 0;
+       
 
         unset($project->categories);
         unset($project->techs);

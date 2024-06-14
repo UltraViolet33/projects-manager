@@ -4,16 +4,13 @@ let project;
 
 let btnPriority;
 let btnStatus;
-let btnPortfolio;
 
 const displayBtns = project => {
   btnPriority = getBtnProperty(project, "priority");
   btnStatus = getBtnProperty(project, "status");
-  btnPortfolio = getBtnProperty(project, "portfolio");
 
   btn_status_div.appendChild(btnPriority);
   btn_status_div.appendChild(btnStatus);
-  btn_status_div.appendChild(btnPortfolio);
 };
 
 const toggle = el => {
@@ -21,9 +18,6 @@ const toggle = el => {
   switch (idElement) {
     case "status":
       project.status = !project.status;
-      break;
-    case "github":
-      project.github_portfolio = !project.github_portfolio;
       break;
     case "priority":
       project.priority = !project.priority;
@@ -60,10 +54,6 @@ const getBtnProperty = (project, property) => {
       return project.status
         ? createButton("btn-primary", "status", "Done")
         : createButton("btn-danger", "status", "In Progress");
-    case "portfolio":
-      return project.github_portfolio
-        ? createButton("btn-primary", "github", "In Github Portfolio")
-        : createButton("btn-primary", "github", "Not In Github Portfolio");
   }
 };
 
@@ -96,7 +86,6 @@ const getProject = async idProject => {
 const removeButtons = () => {
   btn_status_div.removeChild(btnPriority);
   btn_status_div.removeChild(btnStatus);
-  btn_status_div.removeChild(btnPortfolio);
 };
 
 const url = new URL(window.location.href);

@@ -30,22 +30,6 @@ abstract class Model
     }
 
 
-    // public function selectOneById(int $id): object
-    // {
-    //     $query = "SELECT * FROM $this->table WHERE $this->id = :id";
-    //     return $this->db->readOneRow($query, ["id" => $id]);
-    // }
-
-
-    // public function checkIfNameExistsToEdit(string $name, int $id): bool
-    // {
-    //     $query = "SELECT * FROM $this->table WHERE name = :name AND $this->id != :id";
-    //     $result = $this->db->readOneRow($query, ["name" => $name, "id" => $id]);
-
-    //     return $result ? true : false;
-    // }
-
-
     public function checkIfArgAlreadyExistsInAnotherColumn(string $arg, mixed $value, int $id): bool
     {
         $query = "SELECT * FROM $this->table WHERE $arg = :value AND $this->id != :id";

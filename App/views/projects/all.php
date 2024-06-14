@@ -13,7 +13,7 @@
         <select onchange="this.form.submit()" name="categoryFilter" class="form-select">
             <option selected>Choose categories</option>
             <?php foreach ($allCategories as $category) : ?>
-                <option value="<?= $category->id_categorie ?>"><?= $category->name ?></option>
+                <option value="<?= $category->id_category ?>"><?= $category->name ?></option>
             <?php endforeach; ?>
         </select>
     </div>

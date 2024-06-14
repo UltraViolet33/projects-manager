@@ -27,7 +27,7 @@ class Project extends Model
     {
         $query = "SELECT * FROM projects INNER JOIN projects_categories 
         ON projects.id_project = projects_categories.id_project 
-        WHERE projects_categories.id_categorie = :id_category";
+        WHERE projects_categories.id_category = :id_category";
 
         return $this->db->read($query, ["id_category" => $idCategory]);
     }
@@ -57,7 +57,7 @@ class Project extends Model
         $this->deleteProjectCategories($idProject);
         $this->deleteProjectTechs($idProject);
         $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
-        return $this->insertMultipleValues(["id_project", "id_categorie"], "projects_categories", $projectCategories);
+        return $this->insertMultipleValues(["id_project", "id_category"], "projects_categories", $projectCategories);
     }
 
 
@@ -97,25 +97,6 @@ class Project extends Model
 
 
         $this->insertMultipleValues(["id_project", "id_tech"], "projects_techs", $projectTechs);
-        return $this->insertMultipleValues(["id_project", "id_categorie"], "projects_categories", $projectCategories);
+        return $this->insertMultipleValues(["id_project", "id_category"], "projects_categories", $projectCategories);
     }
-
-
-    // private function insertProjectCategories(int $idProject, array $categories): bool
-    // {
-    //     $values = "?,?";
-
-    //     $sql = "INSERT INTO projects_categories (id_project, id_categorie) VALUES " .
-
-    //         str_repeat("($values),", count($categories) - 1) . "($values)";
-
-
-    //     $data = [];
-
-    //     foreach ($categories as $category) {
-    //         $data[] = [$idProject, $category];
-    //     }
-
-    //     return $this->db->write($sql, array_merge(...$data));
-    // }
 }
